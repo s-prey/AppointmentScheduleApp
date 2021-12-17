@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="450.0" xmlns="http://javafx.com/fxml" xmlns:fx="controller.AddCustomerController">
+   <children>
+      <Label alignment="CENTER" layoutX="100.0" layoutY="14.0" prefHeight="19.0" prefWidth="250.0" text="Add Customer Information">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <VBox layoutX="25.0" layoutY="60.0" prefHeight="320.0" prefWidth="400.0">
+         <children>
+            <HBox prefHeight="45.0" prefWidth="400.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="120.0" text="Customer ID" />
+                  <TextField disable="true" prefHeight="30.0" prefWidth="250.0" text="Auto Generated">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox layoutX="10.0" layoutY="10.0" prefHeight="45.0" prefWidth="400.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="120.0" text="Full Name" />
+                  <TextField fx:id="cutomerNameTxtField" prefHeight="30.0" prefWidth="250.0">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox layoutX="10.0" layoutY="45.0" prefHeight="45.0" prefWidth="400.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="120.0" text="Address" />
+                  <TextField fx:id="customerAddressTxtField" prefHeight="30.0" prefWidth="250.0">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox layoutX="10.0" layoutY="100.0" prefHeight="45.0" prefWidth="400.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="120.0" text="Postal Code" />
+                  <TextField fx:id="cutomerPostalTxtField" prefHeight="30.0" prefWidth="250.0">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox layoutX="10.0" layoutY="145.0" prefHeight="45.0" prefWidth="400.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="120.0" text="Country" />
+                  <ComboBox fx:id="customerCountryCmboBox" prefHeight="30.0" prefWidth="250.0">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </ComboBox>
+               </children>
+            </HBox>
+            <HBox layoutX="10.0" layoutY="190.0" prefHeight="45.0" prefWidth="400.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="120.0" text="Division" />
+                  <ComboBox fx:id="customerDivisionCmboBox" prefHeight="30.0" prefWidth="250.0">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </ComboBox>
+               </children>
+            </HBox>
+            <HBox layoutX="10.0" layoutY="235.0" prefHeight="45.0" prefWidth="400.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="120.0" text="Phone Number" />
+                  <TextField fx:id="customerPhoneTxtField" prefHeight="30.0" prefWidth="250.0">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <HBox layoutX="25.0" layoutY="390.0" prefHeight="60.0" prefWidth="400.0">
+         <children>
+            <Button fx:id="customerSaveButton" mnemonicParsing="false" onAction="#onActionSaveCustomer" prefHeight="30.0" prefWidth="80.0" text="Save">
+               <HBox.margin>
+                  <Insets left="60.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="customerClearButton" mnemonicParsing="false" onAction="#onActionClearCustomer" prefHeight="30.0" prefWidth="80.0" text="Clear">
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="customerAddCancelButton" mnemonicParsing="false" onAction="#onActionCancel" prefHeight="30.0" prefWidth="80.0" text="Cancel">
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
