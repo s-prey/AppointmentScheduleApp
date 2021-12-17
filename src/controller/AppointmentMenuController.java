@@ -3,6 +3,7 @@ package controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.ParallelCamera;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
@@ -19,47 +20,117 @@ public class AppointmentMenuController implements Initializable {
     Parent scene;
 
     @FXML
-    public TableColumn customerIDCol;
+    private Button addAppointmentButton;
+
     @FXML
-    public TableColumn customerNameCol;
+    private Button addCustomerButton;
+
     @FXML
-    public TableColumn customerAddressCol;
+    private RadioButton allAppointmentsRadioBtn;
+
     @FXML
-    public TableColumn customerPostalCol;
+    private ToggleGroup appointmentFilterTG;
+
     @FXML
-    public TableColumn customerCountryCol;
+    private RadioButton appointmentsByMoRadioBtn;
+
     @FXML
-    public TableColumn customerDivisionCol;
+    private RadioButton appointmentsByWkRadioBtn;
+
     @FXML
-    public TableColumn customerDivisionCol1;
+    private TableColumn<?, ?> customerAddressCol;
+
     @FXML
-    public TableColumn customerPhoneCol;
+    private TableColumn<?, ?> customerCountryCol;
+
     @FXML
-    public TableColumn customerPhoneCol1;
+    private TableColumn<?, ?> customerDivisionCol;
+
     @FXML
-    public TableColumn customerPhoneCol11;
+    private TableColumn<?, ?> customerDivisionCol1;
+
     @FXML
-    public Button addAppointmentButton;
+    private TableColumn<?, ?> customerIDCol;
+
     @FXML
-    public Button updateAppointmentButton;
+    private TableColumn<?, ?> customerNameCol;
+
     @FXML
-    public Button deleteAppointmentButton;
+    private TableColumn<?, ?> customerPhoneCol;
+
     @FXML
-    public RadioButton allAppointmentsRadioBtn;
+    private TableColumn<?, ?> customerPhoneCol1;
+
     @FXML
-    public ToggleGroup appointmentFilterTG;
+    private TableColumn<?, ?> customerPhoneCol11;
+
     @FXML
-    public RadioButton appointmentsByMoRadioBtn;
+    private TableColumn<?, ?> customerPostalCol;
+
     @FXML
-    public RadioButton appointmentsByWkRadioBtn;
+    private Button deleteAppointmentButton;
+
     @FXML
-    public Button addCustomerButton;
+    private Button logoutbutton;
+
     @FXML
-    public Button updateCustomerButton;
+    private Button reportsButton;
+
     @FXML
-    public Button reportsButton;
+    private Button updateAppointmentButton;
+
     @FXML
-    public Button logoutbutton;
+    private Button updateCustomerButton;
+
+    @FXML
+    void onActionAppointmentsByMonth(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionAppointmentsByWeek(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionDeleteAppointment(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionLogout(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionShowAddAppointment(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionShowAddCustomer(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionShowAllAppointments(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionShowReports(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionShowUpdateAppointment(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionShowUpdateCustomer(ActionEvent event) {
+
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

@@ -11,34 +11,63 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-
 public class CustomerMenuController implements Initializable {
 
     Stage stage;
     Parent scene;
 
     @FXML
-    public TableColumn customerIDCol;
+    private Button customerAddButton;
+
     @FXML
-    public TableColumn customerNameCol;
+    private TableColumn<?, ?> customerAddressCol;
+
     @FXML
-    public TableColumn customerAddressCol;
+    private Button customerBackButton;
+
     @FXML
-    public TableColumn customerPostalCol;
+    private TableColumn<?, ?> customerCountryCol;
+
     @FXML
-    public TableColumn customerCountryCol;
+    private Button customerDeleteButton;
+
     @FXML
-    public TableColumn customerDivisionCol;
+    private TableColumn<?, ?> customerDivisionCol;
+
     @FXML
-    public TableColumn customerPhoneCol;
+    private TableColumn<?, ?> customerIDCol;
+
     @FXML
-    public Button customerAddButton;
+    private TableColumn<?, ?> customerNameCol;
+
     @FXML
-    public Button customerUpdateButton;
+    private TableColumn<?, ?> customerPhoneCol;
+
     @FXML
-    public Button customerDeleteButton;
+    private TableColumn<?, ?> customerPostalCol;
+
     @FXML
-    public Button customerBackButton;
+    private Button customerUpdateButton;
+
+    @FXML
+    void onActionAddCustomer(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionBack(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionDeleteCustomer(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionUpdateCustomer(ActionEvent event) {
+
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

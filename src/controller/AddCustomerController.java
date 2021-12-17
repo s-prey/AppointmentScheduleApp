@@ -13,24 +13,51 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AddCustomerController implements Initializable {
+
+    Stage stage;
+    Parent scene;
+
     @FXML
-    public TextField cutomerNameTxtField;
+    private Button customerAddCancelButton;
+
     @FXML
-    public TextField customerAddressTxtField;
+    private TextField customerAddressTxtField;
+
     @FXML
-    public TextField cutomerPostalTxtField;
+    private Button customerClearButton;
+
     @FXML
-    public ComboBox customerCountryCmboBox;
+    private ComboBox<?> customerCountryCmboBox;
+
     @FXML
-    public ComboBox customerDivisionCmboBox;
+    private ComboBox<?> customerDivisionCmboBox;
+
     @FXML
-    public TextField customerPhoneTxtField;
+    private TextField customerPhoneTxtField;
+
     @FXML
-    public Button customerSaveButton;
+    private Button customerSaveButton;
+
     @FXML
-    public Button customerClearButton;
+    private TextField cutomerNameTxtField;
+
     @FXML
-    public Button customerAddCancelButton;
+    private TextField cutomerPostalTxtField;
+
+    @FXML
+    void onActionCancel(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionClearCustomer(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionSaveCustomer(ActionEvent event) {
+
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

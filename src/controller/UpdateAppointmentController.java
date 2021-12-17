@@ -19,33 +19,61 @@ public class UpdateAppointmentController implements Initializable {
     Parent scene;
 
     @FXML
-    public TextField appointmentIDTxtField;
+    private TextField appointmentIDTxtField;
+
     @FXML
-    public TextField apptTitleTxtField;
+    private ComboBox<?> apptContactNameCmboBox;
+
     @FXML
-    public TextField apptDescriptionTxtField;
+    private ComboBox<?> apptCustomerIDCmboBox;
+
     @FXML
-    public TextField apptLocationTxtField;
+    private DatePicker apptDatePicker;
+
     @FXML
-    public TextField apptTypeTxtField;
+    private TextField apptDescriptionTxtField;
+
     @FXML
-    public ComboBox apptContactNameCmboBox;
+    private TextField apptEndTimeTxtField;
+
     @FXML
-    public ComboBox apptCustomerIDCmboBox;
+    private TextField apptLocationTxtField;
+
     @FXML
-    public ComboBox apptUserIDCmboBox;
+    private TextField apptStartTimeTxtField;
+
     @FXML
-    public DatePicker apptDatePicker;
+    private TextField apptTitleTxtField;
+
     @FXML
-    public TextField apptStartTimeTxtField;
+    private TextField apptTypeTxtField;
+
     @FXML
-    public TextField apptEndTimeTxtField;
+    private ComboBox<?> apptUserIDCmboBox;
+
     @FXML
-    public Button customerSaveButton;
+    private Button customerClearButton;
+
     @FXML
-    public Button customerClearButton;
+    private Button customerSaveButton;
+
     @FXML
-    public Button customerUpdateCancelButton;
+    private Button customerUpdateCancelButton;
+
+    @FXML
+    void onActionCancel(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionClearCustomer(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionSaveCustomer(ActionEvent event) {
+
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

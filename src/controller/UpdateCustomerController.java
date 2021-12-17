@@ -18,23 +18,46 @@ public class UpdateCustomerController implements Initializable {
     Parent scene;
 
     @FXML
-    public TextField cutomerNameTxtField;
+    private TextField customerAddressTxtField;
+
     @FXML
-    public TextField customerAddressTxtField;
+    private Button customerClearButton;
+
     @FXML
-    public TextField cutomerPostalTxtField;
+    private ComboBox<?> customerCountryCmboBox;
+
     @FXML
-    public ComboBox customerCountryCmboBox;
+    private ComboBox<?> customerDivisionCmboBox;
+
     @FXML
-    public ComboBox customerDivisionCmboBox;
+    private TextField customerPhoneTxtField;
+
     @FXML
-    public TextField customerPhoneTxtField;
+    private Button customerSaveButton;
+
     @FXML
-    public Button customerSaveButton;
+    private Button customerUpdateCancelButton;
+
     @FXML
-    public Button customerClearButton;
+    private TextField cutomerNameTxtField;
+
     @FXML
-    public Button customerUpdateCancelButton;
+    private TextField cutomerPostalTxtField;
+
+    @FXML
+    void onActionCancel(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionClearCustomer(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionSaveCustomer(ActionEvent event) {
+
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

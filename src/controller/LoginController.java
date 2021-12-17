@@ -18,17 +18,37 @@ public class LoginController implements Initializable {
     Parent scene;
 
     @FXML
-    public Label titleLabel;
+    private Button clearLoginButton;
+
     @FXML
-    public TextField loginUsernameTxtField;
+    private Button exitLoginButton;
+
     @FXML
-    public TextField loginPasswordTxtField;
+    private Button loginButton;
+
     @FXML
-    public Button loginButton;
+    private TextField loginPasswordTxtField;
+
     @FXML
-    public Button clearLoginButton;
+    private TextField loginUsernameTxtField;
+
     @FXML
-    public Button exitLoginButton;
+    private Label titleLabel;
+
+    @FXML
+    void onActionClearLogin(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionExitLogin(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionUserLogin(ActionEvent event) {
+
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
