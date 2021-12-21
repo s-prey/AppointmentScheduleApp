@@ -10,6 +10,7 @@ public class Main extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+        primaryStage.setTitle("C195 - Software II");
         Parent root = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
