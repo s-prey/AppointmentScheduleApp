@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -36,6 +37,9 @@ public class LoginController implements Initializable {
     private Label titleLabel;
 
     @FXML
+    private Label userZoneLabel;
+
+    @FXML
     void onActionClearLogin(ActionEvent event) {
 
     }
@@ -49,7 +53,6 @@ public class LoginController implements Initializable {
     void onActionUserLogin(ActionEvent event) {
 
     }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 

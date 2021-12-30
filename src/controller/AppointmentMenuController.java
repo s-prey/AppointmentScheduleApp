@@ -3,11 +3,13 @@ package controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.ParallelCamera;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 
@@ -20,10 +22,7 @@ public class AppointmentMenuController implements Initializable {
     Parent scene;
 
     @FXML
-    private Button addAppointmentButton;
-
-    @FXML
-    private Button addCustomerButton;
+    private Button addNewAppointmentButton;
 
     @FXML
     private RadioButton allAppointmentsRadioBtn;
@@ -32,55 +31,98 @@ public class AppointmentMenuController implements Initializable {
     private ToggleGroup appointmentFilterTG;
 
     @FXML
+    private TextField appointmentIDTxtField;
+
+    @FXML
+    private TextField appointmentTypeCmboBox;
+
+    @FXML
     private RadioButton appointmentsByMoRadioBtn;
 
     @FXML
     private RadioButton appointmentsByWkRadioBtn;
 
     @FXML
-    private TableColumn<?, ?> customerAddressCol;
+    private TableColumn<?, ?> apptContactNameCol;
 
     @FXML
-    private TableColumn<?, ?> customerCountryCol;
+    private TableColumn<?, ?> apptDescriptionCol;
 
     @FXML
-    private TableColumn<?, ?> customerDivisionCol;
+    private TableColumn<?, ?> apptEndDateTime;
 
     @FXML
-    private TableColumn<?, ?> customerDivisionCol1;
+    private TableColumn<?, ?> apptIDCol;
+
+    @FXML
+    private TableColumn<?, ?> apptLocationCol;
+
+    @FXML
+    private TableColumn<?, ?> apptStartDateTime;
+
+    @FXML
+    private TableColumn<?, ?> apptTitleCol;
+
+    @FXML
+    private TableColumn<?, ?> apptTypeCol;
+
+    @FXML
+    private Button clearInformationFieldsButton;
+
+    @FXML
+    private ComboBox<?> contactCmboBox;
+
+    @FXML
+    private ComboBox<?> customerIDCmboBox;
 
     @FXML
     private TableColumn<?, ?> customerIDCol;
 
     @FXML
-    private TableColumn<?, ?> customerNameCol;
+    private Button customerMenuButton;
 
     @FXML
-    private TableColumn<?, ?> customerPhoneCol;
-
-    @FXML
-    private TableColumn<?, ?> customerPhoneCol1;
-
-    @FXML
-    private TableColumn<?, ?> customerPhoneCol11;
-
-    @FXML
-    private TableColumn<?, ?> customerPostalCol;
+    private TableColumn<?, ?> customerPhoneNumberCol;
 
     @FXML
     private Button deleteAppointmentButton;
 
     @FXML
-    private Button logoutbutton;
+    private TextField descriptionTxtField;
 
     @FXML
-    private Button reportsButton;
+    private DatePicker endDatePicker;
+
+    @FXML
+    private ComboBox<?> endTimeCmboBox;
+
+    @FXML
+    private TextField locationTxtField;
+
+    @FXML
+    private Button reportsMenuButton;
+
+    @FXML
+    private DatePicker startDatePicker;
+
+    @FXML
+    private ComboBox<?> startTimeCmboBox;
+
+    @FXML
+    private TextField titleTxtField;
 
     @FXML
     private Button updateAppointmentButton;
 
     @FXML
-    private Button updateCustomerButton;
+    private ComboBox<?> userIDCmboBox;
+
+
+
+    @FXML
+    void onActionAddNewAppointment(ActionEvent event) {
+
+    }
 
     @FXML
     void onActionAppointmentsByMonth(ActionEvent event) {
@@ -93,22 +135,42 @@ public class AppointmentMenuController implements Initializable {
     }
 
     @FXML
+    void onActionClearInformationFields(ActionEvent event) {
+
+    }
+
+    @FXML
     void onActionDeleteAppointment(ActionEvent event) {
 
     }
 
     @FXML
-    void onActionLogout(ActionEvent event) {
+    void onActionEndDate(ActionEvent event) {
 
     }
 
     @FXML
-    void onActionShowAddAppointment(ActionEvent event) {
+    void onActionFilterContactCmboBox(ActionEvent event) {
 
     }
 
     @FXML
-    void onActionShowAddCustomer(ActionEvent event) {
+    void onActionFilterCustomerIDCmboBox(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionFilterEndTimeCmboBox(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionFilterStartTimeCmboBox(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionFilterUserIDCmboBox(ActionEvent event) {
 
     }
 
@@ -118,17 +180,22 @@ public class AppointmentMenuController implements Initializable {
     }
 
     @FXML
-    void onActionShowReports(ActionEvent event) {
+    void onActionStartDate(ActionEvent event) {
 
     }
 
     @FXML
-    void onActionShowUpdateAppointment(ActionEvent event) {
+    void onActionSwitchToCustomerMenu(ActionEvent event) {
 
     }
 
     @FXML
-    void onActionShowUpdateCustomer(ActionEvent event) {
+    void onActionSwitchToReportsMenu(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionUpdateAppointment(ActionEvent event) {
 
     }
 
@@ -136,4 +203,5 @@ public class AppointmentMenuController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
+
 }
