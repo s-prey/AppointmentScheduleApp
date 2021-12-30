@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="1200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.2" fx:controller="controller.ReportsMenuController">
+   <children>
+      <Label alignment="CENTER" layoutX="424.0" layoutY="14.0" prefHeight="19.0" prefWidth="351.0" text="Reports Menu">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <TabPane layoutX="23.0" layoutY="56.0" prefHeight="350.0" prefWidth="1150.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab fx:id="appointmentTotalTab" text="Customer Appointment Total">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView layoutY="7.0" prefHeight="320.0" prefWidth="374.0">
+                          <columns>
+                            <TableColumn fx:id="customerApptTotalMonthCol" prefWidth="100.0" text="Month" />
+                            <TableColumn fx:id="customerApptTotalTypeCol" prefWidth="144.0" text="Appointment Type" />
+                            <TableColumn fx:id="customerApptTotalCol" minWidth="0.0" prefWidth="130.0" text="Appointment Total" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab fx:id="appointmentsByContactTab" text="Appointments by Contact">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <TableView layoutY="55.0" prefHeight="271.0" prefWidth="1150.0">
+                          <columns>
+                            <TableColumn fx:id="apptByContactApptID" prefWidth="109.0" text="Appointment ID" />
+                            <TableColumn fx:id="apptByContactApptTitleCol" minWidth="0.0" prefWidth="129.0" text="Appointment Title" />
+                            <TableColumn fx:id="apptByContactApptTypeCol" minWidth="0.0" prefWidth="154.0" text="Appointment Type" />
+                            <TableColumn fx:id="apptByContactApptDescCol" prefWidth="341.0" text="Appointment Description" />
+                            <TableColumn fx:id="apptByContactStartDateTimeCol" prefWidth="170.0" text="Start Date &amp; Time" />
+                            <TableColumn fx:id="apptByContactEndDateTimeCol" prefWidth="160.0" text="End Date &amp; Time" />
+                            <TableColumn fx:id="apptByContactCustomerIDCol" prefWidth="86.0" text="Customer ID" />
+                          </columns>
+                        </TableView>
+                        <ComboBox fx:id="contactComboBox" layoutX="14.0" layoutY="14.0" onAction="#selectContact" prefWidth="150.0" promptText="Select Contact" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+            <Tab fx:id="totalCustomersByCountryTab" text="Total Customers by Country">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView layoutY="7.0" prefHeight="314.0" prefWidth="286.0">
+                          <columns>
+                            <TableColumn fx:id="totalCustomersByCountryCountryCol" prefWidth="174.0" text="Country" />
+                            <TableColumn fx:id="totalCustomersByCountryCustomerTotalCol" prefWidth="111.0" text="Customer Total" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+      <VBox layoutX="1000.0" layoutY="459.0" prefHeight="200.0" prefWidth="180.0">
+         <children>
+            <Button fx:id="customerMenuButton" mnemonicParsing="false" onAction="#onActionSwitchToCustomerMenu" prefHeight="25.0" prefWidth="150.0" text="Customer Menu">
+               <VBox.margin>
+                  <Insets left="25.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="appointmentMenuButton" mnemonicParsing="false" onAction="#onActionSwitchToAppointmentMenu" prefHeight="25.0" prefWidth="150.0" text="Appointment Menu">
+               <VBox.margin>
+                  <Insets left="25.0" top="15.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
