@@ -1,23 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="900.0" xmlns="http://javafx.com/fxml" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerMenuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="584.0" prefWidth="900.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerMenuController">
    <children>
       <Label alignment="CENTER" layoutX="325.0" layoutY="14.0" prefHeight="19.0" prefWidth="250.0" text="Customer Menu">
          <font>
-            <Font name="System Bold" size="14.0" />
+            <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <VBox layoutX="25.0" layoutY="60.0" prefHeight="320.0" prefWidth="850.0">
+      <VBox layoutX="25.0" layoutY="60.0" prefHeight="170.0" prefWidth="850.0">
          <children>
-            <TableView prefHeight="300.0" prefWidth="850.0">
+            <TableView prefHeight="175.0" prefWidth="850.0">
               <columns>
                 <TableColumn fx:id="customerIDCol" prefWidth="83.0" text="Customer ID" />
-                <TableColumn fx:id="customerNameCol" prefWidth="124.0" text="Full Name" />
+                <TableColumn fx:id="customerNameCol" prefWidth="124.0" text="Name" />
                   <TableColumn fx:id="customerAddressCol" prefWidth="258.0" text="Address" />
                   <TableColumn fx:id="customerPostalCol" prefWidth="74.0" text="Postal Code" />
                   <TableColumn fx:id="customerCountryCol" prefWidth="94.0" text="Country" />
@@ -27,28 +34,126 @@
             </TableView>
          </children>
       </VBox>
-      <HBox layoutX="200.0" layoutY="390.0" prefHeight="60.0" prefWidth="500.0">
+      <HBox layoutX="25.0" layoutY="275.0" prefHeight="295.0" prefWidth="850.0">
          <children>
-            <Button fx:id="customerAddButton" mnemonicParsing="false" onAction="#onActionAddCustomer" prefHeight="30.0" prefWidth="80.0" text="Add">
-               <HBox.margin>
-                  <Insets left="60.0" />
-               </HBox.margin>
-            </Button>
-            <Button fx:id="customerUpdateButton" mnemonicParsing="false" onAction="#onActionUpdateCustomer" prefHeight="30.0" prefWidth="80.0" text="Update">
-               <HBox.margin>
-                  <Insets left="20.0" />
-               </HBox.margin>
-            </Button>
-            <Button fx:id="customerDeleteButton" mnemonicParsing="false" onAction="#onActionDeleteCustomer" prefHeight="30.0" prefWidth="80.0" text="Delete">
-               <HBox.margin>
-                  <Insets left="20.0" />
-               </HBox.margin>
-            </Button>
-            <Button fx:id="customerBackButton" layoutX="270.0" layoutY="10.0" mnemonicParsing="false" onAction="#onActionBack" prefHeight="30.0" prefWidth="80.0" text="Back">
-               <HBox.margin>
-                  <Insets left="20.0" />
-               </HBox.margin>
-            </Button>
+            <VBox prefHeight="211.0" prefWidth="303.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="37.0" prefWidth="303.0" text="Customer Information">
+                     <font>
+                        <Font name="Calibri Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <HBox prefHeight="32.0" prefWidth="303.0">
+                     <children>
+                        <Label prefHeight="25.0" prefWidth="130.0" text="Customer ID:" />
+                        <TextField fx:id="customerIDTxtField" disable="true" prefHeight="25.0" prefWidth="180.0" text="Auto-Generated" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="32.0" prefWidth="303.0">
+                     <children>
+                        <Label prefHeight="25.0" prefWidth="130.0" text="Name:" />
+                        <TextField fx:id="customerNameTxtField" prefHeight="25.0" prefWidth="180.0" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="32.0" prefWidth="303.0">
+                     <children>
+                        <Label prefHeight="25.0" prefWidth="130.0" text="Address:" />
+                        <TextField fx:id="customerAddressTxtField" prefHeight="25.0" prefWidth="180.0" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="32.0" prefWidth="303.0">
+                     <children>
+                        <Label prefHeight="25.0" prefWidth="130.0" text="Postal Code:" />
+                        <TextField fx:id="postalCodeTxtField" prefHeight="25.0" prefWidth="180.0" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="32.0" prefWidth="303.0">
+                     <children>
+                        <Label prefHeight="25.0" prefWidth="130.0" text="Country:" />
+                        <ComboBox fx:id="countryCmboBox" onAction="#onActionFilterCountryCmboBox" prefHeight="25.0" prefWidth="180.0" promptText="Select Country" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="32.0" prefWidth="303.0">
+                     <children>
+                        <Label prefHeight="25.0" prefWidth="130.0" text="First Level Division:" />
+                        <ComboBox fx:id="firstLevelDivisionCmboBox" onAction="#onActionFilterFirstLevelDivisionCmboBox" prefHeight="25.0" prefWidth="180.0" promptText="Select Division" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="32.0" prefWidth="303.0">
+                     <children>
+                        <Label prefHeight="25.0" prefWidth="130.0" text="Phone Number:" />
+                        <TextField fx:id="phoneNumberTxtField" prefHeight="25.0" prefWidth="180.0" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox prefHeight="211.0" prefWidth="303.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="37.0" prefWidth="303.0" text="Customer Options">
+                     <font>
+                        <Font name="Calibri Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <HBox prefHeight="40.0" prefWidth="303.0">
+                     <children>
+                        <Button fx:id="addNewCustomerButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionAddNewCustomer" prefHeight="25.0" prefWidth="150.0" text="Add New Cutomer">
+                           <HBox.margin>
+                              <Insets left="77.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="40.0" prefWidth="303.0">
+                     <children>
+                        <Button fx:id="updateCustomerButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionUpdateCustomer" prefHeight="25.0" prefWidth="150.0" text="Update Customer">
+                           <HBox.margin>
+                              <Insets left="77.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="40.0" prefWidth="303.0">
+                     <children>
+                        <Button fx:id="deleteCustomerButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionDeleteCustomer" prefHeight="25.0" prefWidth="150.0" text="Delete Customer">
+                           <HBox.margin>
+                              <Insets left="77.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="40.0" prefWidth="303.0">
+                     <children>
+                        <Button fx:id="clearInformationFieldsButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionClearInformationFields" prefHeight="25.0" prefWidth="150.0" text="Clear Information Fields">
+                           <HBox.margin>
+                              <Insets left="77.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox alignment="TOP_RIGHT" prefHeight="295.0" prefWidth="245.0">
+               <children>
+                  <HBox prefHeight="40.0" prefWidth="303.0">
+                     <children>
+                        <Button fx:id="appointmentMenuButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionSwitchToAppointmentMenu" prefHeight="25.0" prefWidth="150.0" text="Appointment Menu">
+                           <HBox.margin>
+                              <Insets left="120.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="40.0" prefWidth="303.0">
+                     <children>
+                        <Button fx:id="reportsMenuButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionSwitchToReportsMenu" prefHeight="25.0" prefWidth="150.0" text="Reports Menu">
+                           <HBox.margin>
+                              <Insets left="120.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
          </children>
       </HBox>
    </children>

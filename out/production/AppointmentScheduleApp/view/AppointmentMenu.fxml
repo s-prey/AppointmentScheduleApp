@@ -1,131 +1,215 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="561.0" prefWidth="1200.0" xmlns="http://javafx.com/fxml" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AppointmentMenuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="1200.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AppointmentMenuController">
    <children>
       <Label alignment="CENTER" layoutX="424.0" layoutY="14.0" prefHeight="19.0" prefWidth="351.0" text="Appointment Menu">
          <font>
-            <Font name="System Bold" size="14.0" />
+            <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <VBox layoutX="25.0" layoutY="60.0" prefHeight="320.0" prefWidth="1150.0">
+      <VBox layoutX="25.0" layoutY="60.0" prefHeight="233.0" prefWidth="1150.0">
          <children>
             <TableView prefHeight="300.0" prefWidth="845.0">
               <columns>
-                <TableColumn fx:id="customerIDCol" prefWidth="71.0" text="Appt. ID" />
-                <TableColumn fx:id="customerNameCol" prefWidth="101.0" text="Title" />
-                  <TableColumn fx:id="customerAddressCol" prefWidth="176.0" text="Description" />
-                  <TableColumn fx:id="customerPostalCol" prefWidth="103.0" text="Location" />
-                  <TableColumn fx:id="customerCountryCol" prefWidth="115.0" text="Type" />
-                  <TableColumn fx:id="customerDivisionCol" prefWidth="158.0" text="Contact Name" />
-                  <TableColumn fx:id="customerDivisionCol1" prefWidth="81.0" text="Customer ID" />
-                  <TableColumn fx:id="customerPhoneCol" prefWidth="109.0" text="Phone Number" />
-                  <TableColumn fx:id="customerPhoneCol1" prefWidth="110.0" text="Start Date/Time" />
-                  <TableColumn fx:id="customerPhoneCol11" prefWidth="125.0" text="End Date/Time" />
+                <TableColumn fx:id="apptIDCol" prefWidth="71.0" text="Appt. ID" />
+                <TableColumn fx:id="apptTitleCol" prefWidth="101.0" text="Title" />
+                  <TableColumn fx:id="apptDescriptionCol" prefWidth="176.0" text="Description" />
+                  <TableColumn fx:id="apptLocationCol" prefWidth="103.0" text="Location" />
+                  <TableColumn fx:id="apptTypeCol" prefWidth="115.0" text="Type" />
+                  <TableColumn fx:id="apptContactNameCol" prefWidth="158.0" text="Contact Name" />
+                  <TableColumn fx:id="customerIDCol" prefWidth="81.0" text="Customer ID" />
+                  <TableColumn fx:id="customerPhoneNumberCol" prefWidth="109.0" text="Phone Number" />
+                  <TableColumn fx:id="apptStartDateTime" prefWidth="110.0" text="Start Date/Time" />
+                  <TableColumn fx:id="apptEndDateTime" prefWidth="125.0" text="End Date/Time" />
               </columns>
             </TableView>
          </children>
       </VBox>
-      <VBox layoutX="200.0" layoutY="361.0" prefHeight="200.0" prefWidth="370.0">
+      <HBox layoutX="25.0" layoutY="297.0" prefHeight="32.0" prefWidth="1150.0">
          <children>
-            <Label alignment="CENTER" prefHeight="50.0" prefWidth="90.0" text="Appointments">
-               <VBox.margin>
-                  <Insets left="140.0" />
-               </VBox.margin>
+            <Label prefHeight="30.0" prefWidth="175.0" text="Filter Appointment View">
                <font>
-                  <Font name="System Bold" size="12.0" />
+                  <Font size="14.0" />
                </font>
             </Label>
-            <HBox prefHeight="35.0" prefWidth="370.0">
-               <children>
-                  <Button fx:id="addAppointmentButton" mnemonicParsing="false" onAction="#onActionShowAddAppointment" prefHeight="30.0" prefWidth="80.0" text="Add">
-                     <HBox.margin>
-                        <Insets left="45.0" />
-                     </HBox.margin>
-                  </Button>
-                  <Button fx:id="updateAppointmentButton" mnemonicParsing="false" onAction="#onActionShowUpdateAppointment" prefHeight="30.0" prefWidth="80.0" text="Update">
-                     <HBox.margin>
-                        <Insets left="20.0" />
-                     </HBox.margin>
-                  </Button>
-                  <Button fx:id="deleteAppointmentButton" mnemonicParsing="false" onAction="#onActionDeleteAppointment" prefHeight="30.0" prefWidth="80.0" text="Delete">
-                     <HBox.margin>
-                        <Insets left="20.0" />
-                     </HBox.margin>
-                  </Button>
-               </children>
-            </HBox>
-            <Label text="Filter Appointment View">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-               <VBox.margin>
-                  <Insets left="45.0" top="10.0" />
-               </VBox.margin>
-            </Label>
-            <RadioButton fx:id="allAppointmentsRadioBtn" mnemonicParsing="false" onAction="#onActionShowAllAppointments" prefHeight="25.0" prefWidth="160.0" selected="true" text="All Appointments">
-               <VBox.margin>
-                  <Insets left="45.0" />
-               </VBox.margin>
+            <RadioButton fx:id="allAppointmentsRadioBtn" mnemonicParsing="false" onAction="#onActionShowAllAppointments" prefHeight="30.0" selected="true" text="All Appointments">
                <toggleGroup>
                   <ToggleGroup fx:id="appointmentFilterTG" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton fx:id="appointmentsByMoRadioBtn" mnemonicParsing="false" onAction="#onActionAppointmentsByMonth" prefHeight="25.0" prefWidth="160.0" text="Appointments by Month" toggleGroup="$appointmentFilterTG">
-               <VBox.margin>
-                  <Insets left="45.0" />
-               </VBox.margin>
+            <RadioButton fx:id="appointmentsByMoRadioBtn" mnemonicParsing="false" onAction="#onActionAppointmentsByMonth" prefHeight="30.0" text="Appointments by Month" toggleGroup="$appointmentFilterTG">
+               <HBox.margin>
+                  <Insets left="15.0" />
+               </HBox.margin>
             </RadioButton>
-            <RadioButton fx:id="appointmentsByWkRadioBtn" mnemonicParsing="false" onAction="#onActionAppointmentsByWeek" prefHeight="25.0" prefWidth="160.0" text="Appointments by Week" toggleGroup="$appointmentFilterTG">
-               <VBox.margin>
-                  <Insets left="45.0" />
-               </VBox.margin>
+            <RadioButton fx:id="appointmentsByWkRadioBtn" mnemonicParsing="false" onAction="#onActionAppointmentsByWeek" prefHeight="30.0" text="Appointments by Week" toggleGroup="$appointmentFilterTG">
+               <HBox.margin>
+                  <Insets left="15.0" />
+               </HBox.margin>
             </RadioButton>
          </children>
-      </VBox>
-      <VBox layoutX="650.0" layoutY="361.0" prefHeight="180.0" prefWidth="268.0">
+      </HBox>
+      <HBox layoutX="27.0" layoutY="359.0" prefHeight="260.0" prefWidth="1150.0">
          <children>
-            <Label alignment="CENTER" prefHeight="50.0" prefWidth="80.0" text="Customers">
-               <VBox.margin>
-                  <Insets left="95.0" />
-               </VBox.margin>
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Label>
-            <HBox prefHeight="48.0" prefWidth="284.0">
+            <VBox prefHeight="248.0" prefWidth="700.0">
                <children>
-                  <Button fx:id="addCustomerButton" mnemonicParsing="false" onAction="#onActionShowAddCustomer" prefHeight="30.0" prefWidth="80.0" text="Add">
-                     <HBox.margin>
-                        <Insets left="45.0" />
-                     </HBox.margin>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="250.0" text="Appointment Information">
+                     <VBox.margin>
+                        <Insets left="225.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <HBox prefHeight="32.0" prefWidth="284.0">
+                     <children>
+                        <Label prefHeight="25.0" prefWidth="120.0" text="Appointment ID:" />
+                        <TextField fx:id="appointmentIDTxtField" disable="true" prefHeight="25.0" prefWidth="210.0" text="Auto-Generated" />
+                        <Label prefHeight="25.0" prefWidth="120.0" text="Customer ID:">
+                           <HBox.margin>
+                              <Insets left="30.0" />
+                           </HBox.margin>
+                        </Label>
+                        <ComboBox fx:id="customerIDCmboBox" onAction="#onActionFilterCustomerIDCmboBox" prefHeight="25.0" prefWidth="210.0" promptText="Select Customer ID" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="32.0" prefWidth="284.0">
+                     <children>
+                        <Label prefHeight="25.0" prefWidth="120.0" text="Title:" />
+                        <TextField fx:id="titleTxtField" prefHeight="25.0" prefWidth="210.0" />
+                        <Label prefHeight="25.0" prefWidth="120.0" text="User ID:">
+                           <HBox.margin>
+                              <Insets left="30.0" />
+                           </HBox.margin>
+                        </Label>
+                        <ComboBox fx:id="userIDCmboBox" onAction="#onActionFilterUserIDCmboBox" prefHeight="25.0" prefWidth="210.0" promptText="Select User ID" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="32.0" prefWidth="284.0">
+                     <children>
+                        <Label prefHeight="25.0" prefWidth="120.0" text="Desciption:" />
+                        <TextField fx:id="descriptionTxtField" prefHeight="25.0" prefWidth="210.0" />
+                        <Label prefHeight="25.0" prefWidth="120.0" text="Start Date:">
+                           <HBox.margin>
+                              <Insets left="30.0" />
+                           </HBox.margin>
+                        </Label>
+                        <DatePicker fx:id="startDatePicker" onAction="#onActionStartDate" prefHeight="25.0" prefWidth="210.0" promptText="Select Date" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="32.0" prefWidth="284.0">
+                     <children>
+                        <Label prefHeight="25.0" prefWidth="120.0" text="Location:" />
+                        <TextField fx:id="locationTxtField" prefHeight="25.0" prefWidth="210.0" />
+                        <Label prefHeight="25.0" prefWidth="120.0" text="Start Time:">
+                           <HBox.margin>
+                              <Insets left="30.0" />
+                           </HBox.margin>
+                        </Label>
+                        <ComboBox fx:id="startTimeCmboBox" onAction="#onActionFilterStartTimeCmboBox" prefHeight="25.0" prefWidth="210.0" promptText="Select Time" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="32.0" prefWidth="284.0">
+                     <children>
+                        <Label prefHeight="25.0" prefWidth="120.0" text="Contact:" />
+                        <ComboBox fx:id="contactCmboBox" onAction="#onActionFilterContactCmboBox" prefHeight="25.0" prefWidth="210.0" promptText="Select Contact" />
+                        <Label prefHeight="25.0" prefWidth="120.0" text="End Date:">
+                           <HBox.margin>
+                              <Insets left="30.0" />
+                           </HBox.margin>
+                        </Label>
+                        <DatePicker fx:id="endDatePicker" onAction="#onActionEndDate" prefHeight="25.0" prefWidth="210.0" promptText="Select Date" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="32.0" prefWidth="284.0">
+                     <children>
+                        <Label prefHeight="25.0" prefWidth="120.0" text="Appointment Type:" />
+                        <TextField fx:id="appointmentTypeCmboBox" prefHeight="25.0" prefWidth="210.0" />
+                        <Label prefHeight="25.0" prefWidth="120.0" text="End Time:">
+                           <HBox.margin>
+                              <Insets left="30.0" />
+                           </HBox.margin>
+                        </Label>
+                        <ComboBox fx:id="endTimeCmboBox" onAction="#onActionFilterEndTimeCmboBox" prefHeight="25.0" prefWidth="210.0" promptText="Select Time" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox prefHeight="248.0" prefWidth="280.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="50.0" prefWidth="278.0" text="Appointment Options">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <HBox prefHeight="40.0" prefWidth="303.0">
+                     <children>
+                        <Button fx:id="addNewAppointmentButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionAddNewAppointment" prefHeight="25.0" prefWidth="150.0" text="Add New Appointment">
+                           <HBox.margin>
+                              <Insets left="65.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="40.0" prefWidth="303.0">
+                     <children>
+                        <Button fx:id="updateAppointmentButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionUpdateAppointment" prefHeight="25.0" prefWidth="150.0" text="Update Appointment">
+                           <HBox.margin>
+                              <Insets left="65.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="40.0" prefWidth="303.0">
+                     <children>
+                        <Button fx:id="deleteAppointmentButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionDeleteAppointment" prefHeight="25.0" prefWidth="150.0" text="Delete Appointment">
+                           <HBox.margin>
+                              <Insets left="65.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="40.0" prefWidth="303.0">
+                     <children>
+                        <Button fx:id="clearInformationFieldsButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionClearInformationFields" prefHeight="25.0" prefWidth="150.0" text="Clear Information Fields">
+                           <HBox.margin>
+                              <Insets left="65.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox prefHeight="249.0" prefWidth="174.0">
+               <children>
+                  <Button fx:id="customerMenuButton" mnemonicParsing="false" onAction="#onActionSwitchToCustomerMenu" prefHeight="25.0" prefWidth="150.0" text="Customer Menu">
+                     <VBox.margin>
+                        <Insets left="25.0" />
+                     </VBox.margin>
                   </Button>
-                  <Button fx:id="updateCustomerButton" mnemonicParsing="false" onAction="#onActionShowUpdateCustomer" prefHeight="30.0" prefWidth="80.0" text="Update">
-                     <HBox.margin>
-                        <Insets left="20.0" />
-                     </HBox.margin>
+                  <Button fx:id="reportsMenuButton" mnemonicParsing="false" onAction="#onActionSwitchToReportsMenu" prefHeight="25.0" prefWidth="150.0" text="Reports Menu">
+                     <VBox.margin>
+                        <Insets left="25.0" top="15.0" />
+                     </VBox.margin>
                   </Button>
                </children>
-            </HBox>
+            </VBox>
          </children>
-      </VBox>
-      <VBox layoutX="1075.0" layoutY="361.0" prefHeight="180.0" prefWidth="100.0">
-         <children>
-            <Button fx:id="reportsButton" mnemonicParsing="false" onAction="#onActionShowReports" prefHeight="30.0" prefWidth="80.0" text="Reports">
-               <VBox.margin>
-                  <Insets left="10.0" top="40.0" />
-               </VBox.margin>
-            </Button>
-            <Button fx:id="logoutbutton" mnemonicParsing="false" onAction="#onActionLogout" prefHeight="30.0" prefWidth="80.0" text="Logout">
-               <VBox.margin>
-                  <Insets left="10.0" top="40.0" />
-               </VBox.margin>
-            </Button>
-         </children>
-      </VBox>
+      </HBox>
    </children>
 </AnchorPane>
