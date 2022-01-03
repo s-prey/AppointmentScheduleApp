@@ -2,9 +2,10 @@ module AppointmentScheduleApp {
 
     requires javafx.fxml;
     requires javafx.controls;
+
     requires java.sql;
+    requires java.desktop;
 
     opens controller;
-    opens view;
     opens C195.AppointmentScheduleApp;
 }
