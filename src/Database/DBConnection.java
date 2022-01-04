@@ -6,16 +6,16 @@ import java.sql.SQLException;
 
 
 public class DBConnection {
-    private static final String databaseName = "C195DBClient";
-    private static final String DB_URL = "jdbc:myql://localhost:3306/" + databaseName;
+    private static final String databaseName = "client_schedule";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/"+databaseName;
     private static final String username = "sqlUser";
     private static final String password = "Passw0rd!";
     private static Connection conn = null;
 
-    private static final String MYSQLJBCDriver = "com.mysql.cj.jdbc.Driver";
+    private static final String MYSQLJBCDriver = "com.mysql.jdbc.Driver";
 
 
-    public static Connection startConnection() {//throws ClassNotFoundException, SQLException, Exception {
+    public static Connection startConnection() {
 
         try {
             Class.forName(MYSQLJBCDriver);
@@ -29,7 +29,11 @@ public class DBConnection {
             e.printStackTrace();
         }
         return conn;
+
+
         }
+
+
 
     public static Connection getConnection() {
         return conn;

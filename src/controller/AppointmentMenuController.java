@@ -1,5 +1,7 @@
 package controller;
 
+import DBAccess.DBAppointments;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,14 +14,22 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
+import model.Appointments;
+import model.Countries;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.SortedMap;
 
 public class AppointmentMenuController implements Initializable {
 
     Stage stage;
     Parent scene;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+    }
 
     @FXML
     private Button addNewAppointmentButton;
@@ -121,7 +131,10 @@ public class AppointmentMenuController implements Initializable {
 
     @FXML
     void onActionAddNewAppointment(ActionEvent event) {
-
+        ObservableList<Appointments> appointmentsObservableList = DBAppointments.getAllAppointments();
+        for (Appointments A : appointmentsObservableList) {
+            System.out.println("Appointment ID : " + A.getApptID() + " Title : " + A.getApptTitle());
+        }
     }
 
     @FXML
@@ -199,9 +212,6 @@ public class AppointmentMenuController implements Initializable {
 
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
 
-    }
 
 }
