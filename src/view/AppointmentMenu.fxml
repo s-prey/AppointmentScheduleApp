@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="1200.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AppointmentMenuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="1200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17" fx:controller="controller.AppointmentMenuController">
    <children>
       <Label alignment="CENTER" layoutX="424.0" layoutY="14.0" prefHeight="19.0" prefWidth="351.0" text="Appointment Menu">
          <font>
@@ -24,18 +24,18 @@
       </Label>
       <VBox layoutX="25.0" layoutY="60.0" prefHeight="233.0" prefWidth="1150.0">
          <children>
-            <TableView prefHeight="300.0" prefWidth="845.0">
+            <TableView fx:id="appointmentsTableView" prefHeight="300.0" prefWidth="845.0">
               <columns>
-                <TableColumn fx:id="apptIDCol" prefWidth="71.0" text="Appt. ID" />
-                <TableColumn fx:id="apptTitleCol" prefWidth="101.0" text="Title" />
-                  <TableColumn fx:id="apptDescriptionCol" prefWidth="176.0" text="Description" />
-                  <TableColumn fx:id="apptLocationCol" prefWidth="103.0" text="Location" />
+                <TableColumn fx:id="apptIDCol" prefWidth="62.0" text="Appt. ID" />
+                <TableColumn fx:id="apptTitleCol" prefWidth="134.0" text="Title" />
+                  <TableColumn fx:id="apptDescriptionCol" prefWidth="200.0" text="Description" />
+                  <TableColumn fx:id="apptLocationCol" prefWidth="91.0" text="Location" />
                   <TableColumn fx:id="apptTypeCol" prefWidth="115.0" text="Type" />
-                  <TableColumn fx:id="apptContactNameCol" prefWidth="158.0" text="Contact Name" />
-                  <TableColumn fx:id="customerIDCol" prefWidth="81.0" text="Customer ID" />
-                  <TableColumn fx:id="customerPhoneNumberCol" prefWidth="109.0" text="Phone Number" />
-                  <TableColumn fx:id="apptStartDateTime" prefWidth="110.0" text="Start Date/Time" />
-                  <TableColumn fx:id="apptEndDateTime" prefWidth="125.0" text="End Date/Time" />
+                  <TableColumn fx:id="apptStartDateTime" prefWidth="160.0" text="Start Date/Time" />
+                  <TableColumn fx:id="apptEndDateTime" prefWidth="160.0" text="End Date/Time" />
+                  <TableColumn fx:id="customerIDCol" prefWidth="86.0" text="Customer ID" />
+                  <TableColumn fx:id="userIDCol" prefWidth="62.0" text="User ID" />
+                  <TableColumn fx:id="contactIDCol" prefWidth="88.0" text="Contact ID" />
               </columns>
             </TableView>
          </children>

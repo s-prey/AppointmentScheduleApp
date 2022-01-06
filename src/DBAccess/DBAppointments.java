@@ -12,8 +12,11 @@ import java.time.LocalDateTime;
 
 public class DBAppointments {
 
+
+    public static ObservableList<Appointments> allAppointments = FXCollections.observableArrayList();
+
     public static ObservableList<Appointments> getAllAppointments() {
-        ObservableList<Appointments> appointmentsObservableList = FXCollections.observableArrayList();
+        //ObservableList<Appointments> allAppointments = FXCollections.observableArrayList();
 
         try {
             String sql = "SELECT * from appointments";
@@ -34,11 +37,11 @@ public class DBAppointments {
 
                 Appointments appointment = new Appointments(apptID, apptTitle, apptDescription, apptLocation, apptType,
                         apptStartDateTime, apptEndDatetime, customerID, userID, contactID);
-                appointmentsObservableList.add(appointment);
+                allAppointments.add(appointment);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return appointmentsObservableList;
+        return allAppointments;
     }
 }

@@ -6,18 +6,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Appointments;
 import model.Countries;
 
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 import java.util.SortedMap;
 
@@ -26,108 +21,82 @@ public class AppointmentMenuController implements Initializable {
     Stage stage;
     Parent scene;
 
+
+
+    @FXML private Button addNewAppointmentButton;
+
+    @FXML private RadioButton allAppointmentsRadioBtn;
+
+    @FXML private ToggleGroup appointmentFilterTG;
+
+    @FXML private TextField appointmentIDTxtField;
+
+    @FXML private TextField appointmentTypeCmboBox;
+
+    @FXML private RadioButton appointmentsByMoRadioBtn;
+
+    @FXML private RadioButton appointmentsByWkRadioBtn;
+
+    @FXML private TableView<Appointments> appointmentsTableView;
+    @FXML private TableColumn<Appointments, Integer> apptIDCol;
+    @FXML private TableColumn<Appointments, String> apptTitleCol;
+    @FXML private TableColumn<Appointments, String> apptDescriptionCol;
+    @FXML private TableColumn<Appointments, String> apptLocationCol;
+    @FXML private TableColumn<Appointments, String> apptTypeCol;
+    @FXML private TableColumn<Appointments, LocalDateTime> apptStartDateTime;
+    @FXML private TableColumn<Appointments, LocalDateTime> apptEndDateTime;
+    @FXML private TableColumn<Appointments, Integer> customerIDCol;
+    @FXML private TableColumn<Appointments, Integer> userIDCol;
+    @FXML private TableColumn<Appointments, Integer> contactIDCol;
+
+
+
+
+
+
+
+
+    @FXML private Button clearInformationFieldsButton;
+
+    @FXML private ComboBox<?> contactCmboBox;
+
+
+
+    @FXML private ComboBox<?> customerIDCmboBox;
+
+
+
+    @FXML private Button customerMenuButton;
+
+    @FXML private Button deleteAppointmentButton;
+
+    @FXML private TextField descriptionTxtField;
+
+    @FXML private DatePicker endDatePicker;
+
+    @FXML private ComboBox<?> endTimeCmboBox;
+
+    @FXML private TextField locationTxtField;
+
+    @FXML private Button reportsMenuButton;
+
+    @FXML private DatePicker startDatePicker;
+
+    @FXML private ComboBox<?> startTimeCmboBox;
+
+    @FXML private TextField titleTxtField;
+
+    @FXML private Button updateAppointmentButton;
+
+    @FXML private ComboBox<?> userIDCmboBox;
+
+
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
-
-    @FXML
-    private Button addNewAppointmentButton;
-
-    @FXML
-    private RadioButton allAppointmentsRadioBtn;
-
-    @FXML
-    private ToggleGroup appointmentFilterTG;
-
-    @FXML
-    private TextField appointmentIDTxtField;
-
-    @FXML
-    private TextField appointmentTypeCmboBox;
-
-    @FXML
-    private RadioButton appointmentsByMoRadioBtn;
-
-    @FXML
-    private RadioButton appointmentsByWkRadioBtn;
-
-    @FXML
-    private TableColumn<?, ?> apptContactNameCol;
-
-    @FXML
-    private TableColumn<?, ?> apptDescriptionCol;
-
-    @FXML
-    private TableColumn<?, ?> apptEndDateTime;
-
-    @FXML
-    private TableColumn<?, ?> apptIDCol;
-
-    @FXML
-    private TableColumn<?, ?> apptLocationCol;
-
-    @FXML
-    private TableColumn<?, ?> apptStartDateTime;
-
-    @FXML
-    private TableColumn<?, ?> apptTitleCol;
-
-    @FXML
-    private TableColumn<?, ?> apptTypeCol;
-
-    @FXML
-    private Button clearInformationFieldsButton;
-
-    @FXML
-    private ComboBox<?> contactCmboBox;
-
-    @FXML
-    private ComboBox<?> customerIDCmboBox;
-
-    @FXML
-    private TableColumn<?, ?> customerIDCol;
-
-    @FXML
-    private Button customerMenuButton;
-
-    @FXML
-    private TableColumn<?, ?> customerPhoneNumberCol;
-
-    @FXML
-    private Button deleteAppointmentButton;
-
-    @FXML
-    private TextField descriptionTxtField;
-
-    @FXML
-    private DatePicker endDatePicker;
-
-    @FXML
-    private ComboBox<?> endTimeCmboBox;
-
-    @FXML
-    private TextField locationTxtField;
-
-    @FXML
-    private Button reportsMenuButton;
-
-    @FXML
-    private DatePicker startDatePicker;
-
-    @FXML
-    private ComboBox<?> startTimeCmboBox;
-
-    @FXML
-    private TextField titleTxtField;
-
-    @FXML
-    private Button updateAppointmentButton;
-
-    @FXML
-    private ComboBox<?> userIDCmboBox;
-
-
 
     @FXML
     void onActionAddNewAppointment(ActionEvent event) {

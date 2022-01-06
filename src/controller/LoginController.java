@@ -47,6 +47,13 @@ public class LoginController implements Initializable {
     @FXML
     private Label userZoneLabel;
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+    }
+
+
+
     @FXML
     void onActionClearLogin(ActionEvent event) {
 
@@ -63,11 +70,17 @@ public class LoginController implements Initializable {
         String password = loginPasswordTxtField.getText();
 
         if (userID.equals("test") && password.equals("test")) {
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/AppointmentMenu.fxml")));
-            Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            primaryStage.setScene(new Scene(root/*, 900, 600*/));
-            CustomerMenuController login = new CustomerMenuController();
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/View/AppointmentMenu.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
+
+            //Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/AppointmentMenu.fxml")));
+            //Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            //primaryStage.setScene(new Scene(root/*, 900, 600*/));
+            //AppointmentMenuController login = new AppointmentMenuController();
             //login.checkForUpcomingAppointment();
+            //primaryStage.show();
             successfulLogIn = true;
         }
         else {
@@ -80,8 +93,5 @@ public class LoginController implements Initializable {
         //trackUserActivity();
 
     }
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
 
-    }
 }
