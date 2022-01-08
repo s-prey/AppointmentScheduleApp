@@ -7,5 +7,6 @@ module AppointmentScheduleApp {
     requires java.desktop;
 
     opens controller;
+    opens model;
     opens C195.AppointmentScheduleApp;
 }

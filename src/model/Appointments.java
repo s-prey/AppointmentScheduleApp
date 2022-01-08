@@ -1,9 +1,13 @@
 package model;
 
+import javafx.beans.value.ObservableValue;
+
 import javax.print.attribute.standard.RequestingUserName;
 import java.time.LocalDateTime;
 
 public class Appointments {
+
+
     private int apptID;
     private String apptTitle;
     private String apptDescription;
@@ -15,8 +19,9 @@ public class Appointments {
     public int userID;
     public int contactID;
 
-    public Appointments (int apptID, String apptTitle, String apptDescription, String apptLocation, String apptType,
-    LocalDateTime apptStartDateTime, LocalDateTime apptEndDateTime, int customerID, int userID, int contactID) {
+
+    public Appointments(int apptID, String apptTitle, String apptDescription, String apptLocation, String apptType,
+            LocalDateTime apptStartDateTime, LocalDateTime apptEndDateTime, int customerID, int userID, int contactID) {
         this.apptID = apptID;
         this.apptTitle = apptTitle;
         this.apptDescription = apptDescription;
@@ -49,13 +54,15 @@ public class Appointments {
         return apptType;
     }
 
-    public LocalDateTime getApptStartDateTime() {
+    /*public String getApptStartDateTime() {
         return apptStartDateTime;
     }
 
-    public LocalDateTime getApptEndDateTime() {
+    public String getApptEndDateTime() {
         return apptEndDateTime;
     }
+
+     */
 
     public int getCustomerID() {
         return customerID;
