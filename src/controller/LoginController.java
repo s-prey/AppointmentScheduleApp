@@ -57,12 +57,17 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         ZoneId currentZone = ZoneId.systemDefault();
-        userZoneLabel.setText("User Location Time: " + currentZone);
+       userZoneLabel.setText("User Location Time: " + currentZone);
         Locale french = new Locale("fr", "FR");
-        ResourceBundle rb = ResourceBundle.getBundle("Controller/Nat", Locale.FRENCH);
+        ResourceBundle rb = ResourceBundle.getBundle("C195.AppointmentScheduleApp/Nat", Locale.FRENCH);
+        //ResourceBundle rb = ResourceBundle.getBundle("C195.AppointmentScheduleApp/Nat", Locale.getDefault());
+
         if (Locale.getDefault().getLanguage().equals("fr")) {
-            Locale.setDefault(french);
+            System.out.println(rb.getString("Username") + " " + rb.getString("Password"));
+        }
+            /*Locale.setDefault(french);
             loginTitleLabel.setText((rb.getString("Customer Appointment Scheduler Login")).replaceAll(",",
                     " "));
             loginUsernameLabel.setText((rb.getString("Username")).replaceAll(",", " "));
@@ -89,6 +94,8 @@ public class LoginController implements Initializable {
             //logInFormTitleLabel.setLayoutX(190);
             //userLocationLabel.setLayoutX(350);
         }
+
+        */
 
     }
 

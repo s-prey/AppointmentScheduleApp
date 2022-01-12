@@ -81,6 +81,6 @@
             </Button>
          </children>
       </HBox>
-      <Label fx:id="userZoneLabel" layoutX="69.0" layoutY="313.0" prefHeight="17.0" prefWidth="180.0" text="User Location Zone" />
+      <Label fx:id="userZoneLabel" layoutX="69.0" layoutY="313.0" prefHeight="17.0" prefWidth="278.0" text="User Location Zone" />
    </children>
 </AnchorPane>
