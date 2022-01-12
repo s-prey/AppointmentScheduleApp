@@ -15,6 +15,8 @@ import javafx.stage.Stage;
 
 import javax.swing.*;
 import java.net.URL;
+import java.time.ZoneId;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -36,19 +38,57 @@ public class LoginController implements Initializable {
     private Button loginButton;
 
     @FXML
+    private Label loginPasswordLabel;
+
+    @FXML
     private TextField loginPasswordTxtField;
 
     @FXML
-    private TextField loginUsernameTxtField;
+    private Label loginTitleLabel;
 
     @FXML
-    private Label titleLabel;
+    private Label loginUsernameLabel;
+
+    @FXML
+    private TextField loginUsernameTxtField;
 
     @FXML
     private Label userZoneLabel;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        ZoneId currentZone = ZoneId.systemDefault();
+        userZoneLabel.setText("User Location Time: " + currentZone);
+        Locale french = new Locale("fr", "FR");
+        ResourceBundle rb = ResourceBundle.getBundle("Controller/Nat", Locale.FRENCH);
+        if (Locale.getDefault().getLanguage().equals("fr")) {
+            Locale.setDefault(french);
+            loginTitleLabel.setText((rb.getString("Customer Appointment Scheduler Login")).replaceAll(",",
+                    " "));
+            loginUsernameLabel.setText((rb.getString("Username")).replaceAll(",", " "));
+            loginPasswordLabel.setText((rb.getString("Password")).replaceAll(",", " "));
+            loginButton.setText("Login");
+            clearLoginButton.setText("Clear");
+            exitLoginButton.setText("Exit");
+            int indexOfZoneDiff = (currentZone.toString()).indexOf("/");
+            String countryToDisplay = (currentZone.toString()).substring(0, indexOfZoneDiff);
+            String countryToDisplayFR;
+            if (countryToDisplay.equals("Pacific") || countryToDisplay.equals("America") ||
+                    countryToDisplay.equals("Europe")) {
+                countryToDisplayFR = (rb.getString(countryToDisplay));
+                int indexOfEnd = (currentZone.toString()).length();
+                String locationToDisplay = (currentZone.toString()).substring(indexOfZoneDiff, indexOfEnd);
+                userZoneLabel.setText((rb.getString("User Location Zone")).replaceAll(",", " ") +
+                         ": " + countryToDisplayFR + locationToDisplay);
+            } else {
+                userZoneLabel.setText((rb.getString("User Location Zone")).replaceAll(",", " ") +
+                        ": " + currentZone);
+            }
+            logInErrorTitle = rb.getString("Login Failed").replaceAll(",", " ");
+            logInErrorMessage = rb.getString("Invalid Username or Password").replaceAll(",", " ");
+            //logInFormTitleLabel.setLayoutX(190);
+            //userLocationLabel.setLayoutX(350);
+        }
 
     }
 
