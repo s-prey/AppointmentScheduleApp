@@ -1,0 +1,7 @@
+Date: 2022-01-16 -- Timestamp: 2022-01-16 13:01:37.158713 -- Login Attempt Successful
+Timestamp: 2022-01-16 13:04:24.7973196 -- Login Attempt Unsuccessful
+Timestamp: 2022-01-16 13:04:27.629708 -- Login Attempt Successful
+Timestamp: 2022-01-16 13:38:34.7814498 -- Login Attempt Unsuccessful
+Timestamp: 2022-01-16 13:39:23.3236055 -- Login Attempt Unsuccessful
+Timestamp: 2022-01-16 13:40:52.145639 -- Login Attempt Unsuccessful
+Timestamp: 2022-01-16 13:41:25.7821078 -- Login Attempt Unsuccessful

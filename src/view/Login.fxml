@@ -5,9 +5,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.2" fx:controller="controller.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginController">
    <children>
-      <Label fx:id="loginTitleLabel" alignment="TOP_CENTER" prefHeight="52.0" prefWidth="400.0" text="Customer Appointment Scheduler Login">
+      <Label fx:id="loginTitleLabel" alignment="TOP_CENTER" prefHeight="73.0" prefWidth="500.0" text="Customer Appointment Scheduler Login">
          <font>
             <Font name="Tahoma Bold" size="18.0" />
          </font>
@@ -15,7 +15,7 @@
             <Insets top="50.0" />
          </padding>
       </Label>
-      <VBox layoutY="127.0" prefHeight="162.0" prefWidth="400.0">
+      <VBox layoutY="127.0" prefHeight="162.0" prefWidth="500.0">
          <children>
             <HBox prefHeight="45.0" prefWidth="200.0">
                <children>
@@ -27,7 +27,7 @@
                         <Insets left="20.0" />
                      </HBox.margin>
                   </Label>
-                  <TextField fx:id="loginUsernameTxtField" prefHeight="25.0" prefWidth="180.0">
+                  <TextField fx:id="loginUsernameTxtField" prefHeight="25.0" prefWidth="175.0">
                      <HBox.margin>
                         <Insets left="30.0" />
                      </HBox.margin>
@@ -53,7 +53,7 @@
                         <Insets left="20.0" />
                      </HBox.margin>
                   </Label>
-                  <TextField fx:id="loginPasswordTxtField" prefHeight="25.0" prefWidth="180.0">
+                  <TextField fx:id="loginPasswordTxtField" prefHeight="25.0" prefWidth="175.0">
                      <HBox.margin>
                         <Insets left="33.0" />
                      </HBox.margin>
@@ -62,16 +62,11 @@
             </HBox>
          </children>
       </VBox>
-      <HBox layoutY="240.0" prefHeight="73.0" prefWidth="400.0">
+      <HBox layoutY="240.0" prefHeight="73.0" prefWidth="500.0">
          <children>
             <Button fx:id="loginButton" mnemonicParsing="false" onAction="#onActionUserLogin" prefHeight="35.0" prefWidth="80.0" text="Login">
                <HBox.margin>
-                  <Insets left="70.0" />
-               </HBox.margin>
-            </Button>
-            <Button fx:id="clearLoginButton" mnemonicParsing="false" onAction="#onActionClearLogin" prefHeight="35.0" prefWidth="80.0" text="Clear">
-               <HBox.margin>
-                  <Insets left="15.0" />
+                  <Insets left="170.0" />
                </HBox.margin>
             </Button>
             <Button fx:id="exitLoginButton" mnemonicParsing="false" onAction="#onActionExitLogin" prefHeight="35.0" prefWidth="80.0" text="Exit">
@@ -81,6 +76,6 @@
             </Button>
          </children>
       </HBox>
-      <Label fx:id="userZoneLabel" layoutX="69.0" layoutY="313.0" prefHeight="17.0" prefWidth="278.0" text="User Location Zone" />
+      <Label fx:id="userZoneLabel" layoutX="69.0" layoutY="313.0" prefHeight="17.0" prefWidth="360.0" text="User Location Zone" />
    </children>
 </AnchorPane>

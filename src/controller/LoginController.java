@@ -14,7 +14,14 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import javax.swing.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.Objects;
@@ -24,12 +31,10 @@ public class LoginController implements Initializable {
 
     Stage stage;
     Parent scene;
-    String logInErrorMessage = "Invalid Username or Password";
-    String logInErrorTitle = "Login Failed";
+    String logInErrorMessage; //= "Invalid Username or Password";
+    String logInErrorTitle; //= "Login Failed";
     boolean successfulLogIn = false;
 
-    @FXML
-    private Button clearLoginButton;
 
     @FXML
     private Button exitLoginButton;
@@ -58,57 +63,29 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        //ZoneId currentZone = ZoneId.systemDefault();
+
+        ResourceBundle rb = ResourceBundle.getBundle("C195.AppointmentScheduleApp/Nat", Locale.getDefault());
         ZoneId currentZone = ZoneId.systemDefault();
-       userZoneLabel.setText("User Location Time: " + currentZone);
-        Locale french = new Locale("fr", "FR");
-        ResourceBundle rb = ResourceBundle.getBundle("C195.AppointmentScheduleApp/Nat", Locale.FRENCH);
-        //ResourceBundle rb = ResourceBundle.getBundle("C195.AppointmentScheduleApp/Nat", Locale.getDefault());
 
-        if (Locale.getDefault().getLanguage().equals("fr")) {
-            System.out.println(rb.getString("Username") + " " + rb.getString("Password"));
-        }
-            /*Locale.setDefault(french);
-            loginTitleLabel.setText((rb.getString("Customer Appointment Scheduler Login")).replaceAll(",",
-                    " "));
-            loginUsernameLabel.setText((rb.getString("Username")).replaceAll(",", " "));
-            loginPasswordLabel.setText((rb.getString("Password")).replaceAll(",", " "));
-            loginButton.setText("Login");
-            clearLoginButton.setText("Clear");
-            exitLoginButton.setText("Exit");
-            int indexOfZoneDiff = (currentZone.toString()).indexOf("/");
-            String countryToDisplay = (currentZone.toString()).substring(0, indexOfZoneDiff);
-            String countryToDisplayFR;
-            if (countryToDisplay.equals("Pacific") || countryToDisplay.equals("America") ||
-                    countryToDisplay.equals("Europe")) {
-                countryToDisplayFR = (rb.getString(countryToDisplay));
-                int indexOfEnd = (currentZone.toString()).length();
-                String locationToDisplay = (currentZone.toString()).substring(indexOfZoneDiff, indexOfEnd);
-                userZoneLabel.setText((rb.getString("User Location Zone")).replaceAll(",", " ") +
-                         ": " + countryToDisplayFR + locationToDisplay);
-            } else {
-                userZoneLabel.setText((rb.getString("User Location Zone")).replaceAll(",", " ") +
-                        ": " + currentZone);
-            }
-            logInErrorTitle = rb.getString("Login Failed").replaceAll(",", " ");
-            logInErrorMessage = rb.getString("Invalid Username or Password").replaceAll(",", " ");
-            //logInFormTitleLabel.setLayoutX(190);
-            //userLocationLabel.setLayoutX(350);
-        }
 
-        */
+        loginTitleLabel.setText(rb.getString("loginTitle"));
+        loginUsernameLabel.setText(rb.getString("Username"));
+        loginPasswordLabel.setText(rb.getString("Password"));
+        loginButton.setText(rb.getString("Login"));
+        exitLoginButton.setText(rb.getString("Exit"));
+        userZoneLabel.setText(rb.getString("zoneLabel") + ": " + currentZone);
+
+        logInErrorTitle = rb.getString("loginErrorTitle");
+        logInErrorMessage = rb.getString("loginErrorMessage");
 
     }
 
 
-
-    @FXML
-    void onActionClearLogin(ActionEvent event) {
-
-    }
 
     @FXML
     void onActionExitLogin(ActionEvent event) {
-
+        System.exit(0);
     }
 
     @FXML
@@ -122,22 +99,32 @@ public class LoginController implements Initializable {
             stage.setScene(new Scene(scene));
             stage.show();
 
-            //Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/AppointmentMenu.fxml")));
-            //Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            //primaryStage.setScene(new Scene(root/*, 900, 600*/));
-            //AppointmentMenuController login = new AppointmentMenuController();
-            //login.checkForUpcomingAppointment();
-            //primaryStage.show();
+
             successfulLogIn = true;
         }
         else {
-            JOptionPane.showMessageDialog(null,
-                    logInErrorMessage,
-                    logInErrorTitle,
+            JOptionPane.showMessageDialog(null, logInErrorMessage, logInErrorTitle,
                     JOptionPane.ERROR_MESSAGE);
             successfulLogIn = false;
         }
-        //trackUserActivity();
+        loginActivityTracker();
+    }
+
+    public void loginActivityTracker() throws IOException {
+        LocalDate attemptDate = LocalDateTime.now().toLocalDate();
+        Timestamp attemptTimeStamp = Timestamp.valueOf(LocalDateTime.now());
+        FileWriter fileWriter = new FileWriter("login_activity.txt", true);
+        PrintWriter outputFile = new PrintWriter(fileWriter);
+        //outputFile.print("Date: " + attemptDate + " -- ");
+        outputFile.print("Timestamp: " + attemptTimeStamp + " -- ");
+        if (successfulLogIn) {
+            outputFile.print("Login Attempt Successful\n");
+        }
+        else {
+            outputFile.print("Login Attempt Unsuccessful\n");
+        }
+
+        outputFile.close();
 
     }
 
