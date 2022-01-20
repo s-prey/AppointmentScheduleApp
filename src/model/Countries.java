@@ -1,5 +1,7 @@
 package model;
 
+import javafx.collections.ObservableList;
+
 public class Countries {
     private int countryID;
     private String countryName;
@@ -9,11 +11,23 @@ public class Countries {
         this.countryName = countryName;
     }
 
+    public Countries() {
+
+    }
+
     public int getCountryID() {
         return countryID;
     }
 
     public String getCountryName() {
         return countryName;
+    }
+
+    public void setCountryID(int countryID) {
+        this.countryID = countryID;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
     }
 }
