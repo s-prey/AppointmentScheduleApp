@@ -105,16 +105,16 @@ public class CustomerMenuController implements Initializable {
         countryCmboBox.getSelectionModel().selectFirst();
         filterDivisions();
 
-        for (Countries country : allCountries) {
-            countryNames.add(country.getCountryName());
-        }
+        //for (Countries country : allCountries) {
+            //countryNames.add(country.getCountryName());
+        //}
         //countryCmboBox.setItems(countryNames);
         //countryCmboBox.setEditable(true);
         //countryCmboBox.getEditor().setEditable(false);
-        ObservableList<FirstLevelDivisions> allFirstLevelDivisions = DBFirstLevelDivisions.getAllFirstLevelDivisions();
-        ObservableList<String> allFirstLevelDivisionNames = FXCollections.observableArrayList();
+        //ObservableList<FirstLevelDivisions> allFirstLevelDivisions = DBFirstLevelDivisions.getAllFirstLevelDivisions();
+        //ObservableList<String> allFirstLevelDivisionNames = FXCollections.observableArrayList();
 
-        allFirstLevelDivisions.forEach(firstLevelDivisions -> allFirstLevelDivisionNames.add(firstLevelDivisions.getDivisionName()));
+        //allFirstLevelDivisions.forEach(firstLevelDivisions -> allFirstLevelDivisionNames.add(firstLevelDivisions.getDivisionName()));
 
 
     }
@@ -178,7 +178,7 @@ public class CustomerMenuController implements Initializable {
 
     @FXML
     void onActionFilterCountryCmboBox(ActionEvent event) {
-
+        filterDivisions();
     }
 
     public void filterDivisions() {

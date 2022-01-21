@@ -25,6 +25,7 @@ public class DBCountries {
 
                 Countries country = new Countries(countryID, countryName);
                 countriesObservableList.add(country);
+
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
