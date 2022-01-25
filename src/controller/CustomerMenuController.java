@@ -85,7 +85,7 @@ public class CustomerMenuController implements Initializable {
     public ObservableList<Customers> customerData = FXCollections.observableArrayList();
 
     public ObservableList<FirstLevelDivisions> divisions = FXCollections.observableArrayList();
-    public ObservableList<Countries> countriesData = DBCountries.getAllCountries();
+    public ObservableList<Countries> countriesList = DBCountries.getAllCountries();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -102,8 +102,11 @@ public class CustomerMenuController implements Initializable {
         ObservableList<String> countryNames = FXCollections.observableArrayList();
 
         countryCmboBox.setItems(allCountries);
-        countryCmboBox.getSelectionModel().selectFirst();
-        filterDivisions();
+        countryCmboBox.setPromptText("Select Country");
+        //countryCmboBox.getSelectionModel().selectFirst();
+
+        //filterDivisions();
+
 
         //for (Countries country : allCountries) {
             //countryNames.add(country.getCountryName());
@@ -120,15 +123,16 @@ public class CustomerMenuController implements Initializable {
     }
 
     public void selectedCustomerData() throws SQLException {
-       /* Customers selectedCustomer = customerTableView.getSelectionModel().getSelectedItem();
-        if (selectedCustomer != null) {
+       Customers selectedCustomer = customerTableView.getSelectionModel().getSelectedItem();
+
+       if (selectedCustomer != null) {
             ObservableList<Countries> allCountries = DBCountries.getAllCountries();
             ObservableList<FirstLevelDivisions> allFirstLevelDivisions = DBFirstLevelDivisions.getAllFirstLevelDivisions();
             ObservableList<String> firstLevelDivisionName = FXCollections.observableArrayList();
             for (FirstLevelDivisions firstLevelDivisions : allFirstLevelDivisions) {
                 firstLevelDivisionName.add(firstLevelDivisions.getDivisionName());
             }
-            firstLevelDivisionCmboBox.setItems(firstLevelDivisionName);
+            //firstLevelDivisionCmboBox.setItems(firstLevelDivisionName);
             customerIDTxtField.setText(String.valueOf(selectedCustomer.getCustomerID()));
             customerNameTxtField.setText(selectedCustomer.getCustomerName());
             customerAddressTxtField.setText(selectedCustomer.getCustomerAddress());
@@ -150,12 +154,12 @@ public class CustomerMenuController implements Initializable {
                     }
                 }
             }
-            firstLevelDivisionCmboBox.setValue(divisionName);
-            countryCmboBox.setValue(countryName);
+            //firstLevelDivisionCmboBox.setValue(divisionName);
+            //countryCmboBox.setValue(countryName);
 
         }
 
-        */
+
     }
 
 
@@ -178,7 +182,15 @@ public class CustomerMenuController implements Initializable {
 
     @FXML
     void onActionFilterCountryCmboBox(ActionEvent event) {
-        filterDivisions();
+        divisions.clear();
+        int country_ID = countryCmboBox.getSelectionModel().getSelectedItem().getCountryID();
+        for (FirstLevelDivisions div : DBFirstLevelDivisions.getAllFirstLevelDivisions()) {
+            if (country_ID == div.getCountryID()) {
+                divisions.add(div);
+            }
+        }
+        firstLevelDivisionCmboBox.setItems(divisions);
+        firstLevelDivisionCmboBox.getSelectionModel().selectFirst();
     }
 
     public void filterDivisions() {
