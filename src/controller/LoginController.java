@@ -62,12 +62,8 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        //ZoneId currentZone = ZoneId.systemDefault();
-
         ResourceBundle rb = ResourceBundle.getBundle("C195.AppointmentScheduleApp/Nat", Locale.getDefault());
         ZoneId currentZone = ZoneId.systemDefault();
-
 
         loginTitleLabel.setText(rb.getString("loginTitle"));
         loginUsernameLabel.setText(rb.getString("Username"));
@@ -75,12 +71,10 @@ public class LoginController implements Initializable {
         loginButton.setText(rb.getString("Login"));
         exitLoginButton.setText(rb.getString("Exit"));
         userZoneLabel.setText(rb.getString("zoneLabel") + ": " + currentZone);
-
         logInErrorTitle = rb.getString("loginErrorTitle");
         logInErrorMessage = rb.getString("loginErrorMessage");
 
     }
-
 
 
     @FXML

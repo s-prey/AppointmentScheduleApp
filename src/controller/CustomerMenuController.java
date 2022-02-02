@@ -102,18 +102,10 @@ public class CustomerMenuController implements Initializable {
         customerDivisionCol.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
         customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("customerPhone"));
 
-        //ObservableList<Countries> allCountries = DBCountries.getAllCountries();
 
-
-        //countryCmboBox.setItems(allCountries);
-        //countryCmboBox.setPromptText("Select Country");
-        //countryCmboBox.getSelectionModel().selectFirst();
-        //filterDivisions();
     }
 
     public void selectedCustomerData() throws SQLException {
-
-
         Customers selectedCustomer = customerTableView.getSelectionModel().getSelectedItem();
         customerIDTxtField.setText(String.valueOf(selectedCustomer.getCustomerID()));
         customerNameTxtField.setText(selectedCustomer.getCustomerName());
@@ -132,19 +124,7 @@ public class CustomerMenuController implements Initializable {
                 }
             }
         }
-
-
-
-
-
     }
-
-
-
-
-
-
-
 
 
     @FXML
@@ -154,7 +134,15 @@ public class CustomerMenuController implements Initializable {
 
     @FXML
     void onActionClearInformationFields(ActionEvent event) {
-        clearInformationFields();
+        customerIDTxtField.setText("Auto-Generated");
+        customerNameTxtField.clear();
+        customerAddressTxtField.clear();
+        postalCodeTxtField.clear();
+        countryCmboBox.getSelectionModel().clearSelection();
+        firstLevelDivisionCmboBox.getSelectionModel().clearSelection();
+        countryCmboBox.setPromptText("Select Country");
+        firstLevelDivisionCmboBox.setPromptText("Select Division");
+        phoneNumberTxtField.clear();
 
     }
 
@@ -181,7 +169,7 @@ public class CustomerMenuController implements Initializable {
     }
 
     public void filterDivisions() {
-        divisions.clear();
+        /*divisions.clear();
         int country_ID = countryCmboBox.getSelectionModel().getSelectedItem().getCountryID();
         for (FirstLevelDivisions div : DBFirstLevelDivisions.getAllFirstLevelDivisions()) {
             if (country_ID == div.getCountryID()) {
@@ -191,37 +179,14 @@ public class CustomerMenuController implements Initializable {
         firstLevelDivisionCmboBox.setItems(divisions);
         firstLevelDivisionCmboBox.getSelectionModel().selectFirst();
 
+         */
+
 
     }
 
     @FXML
     void onActionFilterFirstLevelDivisionCmboBox(ActionEvent event) {
 
-
-        /*ObservableList<FirstLevelDivisions> allFirstLevelDivisions = DBFirstLevelDivisions.getAllFirstLevelDivisions();
-        ObservableList<String> firstLevelDivisionsUS = FXCollections.observableArrayList();
-        ObservableList<String> firstLevelDivisionsUK = FXCollections.observableArrayList();
-        ObservableList<String> firstLevelDivisionsCA = FXCollections.observableArrayList();
-
-        for (FirstLevelDivisions firstLevelDivisions : allFirstLevelDivisions) {
-            if (firstLevelDivisions.getCountryID() == 1) {
-                firstLevelDivisionsUS.add(firstLevelDivisions.getDivisionName());
-            } else if (firstLevelDivisions.getCountryID() == 2) {
-                firstLevelDivisionsUK.add(firstLevelDivisions.getDivisionName());
-            } else if (firstLevelDivisions.getCountryID() == 3) {
-                firstLevelDivisionsCA.add(firstLevelDivisions.getDivisionName());
-            }
-        }
-        String selectedCountry = countryCmboBox.getSelectionModel().getSelectedItem();
-        if (selectedCountry.equals("U.S")) {
-            firstLevelDivisionCmboBox.setItems(firstLevelDivisionsUS);
-        } else if (selectedCountry.equals("UK")) {
-            firstLevelDivisionCmboBox.setItems(firstLevelDivisionsUK);
-        } else if (selectedCountry.equals("Canada")) {
-            firstLevelDivisionCmboBox.setItems(firstLevelDivisionsCA);
-        }
-
-         */
     }
 
 
