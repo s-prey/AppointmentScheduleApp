@@ -89,6 +89,10 @@ public class CustomerMenuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        divisions = DBFirstLevelDivisions.getAllFirstLevelDivisions();
+
+        countryCmboBox.setItems(DBCountries.getAllCountries());
+        firstLevelDivisionCmboBox.setItems(divisions);
 
         customerTableView.setItems(DBCustomers.getAllCustomers());
         customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
@@ -98,69 +102,47 @@ public class CustomerMenuController implements Initializable {
         customerDivisionCol.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
         customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("customerPhone"));
 
-        ObservableList<Countries> allCountries = DBCountries.getAllCountries();
-        ObservableList<String> countryNames = FXCollections.observableArrayList();
+        //ObservableList<Countries> allCountries = DBCountries.getAllCountries();
 
-        countryCmboBox.setItems(allCountries);
-        countryCmboBox.setPromptText("Select Country");
+
+        //countryCmboBox.setItems(allCountries);
+        //countryCmboBox.setPromptText("Select Country");
         //countryCmboBox.getSelectionModel().selectFirst();
-
         //filterDivisions();
-
-
-        //for (Countries country : allCountries) {
-            //countryNames.add(country.getCountryName());
-        //}
-        //countryCmboBox.setItems(countryNames);
-        //countryCmboBox.setEditable(true);
-        //countryCmboBox.getEditor().setEditable(false);
-        //ObservableList<FirstLevelDivisions> allFirstLevelDivisions = DBFirstLevelDivisions.getAllFirstLevelDivisions();
-        //ObservableList<String> allFirstLevelDivisionNames = FXCollections.observableArrayList();
-
-        //allFirstLevelDivisions.forEach(firstLevelDivisions -> allFirstLevelDivisionNames.add(firstLevelDivisions.getDivisionName()));
-
-
     }
 
     public void selectedCustomerData() throws SQLException {
-       Customers selectedCustomer = customerTableView.getSelectionModel().getSelectedItem();
 
-       if (selectedCustomer != null) {
-            ObservableList<Countries> allCountries = DBCountries.getAllCountries();
-            ObservableList<FirstLevelDivisions> allFirstLevelDivisions = DBFirstLevelDivisions.getAllFirstLevelDivisions();
-            ObservableList<String> firstLevelDivisionName = FXCollections.observableArrayList();
-            for (FirstLevelDivisions firstLevelDivisions : allFirstLevelDivisions) {
-                firstLevelDivisionName.add(firstLevelDivisions.getDivisionName());
-            }
-            //firstLevelDivisionCmboBox.setItems(firstLevelDivisionName);
-            customerIDTxtField.setText(String.valueOf(selectedCustomer.getCustomerID()));
-            customerNameTxtField.setText(selectedCustomer.getCustomerName());
-            customerAddressTxtField.setText(selectedCustomer.getCustomerAddress());
-            postalCodeTxtField.setText(selectedCustomer.getCustomerPostal());
-            phoneNumberTxtField.setText(selectedCustomer.getCustomerPhone());
 
-            int divisionID = selectedCustomer.getDivisionID();
-            String divisionName = "";
-            int countryID;
-            String countryName = "";
-            for (FirstLevelDivisions firstLevelDivisions : allFirstLevelDivisions) {
-                if (divisionID == firstLevelDivisions.getDivisionID()) {
-                    divisionName = firstLevelDivisions.getDivisionName();
-                    countryID = firstLevelDivisions.getCountryID();
-                    for (Countries countries : allCountries) {
-                        if (countryID == countries.getCountryID()) {
-                            countryName = countries.getCountryName();
-                        }
+        Customers selectedCustomer = customerTableView.getSelectionModel().getSelectedItem();
+        customerIDTxtField.setText(String.valueOf(selectedCustomer.getCustomerID()));
+        customerNameTxtField.setText(selectedCustomer.getCustomerName());
+        customerAddressTxtField.setText(selectedCustomer.getCustomerAddress());
+        postalCodeTxtField.setText(selectedCustomer.getCustomerPostal());
+        phoneNumberTxtField.setText(selectedCustomer.getCustomerPhone());
+
+        divisions = DBFirstLevelDivisions.getAllFirstLevelDivisions();
+        for (FirstLevelDivisions FLD : divisions) {
+            if (selectedCustomer.getDivisionID() == FLD.getDivisionID()) {
+                firstLevelDivisionCmboBox.setValue(FLD);
+                for (Countries countries : countriesList) {
+                    if (FLD.getCountryID() == countries.getCountryID()) {
+                        countryCmboBox.setValue(countries);
                     }
                 }
             }
-            //firstLevelDivisionCmboBox.setValue(divisionName);
-            //countryCmboBox.setValue(countryName);
-
         }
 
 
+
+
+
     }
+
+
+
+
+
 
 
 
@@ -172,6 +154,7 @@ public class CustomerMenuController implements Initializable {
 
     @FXML
     void onActionClearInformationFields(ActionEvent event) {
+        clearInformationFields();
 
     }
 
@@ -182,7 +165,7 @@ public class CustomerMenuController implements Initializable {
 
     @FXML
     void onActionFilterCountryCmboBox(ActionEvent event) {
-        divisions.clear();
+       divisions.clear();
         int country_ID = countryCmboBox.getSelectionModel().getSelectedItem().getCountryID();
         for (FirstLevelDivisions div : DBFirstLevelDivisions.getAllFirstLevelDivisions()) {
             if (country_ID == div.getCountryID()) {
@@ -191,6 +174,10 @@ public class CustomerMenuController implements Initializable {
         }
         firstLevelDivisionCmboBox.setItems(divisions);
         firstLevelDivisionCmboBox.getSelectionModel().selectFirst();
+
+
+
+
     }
 
     public void filterDivisions() {
@@ -203,6 +190,8 @@ public class CustomerMenuController implements Initializable {
         }
         firstLevelDivisionCmboBox.setItems(divisions);
         firstLevelDivisionCmboBox.getSelectionModel().selectFirst();
+
+
     }
 
     @FXML
@@ -258,6 +247,15 @@ public class CustomerMenuController implements Initializable {
 
     }
 
+    private void clearInformationFields() {
+        customerIDTxtField.setText("Auto-Generated");
+        customerNameTxtField.clear();
+        customerAddressTxtField.clear();
+        postalCodeTxtField.clear();
+        countryCmboBox.getSelectionModel().clearSelection();
+        firstLevelDivisionCmboBox.getSelectionModel().clearSelection();
+        phoneNumberTxtField.clear();
+    }
 
 
 

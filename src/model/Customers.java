@@ -8,6 +8,10 @@ public class Customers {
     private String customerPhone;
     private int divisionID;
 
+    public Customers() {
+
+    }
+
     public Customers(int customerID, String customerName, String customerAddress, String customerPostal,
                      String customerPhone, int divisionID) {
         this.customerID = customerID;
@@ -40,5 +44,10 @@ public class Customers {
 
     public int getDivisionID() {
         return divisionID;
+    }
+
+    @Override
+    public String toString() {
+        return (customerName);
     }
 }
