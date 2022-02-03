@@ -6,6 +6,7 @@ import DBAccess.DBFirstLevelDivisions;
 import Database.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -116,9 +117,11 @@ public class CustomerMenuController implements Initializable {
         divisions = DBFirstLevelDivisions.getAllFirstLevelDivisions();
         for (FirstLevelDivisions FLD : divisions) {
             if (selectedCustomer.getDivisionID() == FLD.getDivisionID()) {
+                System.out.println(FLD);
                 firstLevelDivisionCmboBox.setValue(FLD);
                 for (Countries countries : countriesList) {
                     if (FLD.getCountryID() == countries.getCountryID()) {
+                        System.out.println(countries);
                         countryCmboBox.setValue(countries);
                     }
                 }
@@ -140,8 +143,6 @@ public class CustomerMenuController implements Initializable {
         postalCodeTxtField.clear();
         countryCmboBox.getSelectionModel().clearSelection();
         firstLevelDivisionCmboBox.getSelectionModel().clearSelection();
-        countryCmboBox.setPromptText("Select Country");
-        firstLevelDivisionCmboBox.setPromptText("Select Division");
         phoneNumberTxtField.clear();
 
     }
@@ -151,43 +152,51 @@ public class CustomerMenuController implements Initializable {
 
     }
 
-    @FXML
-    void onActionFilterCountryCmboBox(ActionEvent event) {
-       divisions.clear();
-        int country_ID = countryCmboBox.getSelectionModel().getSelectedItem().getCountryID();
-        for (FirstLevelDivisions div : DBFirstLevelDivisions.getAllFirstLevelDivisions()) {
-            if (country_ID == div.getCountryID()) {
-                divisions.add(div);
-            }
+   /* @FXML
+    void onActionFilterCountryCmboBox(MouseEvent event) throws SQLException {
+        String sql = "SELECT * from countries";
+        PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Countries countries = new Countries();
+            countries.setCountryName(rs.getString("Country"));
+            countryCmboBox.setItems(countriesList);
+            firstLevelDivisionCmboBox.setValue(null);
         }
-        firstLevelDivisionCmboBox.setItems(divisions);
-        firstLevelDivisionCmboBox.getSelectionModel().selectFirst();
-
-
 
 
     }
 
-    public void filterDivisions() {
+    */
+
+    public ObservableList<FirstLevelDivisions> filterDivisions() {
+        ObservableList<FirstLevelDivisions> divisionsList = DBFirstLevelDivisions.getAllFirstLevelDivisions();
+        FilteredList<FirstLevelDivisions> filteredDivisionsList = new FilteredList<>(divisionsList, i -> i.getCountryID() == countryCmboBox.getSelectionModel().getSelectedItem().getCountryID());
+        return filteredDivisionsList;
+
+
+
         /*divisions.clear();
         int country_ID = countryCmboBox.getSelectionModel().getSelectedItem().getCountryID();
         for (FirstLevelDivisions div : DBFirstLevelDivisions.getAllFirstLevelDivisions()) {
             if (country_ID == div.getCountryID()) {
-                divisions.add(div);
+                //divisions.add(div);
+                firstLevelDivisionCmboBox.setItems(divisions);
             }
         }
-        firstLevelDivisionCmboBox.setItems(divisions);
-        firstLevelDivisionCmboBox.getSelectionModel().selectFirst();
+        //firstLevelDivisionCmboBox.setItems(divisions);
+        //firstLevelDivisionCmboBox.getSelectionModel().selectFirst();
 
          */
 
+    }
+
+   /* @FXML
+    void onActionFilterFirstLevelDivisionCmboBox(javafx.scene.input.MouseEvent event) {
 
     }
 
-    @FXML
-    void onActionFilterFirstLevelDivisionCmboBox(ActionEvent event) {
-
-    }
+    */
 
 
 
@@ -223,9 +232,31 @@ public class CustomerMenuController implements Initializable {
     }
 
 
+    public void onActionFilterCountryCmboBox(javafx.scene.input.MouseEvent mouseEvent) throws SQLException {
+        String sql = "SELECT * from countries";
+        PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Countries countries = new Countries();
+            countries.setCountryName(rs.getString("Country"));
+            countryCmboBox.setItems(countriesList);
+            firstLevelDivisionCmboBox.setValue(null);
+        }
+    }
 
 
+    public void onActionFilterFirstLevelDivisionCmboBox(javafx.scene.input.MouseEvent mouseEvent) {
+        try {
+            divisions.clear();
+            int countryID = countryCmboBox.getSelectionModel().getSelectedItem().getCountryID();
+            for (FirstLevelDivisions fld : DBFirstLevelDivisions.getAllFirstLevelDivisions()) {
+                if (fld.getCountryID() == countryID) {
+                    divisions.add(fld);
+                }
+            }
+            firstLevelDivisionCmboBox.setItems(divisions);
+        } catch (NumberFormatException e) {
 
-
-
+        }
+    }
 }

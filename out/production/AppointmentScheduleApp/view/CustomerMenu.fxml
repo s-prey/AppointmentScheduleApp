@@ -62,13 +62,13 @@
                   <HBox prefHeight="32.0" prefWidth="303.0">
                      <children>
                         <Label prefHeight="25.0" prefWidth="130.0" text="Country:" />
-                        <ComboBox fx:id="countryCmboBox" onAction="#onActionFilterCountryCmboBox" prefHeight="25.0" prefWidth="180.0" promptText="Select Country" />
+                        <ComboBox fx:id="countryCmboBox" onMouseClicked="#onActionFilterCountryCmboBox" prefHeight="25.0" prefWidth="180.0" promptText="Select Country" />
                      </children>
                   </HBox>
                   <HBox prefHeight="32.0" prefWidth="303.0">
                      <children>
                         <Label prefHeight="25.0" prefWidth="130.0" text="First Level Division:" />
-                        <ComboBox fx:id="firstLevelDivisionCmboBox" onAction="#onActionFilterFirstLevelDivisionCmboBox" prefHeight="25.0" prefWidth="180.0" promptText="Select Division" />
+                        <ComboBox fx:id="firstLevelDivisionCmboBox" onMouseClicked="#onActionFilterFirstLevelDivisionCmboBox" prefHeight="25.0" prefWidth="180.0" promptText="Select Division" />
                      </children>
                   </HBox>
                   <HBox prefHeight="32.0" prefWidth="303.0">
