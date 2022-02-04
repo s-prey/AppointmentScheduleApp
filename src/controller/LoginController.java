@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -97,8 +98,15 @@ public class LoginController implements Initializable {
             successfulLogIn = true;
         }
         else {
-            JOptionPane.showMessageDialog(null, logInErrorMessage, logInErrorTitle,
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Login Failed");
+            alert.setHeaderText("Incorrect Username or Password");
+            alert.setContentText("Please try again");
+            alert.showAndWait();
+            /*JOptionPane.showMessageDialog(null, logInErrorMessage, logInErrorTitle,
                     JOptionPane.ERROR_MESSAGE);
+
+             */
             successfulLogIn = false;
         }
         loginActivityTracker();
