@@ -3,6 +3,7 @@ package controller;
 import DBAccess.DBCountries;
 import DBAccess.DBCustomers;
 import DBAccess.DBFirstLevelDivisions;
+import DBAccess.DBUsers;
 import Database.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,6 +26,7 @@ import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -133,7 +135,28 @@ public class CustomerMenuController implements Initializable {
 
     @FXML
     void onActionAddNewCustomer(ActionEvent event) {
+        Connection connection = DBConnection.getConnection();
 
+        Customers customers = new Customers();
+
+        customers.setCustomerName(customerNameTxtField.getText());
+        customers.setCustomerAddress(customerAddressTxtField.getText());
+        customers.setCustomerPostal(postalCodeTxtField.getText());
+        customers.setCustomerPhone(phoneNumberTxtField.getText());
+        customers.setCreatedBy(DBUsers.loggedUser.getUserName());
+        customers.setUpdatedBy(DBUsers.loggedUser.getUserName());
+        customers.setDivisionID(firstLevelDivisionCmboBox.getSelectionModel().getSelectedItem().getDivisionID());
+
+        try {
+            int insertCustomer = DBCustomers.insertCustomer(customers, connection);
+            customerTableView.setItems(DBCustomers.getAllCustomers());
+
+            
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        DBConnection.closeConnection();
     }
 
     @FXML

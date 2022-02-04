@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Customers;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,5 +36,23 @@ public class DBCustomers {
             throwables.printStackTrace();
         }
         return customersObservableList;
+    }
+
+    public static int insertCustomer(Customers customers, Connection connection) throws SQLException {
+        String sql = "INSERT into customers (Customer_Name, Address, Postal_Code, Phone, Created_By, Last_Updated_By, Division_ID) VALUES (?,?,?,?,?,?,?)";
+        PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+
+        ps.setString(1, customers.getCustomerName());
+        ps.setString(2, customers.getCustomerAddress());
+        ps.setString(3, customers.getCustomerPostal());
+        ps.setString(4,customers.getCustomerPhone());
+        ps.setString(5, customers.getCreatedBy());
+        ps.setString(6, customers.getUpdatedBy());
+
+
+        int result = ps.executeUpdate();
+        ps.close();
+
+        return result;
     }
 }

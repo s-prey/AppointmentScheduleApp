@@ -11,6 +11,10 @@ public class Users {
         this.userPassword = userPassword;
     }
 
+    public Users() {
+
+    }
+
     public int getUserID() {
         return userID;
     }
@@ -21,5 +25,17 @@ public class Users {
 
     public String getUserPassword() {
         return userPassword;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 }
