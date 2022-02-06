@@ -103,10 +103,7 @@ public class LoginController implements Initializable {
             alert.setHeaderText("Incorrect Username or Password");
             alert.setContentText("Please try again");
             alert.showAndWait();
-            /*JOptionPane.showMessageDialog(null, logInErrorMessage, logInErrorTitle,
-                    JOptionPane.ERROR_MESSAGE);
 
-             */
             successfulLogIn = false;
         }
         loginActivityTracker();

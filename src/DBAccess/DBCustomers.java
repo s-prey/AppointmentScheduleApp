@@ -32,13 +32,13 @@ public class DBCustomers {
                         divisionID);
                 customersObservableList.add(customer);
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
         return customersObservableList;
     }
 
-    public static int insertCustomer(Customers customers, Connection connection) throws SQLException {
+    /*public static int addCustomer(Customers customers, Connection connection) throws SQLException {
         String sql = "INSERT into customers (Customer_Name, Address, Postal_Code, Phone, Created_By, Last_Updated_By, Division_ID) VALUES (?,?,?,?,?,?,?)";
         PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
 
@@ -54,5 +54,24 @@ public class DBCustomers {
         ps.close();
 
         return result;
+    }
+
+     */
+    public static void addCustomer(String customerName, String customerAddress, String customerPostal, String customerPhone, Integer divisionID) {
+        try {
+            String sql = "INSERT INTO client_schedule.customers (Customer_Name, Address, Postal_code, Phone, Division_ID)" +
+                    "VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            ps.setString(1, customerName);
+            ps.setString(2, customerAddress);
+            ps.setString(3, customerPostal);
+            ps.setString(4, customerPhone);
+            ps.setInt(5, divisionID);
+            ps.execute();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
     }
 }

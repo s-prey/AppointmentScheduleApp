@@ -30,6 +30,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class CustomerMenuController implements Initializable {
@@ -132,10 +133,102 @@ public class CustomerMenuController implements Initializable {
         }
     }
 
+    public Boolean errorCheck(String customer_ID) {
+        ObservableList<Customers> customersList = DBCustomers.getAllCustomers();
+
+        if (customerNameTxtField.getText().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Empty Field");
+            alert.setHeaderText("Name Empty");
+            alert.setContentText("Input Customer Name");
+            alert.showAndWait();
+            return false;
+        }
+        if (customerAddressTxtField.getText().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Empty Field");
+            alert.setHeaderText("Address Empty");
+            alert.setContentText("Input Customer Address");
+            alert.showAndWait();
+            return false;
+        }
+        if (postalCodeTxtField.getText().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Empty Field");
+            alert.setHeaderText("Postal Code Empty");
+            alert.setContentText("Input Customer Postal Code");
+            alert.showAndWait();
+            return false;
+        }
+        if (countryCmboBox.getSelectionModel().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Empty Box");
+            alert.setHeaderText("Country Box Empty");
+            alert.setContentText("Select Customer Country");
+            alert.showAndWait();
+            return false;
+        }
+        if (firstLevelDivisionCmboBox.getSelectionModel().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Empty Box");
+            alert.setHeaderText("First Level Division Box Empty");
+            alert.setContentText("Select Customer First Level Division");
+            alert.showAndWait();
+            return false;
+        }
+        if (phoneNumberTxtField.getText().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Empty Field");
+            alert.setHeaderText("Phone Number Empty");
+            alert.setContentText("Input Customer Phone Number");
+            alert.showAndWait();
+            return false;
+        }
+
+        return true;
+    }
 
     @FXML
-    void onActionAddNewCustomer(ActionEvent event) {
-        Connection connection = DBConnection.getConnection();
+    void onActionAddNewCustomer(ActionEvent event) throws IOException {
+        Boolean noError = errorCheck(customerIDTxtField.getText());
+        if (noError) {
+            String customerName = customerNameTxtField.getText();
+            String customerAddress = customerAddressTxtField.getText();
+            String customerPostal = postalCodeTxtField.getText();
+            String customerPhone = phoneNumberTxtField.getText();
+            FirstLevelDivisions divisions = firstLevelDivisionCmboBox.getValue();
+
+            DBCustomers.addCustomer(customerName, customerAddress, customerPostal, customerPhone,
+                    divisions.getDivisionID());
+            ObservableList<FirstLevelDivisions> flDivisions = FXCollections.observableArrayList();
+            flDivisions = DBFirstLevelDivisions.getAllFirstLevelDivisions();
+
+            countryCmboBox.setItems(DBCountries.getAllCountries());
+            firstLevelDivisionCmboBox.setItems(flDivisions);
+
+            customerTableView.setItems(DBCustomers.getAllCustomers());
+            customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+            customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+            customerAddressCol.setCellValueFactory(new PropertyValueFactory<>("customerAddress"));
+            customerPostalCol.setCellValueFactory(new PropertyValueFactory<>("customerPostal"));
+            customerDivisionCol.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
+            customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("customerPhone"));
+            customerIDTxtField.setText("Auto-Generated");
+            customerNameTxtField.clear();
+            customerAddressTxtField.clear();
+            postalCodeTxtField.clear();
+            countryCmboBox.getSelectionModel().clearSelection();
+            countryCmboBox.setValue(null);
+            firstLevelDivisionCmboBox.getSelectionModel().clearSelection();
+            firstLevelDivisionCmboBox.setValue(null);
+            phoneNumberTxtField.clear();
+        }
+        //stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        //scene = FXMLLoader.load(getClass().getResource("/View/CustomerMenu.fxml"));
+        //stage.setScene(new Scene(scene));
+        //stage.show();
+
+        /*Connection connection = DBConnection.getConnection();
 
         Customers customers = new Customers();
 
@@ -151,12 +244,14 @@ public class CustomerMenuController implements Initializable {
             int insertCustomer = DBCustomers.insertCustomer(customers, connection);
             customerTableView.setItems(DBCustomers.getAllCustomers());
 
-            
+
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         DBConnection.closeConnection();
+
+         */
     }
 
     @FXML
