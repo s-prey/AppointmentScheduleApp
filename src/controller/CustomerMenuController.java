@@ -21,16 +21,16 @@ import javafx.stage.Stage;
 import model.Countries;
 import model.Customers;
 import model.FirstLevelDivisions;
+import model.Users;
 
 import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CustomerMenuController implements Initializable {
@@ -94,6 +94,10 @@ public class CustomerMenuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        refreshTableView();
+    }
+
+    public void refreshTableView() {
         divisions = DBFirstLevelDivisions.getAllFirstLevelDivisions();
 
         countryCmboBox.setItems(DBCountries.getAllCountries());
@@ -106,8 +110,6 @@ public class CustomerMenuController implements Initializable {
         customerPostalCol.setCellValueFactory(new PropertyValueFactory<>("customerPostal"));
         customerDivisionCol.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
         customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("customerPhone"));
-
-
     }
 
     public void selectedCustomerData() throws SQLException {
@@ -189,7 +191,7 @@ public class CustomerMenuController implements Initializable {
     }
 
     @FXML
-    void onActionAddNewCustomer(ActionEvent event) throws IOException {
+    void onActionAddNewCustomer(ActionEvent event) throws IOException, SQLException {
         Boolean noError = errorCheck(customerIDTxtField.getText());
         if (noError) {
             String customerName = customerNameTxtField.getText();
@@ -198,14 +200,35 @@ public class CustomerMenuController implements Initializable {
             String customerPhone = phoneNumberTxtField.getText();
             FirstLevelDivisions divisions = firstLevelDivisionCmboBox.getValue();
 
-            DBCustomers.addCustomer(customerName, customerAddress, customerPostal, customerPhone,
-                    divisions.getDivisionID());
+
+            //DBCustomers.addCustomer(customerName, customerAddress, customerPostal, customerPhone, divisions.getDivisionID());
             ObservableList<FirstLevelDivisions> flDivisions = FXCollections.observableArrayList();
             flDivisions = DBFirstLevelDivisions.getAllFirstLevelDivisions();
 
             countryCmboBox.setItems(DBCountries.getAllCountries());
             firstLevelDivisionCmboBox.setItems(flDivisions);
 
+            LocalDateTime localDateTimeToAdd = LocalDateTime.now();
+            String createdByToAdd = "admin";
+            Timestamp lastUpdateToAdd = Timestamp.valueOf(LocalDateTime.now());
+            String lastUpdatedByToAdd = "admin";
+
+
+
+            String sql = "INSERT INTO client_schedule.customers (Customer_Name, Address, Postal_code, Phone,  " +
+                    "Create_Date, Created_By, Last_Update, Last_Updated_By, Division_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            ps.setString(1, customerName);
+            ps.setString(2, customerAddress);
+            ps.setString(3, customerPostal);
+            ps.setString(4, customerPhone);
+            ps.setTimestamp(5, Timestamp.valueOf(localDateTimeToAdd));
+            ps.setString(6, createdByToAdd);
+            ps.setTimestamp(7, lastUpdateToAdd);
+            ps.setString(8, lastUpdatedByToAdd);
+            ps.setInt(9, divisions.getDivisionID());
+            ps.execute();
+            /*
             customerTableView.setItems(DBCustomers.getAllCustomers());
             customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
             customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
@@ -213,49 +236,15 @@ public class CustomerMenuController implements Initializable {
             customerPostalCol.setCellValueFactory(new PropertyValueFactory<>("customerPostal"));
             customerDivisionCol.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
             customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("customerPhone"));
-            customerIDTxtField.setText("Auto-Generated");
-            customerNameTxtField.clear();
-            customerAddressTxtField.clear();
-            postalCodeTxtField.clear();
-            countryCmboBox.getSelectionModel().clearSelection();
-            countryCmboBox.setValue(null);
-            firstLevelDivisionCmboBox.getSelectionModel().clearSelection();
-            firstLevelDivisionCmboBox.setValue(null);
-            phoneNumberTxtField.clear();
+
+             */
+            refreshTableView();
+            clearInfomrationFields();
         }
-        //stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        //scene = FXMLLoader.load(getClass().getResource("/View/CustomerMenu.fxml"));
-        //stage.setScene(new Scene(scene));
-        //stage.show();
 
-        /*Connection connection = DBConnection.getConnection();
-
-        Customers customers = new Customers();
-
-        customers.setCustomerName(customerNameTxtField.getText());
-        customers.setCustomerAddress(customerAddressTxtField.getText());
-        customers.setCustomerPostal(postalCodeTxtField.getText());
-        customers.setCustomerPhone(phoneNumberTxtField.getText());
-        customers.setCreatedBy(DBUsers.loggedUser.getUserName());
-        customers.setUpdatedBy(DBUsers.loggedUser.getUserName());
-        customers.setDivisionID(firstLevelDivisionCmboBox.getSelectionModel().getSelectedItem().getDivisionID());
-
-        try {
-            int insertCustomer = DBCustomers.insertCustomer(customers, connection);
-            customerTableView.setItems(DBCustomers.getAllCustomers());
-
-
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        DBConnection.closeConnection();
-
-         */
     }
 
-    @FXML
-    void onActionClearInformationFields(ActionEvent event) {
+    public void clearInfomrationFields () {
         customerIDTxtField.setText("Auto-Generated");
         customerNameTxtField.clear();
         customerAddressTxtField.clear();
@@ -265,13 +254,44 @@ public class CustomerMenuController implements Initializable {
         firstLevelDivisionCmboBox.getSelectionModel().clearSelection();
         firstLevelDivisionCmboBox.setValue(null);
         phoneNumberTxtField.clear();
+    }
 
+    @FXML
+    void onActionClearInformationFields(ActionEvent event) {
+        clearInfomrationFields();
+    }
 
+    public void deleteCustomersAppointments() {
+        try {
+            String sql = "DELETE FROM client_schedule.appointments WHERE Customer_ID = ?";
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            ps.setString(1, String.valueOf(customerTableView.getSelectionModel().getSelectedItem().getCustomerID()));
+            int result = ps.executeUpdate();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        refreshTableView();
+        clearInfomrationFields();
     }
 
     @FXML
     void onActionDeleteCustomer(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Deleting selected customer and associated appointments. Do you wish to continue?");
+        Optional<ButtonType> results = alert.showAndWait();
+        try {
+            if (results.isPresent() && results.get() == ButtonType.OK) {
+                int customerID = customerTableView.getSelectionModel().getSelectedItem().getCustomerID();
+                String sql = "DELETE FROM client_schedule.customers WHERE Customer_ID = ?";
+                PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+                ps.setInt(1, customerID);
+                int result = ps.executeUpdate();
+                deleteCustomersAppointments();
 
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
 
@@ -292,23 +312,91 @@ public class CustomerMenuController implements Initializable {
     }
 
     @FXML
-    void onActionUpdateCustomer(ActionEvent event) {
+    void onActionUpdateCustomer(ActionEvent event) throws SQLException {
+        Boolean noError = errorCheck(customerIDTxtField.getText());
+        if (noError) {
+            int customerID = Integer.parseInt(customerIDTxtField.getText());
+            String customerName = customerNameTxtField.getText();
+            String customerAddress = customerAddressTxtField.getText();
+            String customerPostal = postalCodeTxtField.getText();
+            String customerPhone = phoneNumberTxtField.getText();
+            FirstLevelDivisions divisions = firstLevelDivisionCmboBox.getValue();
+            System.out.println(divisions);
 
-    }
+            int firstLevelDivisionsToUpdate = 0;
+
+           /* ObservableList<FirstLevelDivisions> flDivisions = DBFirstLevelDivisions.getAllFirstLevelDivisions();
+            for (FirstLevelDivisions firstLevelDivision : flDivisions) {
+                if (Objects.equals(firstLevelDivisionsToUpdate, firstLevelDivision.getDivisionName())) {
+                    firstLevelDivisionsToUpdate = firstLevelDivision.getDivisionID();
+                    System.out.println(firstLevelDivisionsToUpdate);
+                }
+
+            */
+
+
+                //for (FirstLevelDivisions firstLevelDivisions : FLD) {
+                //if (Objects.equals(firstLevelDivisionsToUpdate, firstLevelDivisions.getDivisionName())) {
+                //firstLevelDivisionsToUpdate = firstLevelDivisions.getDivisionID();
+                //}
+                //}
+                Timestamp lastUpdateToAdd = Timestamp.valueOf(LocalDateTime.now());
+                String lastUpdatedByToAdd = "admin";
+                String sql = "UPDATE client_schedule.customers SET Customer_ID = ?, Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Last_Update = ?, Last_Updated_By = ?, Division_ID = ? WHERE Customer_ID = ?";
+                PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+                ps.setInt(1, customerID);
+                ps.setString(2, customerName);
+                ps.setString(3, customerAddress);
+                ps.setString(4, customerPostal);
+                ps.setString(5, customerPhone);
+                ps.setTimestamp(6, lastUpdateToAdd);
+                ps.setString(7, lastUpdatedByToAdd);
+                ps.setInt(8, firstLevelDivisionsToUpdate);
+                ps.setInt(9, customerID);
+                ps.execute();
+                refreshTableView();
+                clearInfomrationFields();
+
+
+        /*Connection connection = DBConnection.startConnection();
+
+        Customers customer = new Customers();
+
+        customer.setCustomerID(Integer.valueOf(customerIDTxtField.getText()));
+        customer.setCustomerName(customerNameTxtField.getText());
+        customer.setCustomerAddress(customerAddressTxtField.getText());
+        customer.setCustomerPostal(postalCodeTxtField.getText());
+        customer.setCustomerPhone(phoneNumberTxtField.getText());
+        customer.setUpdatedBy(DBUsers.loggedUser.getUserName());
+        customer.setDivisionID(firstLevelDivisionCmboBox.getSelectionModel().getSelectedItem().getDivisionID());
+
+        int update = DBCustomers.updateCustomer(customer, connection);
+        customerTableView.setItems(DBCustomers.getAllCustomers(connection));
+
+         */
+            }
+        }
+
+
 
 
 
 
     public void onActionFilterCountryCmboBox(javafx.scene.input.MouseEvent mouseEvent) throws SQLException {
-        String sql = "SELECT * from countries";
-        PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            Countries countries = new Countries();
-            countries.setCountryName(rs.getString("Country"));
-            countryCmboBox.setItems(countriesList);
-            firstLevelDivisionCmboBox.setValue(null);
-        }
+       try {
+
+           String sql = "SELECT * from countries";
+           PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+           ResultSet rs = ps.executeQuery();
+           while (rs.next()) {
+               Countries countries = new Countries();
+               countries.setCountryName(rs.getString("Country"));
+               countryCmboBox.setItems(countriesList);
+               firstLevelDivisionCmboBox.setValue(null);
+           }
+       } catch (SQLException ex) {
+           ex.printStackTrace();
+       }
     }
 
 

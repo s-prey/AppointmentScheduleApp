@@ -18,10 +18,11 @@ public class Appointments {
     public int customerID;
     public int userID;
     public int contactID;
+    public String contactName;
 
 
     public Appointments(int apptID, String apptTitle, String apptDescription, String apptLocation, String apptType,
-            LocalDateTime apptStartDateTime, LocalDateTime apptEndDateTime, int customerID, int userID, int contactID) {
+            LocalDateTime apptStartDateTime, LocalDateTime apptEndDateTime, int customerID, int userID, int contactID, String contactName) {
         this.apptID = apptID;
         this.apptTitle = apptTitle;
         this.apptDescription = apptDescription;
@@ -32,6 +33,7 @@ public class Appointments {
         this.customerID = customerID;
         this.userID = userID;
         this.contactID = contactID;
+        this.contactName = contactName;
     }
 
     public int getApptID() {

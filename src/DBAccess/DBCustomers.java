@@ -5,10 +5,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Customers;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDateTime;
 
 public class DBCustomers {
 
@@ -36,42 +34,65 @@ public class DBCustomers {
             ex.printStackTrace();
         }
         return customersObservableList;
+
     }
 
-    /*public static int addCustomer(Customers customers, Connection connection) throws SQLException {
-        String sql = "INSERT into customers (Customer_Name, Address, Postal_Code, Phone, Created_By, Last_Updated_By, Division_ID) VALUES (?,?,?,?,?,?,?)";
-        PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
 
-        ps.setString(1, customers.getCustomerName());
-        ps.setString(2, customers.getCustomerAddress());
-        ps.setString(3, customers.getCustomerPostal());
-        ps.setString(4,customers.getCustomerPhone());
-        ps.setString(5, customers.getCreatedBy());
-        ps.setString(6, customers.getUpdatedBy());
-
-
-        int result = ps.executeUpdate();
-        ps.close();
-
-        return result;
-    }
-
-     */
     public static void addCustomer(String customerName, String customerAddress, String customerPostal, String customerPhone, Integer divisionID) {
         try {
-            String sql = "INSERT INTO client_schedule.customers (Customer_Name, Address, Postal_code, Phone, Division_ID)" +
-                    "VALUES (?, ?, ?, ?, ?)";
+            LocalDateTime localDateTimeToAdd = LocalDateTime.now();
+            String createdByToAdd = "admin";
+            Timestamp lastUpdateToAdd = Timestamp.valueOf(LocalDateTime.now());
+            String lastUpdatedByToAdd = "admin";
+
+
+
+            String sql = "INSERT INTO client_schedule.customers (Customer_Name, Address, Postal_code, Phone,  " +
+                    "Create_Date, Created_By, Last_Update, Last_Updated_By, Division_ID) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
             ps.setString(1, customerName);
             ps.setString(2, customerAddress);
             ps.setString(3, customerPostal);
             ps.setString(4, customerPhone);
+            ps.setTimestamp(5, Timestamp.valueOf(createdByToAdd));
+            ps.setString(6, createdByToAdd);
+            ps.setTimestamp(7, lastUpdateToAdd);
+            ps.setString(8, lastUpdatedByToAdd);
             ps.setInt(5, divisionID);
             ps.execute();
+
+            ps.close();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
     }
+
+   public static void updateCustomer(String customerName, String customerAddress, String customerPostal, String customerPhone, Integer divisionID, String customerID) {
+        try {
+            String sql = "UPDATE client_schedule.customers SET Customer_Name=?, Address=?, Postal_Code=?, phone=?, Division_ID=? WHERE Customer_ID=?";
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+
+            //ps.setInt(7, customer.getCustomerID());
+            ps.setString(1, customerName);
+            ps.setString(2, customerAddress);
+            ps.setString(3, customerPostal);
+            ps.setString(4, customerPhone);
+            //ps.setString(5, customer.getUpdatedBy());
+            ps.setInt(5, divisionID);
+            ps.setString(6, customerID);
+            ps.execute();
+
+            ps.close();
+
+
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
+
 }
