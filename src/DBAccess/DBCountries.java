@@ -12,7 +12,7 @@ import java.sql.SQLException;
 public class DBCountries {
 
     public static ObservableList<Countries> getAllCountries() {
-        ObservableList<Countries> countriesObservableList = FXCollections.observableArrayList();
+        ObservableList<Countries> countriesList = FXCollections.observableArrayList();
 
         try {
             String sql = "SELECT * from countries";
@@ -24,12 +24,12 @@ public class DBCountries {
                 String  countryName = rs.getString("Country");
 
                 Countries country = new Countries(countryID, countryName);
-                countriesObservableList.add(country);
+                countriesList.add(country);
 
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
-        return countriesObservableList;
+        return countriesList;
     }
 }

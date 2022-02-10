@@ -9,30 +9,22 @@ public class Customers {
     private String createdBy;
     private String updatedBy;
     private int divisionID;
+    private int countryID;
 
     public Customers() {
 
     }
 
     public Customers(int customerID, String customerName, String customerAddress, String customerPostal,
-                     String customerPhone, int divisionID) {
+                     String customerPhone, int divisionID, int countryID) {
         this.customerID = customerID;
         this.customerName = customerName;
         this.customerAddress = customerAddress;
         this.customerPostal = customerPostal;
         this.customerPhone = customerPhone;
         this.divisionID = divisionID;
-    }
+        this.countryID = countryID;
 
-    public Customers(String customerName, String customerAddress, String customerPostal, String customerPhone,
-                     String createdBy, String updatedBy, int divisionID) {
-        this.customerName = customerName;
-        this.customerAddress = customerAddress;
-        this.customerPostal = customerPostal;
-        this.customerPhone = customerPhone;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.divisionID = divisionID;
     }
 
 
@@ -68,6 +60,10 @@ public class Customers {
         return divisionID;
     }
 
+    public int getCountryID() {
+        return countryID;
+    }
+
     public void setCustomerID(int customerID) {
         this.customerID = customerID;
     }
@@ -100,8 +96,17 @@ public class Customers {
         this.divisionID = divisionID;
     }
 
+    public void setCountryID(int countryID) {
+        this.countryID = countryID;
+    }
+/*
     @Override
     public String toString() {
         return (customerName);
+    }
+ */
+    @Override
+    public String toString() {
+        return "[" + customerID + "]" + customerName;
     }
 }

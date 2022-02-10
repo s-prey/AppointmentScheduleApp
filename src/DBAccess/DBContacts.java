@@ -12,7 +12,7 @@ import java.sql.SQLException;
 public class DBContacts {
 
     public static ObservableList<Contacts> getAllContacts() {
-        ObservableList<Contacts> contactsObservableList = FXCollections.observableArrayList();
+        ObservableList<Contacts> contactsList = FXCollections.observableArrayList();
 
         try {
             String sql = "SELECT * from contacts";
@@ -25,11 +25,11 @@ public class DBContacts {
                 String contactEmail = rs.getString("Email");
 
                 Contacts contact = new Contacts(contactID, contactName, contactEmail);
-                contactsObservableList.add(contact);
+                contactsList.add(contact);
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
-        return contactsObservableList;
+        return contactsList;
     }
 }
