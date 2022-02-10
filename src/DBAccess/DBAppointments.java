@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Appointments;
 
+import java.net.PortUnreachableException;
 import java.sql.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -109,6 +110,242 @@ public class DBAppointments {
             ex.printStackTrace();
         }
     }
+//************************* NEED TO CHECK IF THIS CAN ADJUSTED / THIS IS A LAMBDA EXPRESSSION *************************************************************
+    public static ObservableList<Appointments> getApppointments15Minutes(int userID) {
+        ObservableList<Appointments> allApptList = getAllAppointments();
+
+        LocalDate todaysDate = LocalDate.now();
+        LocalTime timeNow = LocalTime.now();
+        LocalTime nowPlus15Mins = LocalTime.now().plusMinutes(15);
+        LocalDateTime dateTimeNow = LocalDateTime.of(todaysDate, timeNow);
+        LocalDateTime todayAnd15Min = LocalDateTime.of(todaysDate, nowPlus15Mins);
+
+        ObservableList<Appointments> apptsWithin15MinsList = allApptList.filtered(appointment -> {
+            if (appointment.getUserID() == userID &&
+                    (appointment.getApptStartDateTime().isAfter(dateTimeNow.minusMinutes(1)) && appointment.getApptStartDateTime().isBefore(todayAnd15Min.plusMinutes(1))) ||
+                    (appointment.getApptEndDateTime().isAfter(dateTimeNow.minusMinutes(1)) && appointment.getApptEndDateTime().isBefore(todayAnd15Min.plusMinutes(1))) ||
+                    (appointment.getApptStartDateTime().isBefore(dateTimeNow) && appointment.getApptEndDateTime().isAfter(todayAnd15Min))) {
+
+                return true;
+            } else {
+                return false;
+            }
+        });
+            return apptsWithin15MinsList;
+    }
+
+
+
+//************** NEED TO CHECK IF THIS CAN BE ADJUSTED *********************************************************************
+    public static ObservableList<Appointments> getTodaysAppointments() {
+        ObservableList<Appointments> todaysAppointmentsList = FXCollections.observableArrayList();
+
+        try {
+            String sql = "SELECT Appointment_ID, Title, Description, Location, contacts.Contact_ID, contacts.Contact_Name, Type, Start, End, customers.Customer_ID, User_ID " +
+                    "FROM appointments, contacts, customers WHERE appointments.Contact_ID=contacts.Contact_ID AND appointments.Customer_ID=customers.Customer_ID AND " +
+                    "Start >= ? AND Start <= ?";
+
+            LocalDate todaysDate = LocalDate.now();
+            LocalTime midnightTime = LocalTime.MIDNIGHT;
+            LocalTime twelveFiftyNine = LocalTime.MIDNIGHT.minusMinutes(1);
+            LocalDateTime midnightToday = LocalDateTime.of(todaysDate, midnightTime);
+            Timestamp timeStampStart = valueOf(midnightToday);
+
+            LocalDateTime lastMinToday = LocalDateTime.of(todaysDate, twelveFiftyNine);
+            Timestamp timeStampEnd = valueOf(lastMinToday);
+
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            ps.setTimestamp(1, timeStampStart);
+            ps.setTimestamp(2, timeStampEnd);
+            ResultSet rs = ps.executeQuery();
+
+                while (rs.next()) {
+                    int apptID = rs.getInt("Appointment_ID");
+                    String apptTitle = rs.getString("Title");
+                    String apptDesc = rs.getString("Description");
+                    String apptLocation = rs.getString("Location");
+                    String apptType = rs.getString("Type");
+                    LocalDateTime dateTimeStart = rs.getTimestamp("Start").toLocalDateTime();       //UTC
+                    LocalDateTime dateTimeEnd = rs.getTimestamp("End").toLocalDateTime();          //UTC
+                    int customerID = rs.getInt("Customer_ID");
+                    int userID = rs.getInt("User_ID");
+                    int contactID = rs.getInt("Contact_ID");
+                    String contactName = rs.getString("Contact_Name");
+
+                    Appointments appointment = new Appointments(apptID, apptTitle, apptDesc, apptLocation, apptType,
+                            dateTimeStart, dateTimeEnd, customerID, userID, contactID, contactName);
+                    todaysAppointmentsList.add(appointment);
+                }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return todaysAppointmentsList;
+    }
+
+    //*************************** SEE IF SQL STATEMENT CAN BE ADJUSTED ***************************
+    public static ObservableList<Appointments> getAppointmentsByMonth() {
+        ObservableList<Appointments> apptByMonthList = FXCollections.observableArrayList();
+
+        try {
+            String sql = "SELECT Appointment_ID, Title, Description, Location, contacts.Contact_ID, contacts.Contact_Name, Type, Start, End, customers.Customer_ID, User_ID " +
+                    "FROM appointments, contacts, customers WHERE appointments.Contact_ID=contacts.Contact_ID AND appointments.Customer_ID=customers.Customer_ID " +
+                    "AND month(Start) = month(now())";
+
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int apptID = rs.getInt("Appointment_ID");
+                String apptTitle = rs.getString("Title");
+                String apptDesc = rs.getString("Description");
+                String apptLocation = rs.getString("Location");
+                String apptType = rs.getString("Type");
+                LocalDateTime dateTimeStart = rs.getTimestamp("Start").toLocalDateTime();       //UTC
+                LocalDateTime dateTimeEnd = rs.getTimestamp("End").toLocalDateTime();          //UTC
+                int customerID = rs.getInt("Customer_ID");
+                int userID = rs.getInt("User_ID");
+                int contactID = rs.getInt("Contact_ID");
+                String contactName = rs.getString("Contact_Name");
+
+                Appointments appointment = new Appointments(apptID, apptTitle, apptDesc, apptLocation, apptType,
+                        dateTimeStart, dateTimeEnd, customerID, userID, contactID, contactName);
+                apptByMonthList.add(appointment);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return apptByMonthList;
+    }
+
+    public static ObservableList<Appointments> getAppointmentsByWeek() {
+        ObservableList<Appointments> apptByWeekList = FXCollections.observableArrayList();
+
+        try {
+            String sql = "SELECT Appointment_ID, Title, Description, Location, contacts.Contact_ID, contacts.Contact_Name, Type, Start, End, customers.Customer_ID, User_ID " +
+                    "FROM appointments, contacts, customers WHERE appointments.Contact_ID=contacts.Contact_ID AND appointments.Customer_ID=customers.Customer_ID AND " +
+                    "Start >= ? AND Start <= date_add(?, interval 7 day)";
+
+            // ************** Gets Monday before date now ************
+
+            // Gets midnight time as of today
+            LocalDate today = LocalDate.now();
+            LocalTime midnight = LocalTime.MIDNIGHT;
+
+            // Go's back in time from today to reach Monday
+            LocalDate monday = today;
+            while (monday.getDayOfWeek() != DayOfWeek.MONDAY) {
+                monday = monday.minusDays(1);
+            }
+
+            LocalDateTime mondayMidnight = LocalDateTime.of(monday, midnight);
+            Timestamp timestamp = valueOf(mondayMidnight);
+            // ************* Ends get Monday code***********
+
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            ps.setTimestamp(1, timestamp);
+            ps.setTimestamp(2, timestamp);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int apptID = rs.getInt("Appointment_ID");
+                String apptTitle = rs.getString("Title");
+                String apptDesc = rs.getString("Description");
+                String apptLocation = rs.getString("Location");
+                String apptType = rs.getString("Type");
+                LocalDateTime dateTimeStart = rs.getTimestamp("Start").toLocalDateTime();       //UTC
+                LocalDateTime dateTimeEnd = rs.getTimestamp("End").toLocalDateTime();          //UTC
+                int customerID = rs.getInt("Customer_ID");
+                int userID = rs.getInt("User_ID");
+                int contactID = rs.getInt("Contact_ID");
+                String contactName = rs.getString("Contact_Name");
+
+                Appointments appointment = new Appointments(apptID, apptTitle, apptDesc, apptLocation, apptType,
+                        dateTimeStart, dateTimeEnd, customerID, userID, contactID, contactName);
+                apptByWeekList.add(appointment);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return apptByWeekList;
+    }
+
+    //*********************************** SEE IF SQL STATEMENT CAN BE ADJUSTED **************************************************
+    public static ObservableList<Appointments> getAppointmentsByContact(int contact_ID) {
+        ObservableList<Appointments> apptByContactList = FXCollections.observableArrayList();
+
+        try {
+            String sql = "SELECT Appointment_ID, Title, Description, Location, contacts.Contact_ID, contacts.Contact_Name, Type, Start, End, customers.Customer_ID, User_ID " +
+                   "FROM appointments, contacts, customers WHERE appointments.Contact_ID=contacts.Contact_ID AND appointments.Customer_ID=customers.Customer_ID AND contacts.Contact_ID = ?";
+
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            ps.setInt(1, contact_ID);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int apptID = rs.getInt("Appointment_ID");
+                String apptTitle = rs.getString("Title");
+                String apptDesc = rs.getString("Description");
+                String apptLocation = rs.getString("Location");
+                String apptType = rs.getString("Type");
+                LocalDateTime dateTimeStart = rs.getTimestamp("Start").toLocalDateTime();       //UTC
+                LocalDateTime dateTimeEnd = rs.getTimestamp("End").toLocalDateTime();          //UTC
+                int customerID = rs.getInt("Customer_ID");
+                int userID = rs.getInt("User_ID");
+                int contactID = rs.getInt("Contact_ID");
+                String contactName = rs.getString("Contact_Name");
+
+                Appointments appointment = new Appointments(apptID, apptTitle, apptDesc, apptLocation, apptType,
+                        dateTimeStart, dateTimeEnd, customerID, userID, contactID, contactName);
+                apptByContactList.add(appointment);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return apptByContactList;
+    }
+
+//********************* SEE IF SQL STATEMENT CAN BE AJDUSTED *********************************************************************
+    public static ObservableList<Appointments> getAppointmentsByCustomer(int customer_ID) {
+        ObservableList<Appointments> apptByCustomerList = FXCollections.observableArrayList();
+
+        try {
+            String sql = "SELECT Appointment_ID, Title, Description, Location, contacts.Contact_ID, contacts.Contact_Name, Type, Start, End, customers.Customer_ID, User_ID " +
+                    "FROM appointments, contacts, customers WHERE appointments.Contact_ID=contacts.Contact_ID AND appointments.Customer_ID=customers.Customer_ID " +
+                    "AND customers.Customer_ID = ?";
+
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            ps.setInt(1, customer_ID);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int apptID = rs.getInt("Appointment_ID");
+                String apptTitle = rs.getString("Title");
+                String apptDesc = rs.getString("Description");
+                String apptLocation = rs.getString("Location");
+                String apptType = rs.getString("Type");
+                LocalDateTime dateTimeStart = rs.getTimestamp("Start").toLocalDateTime();       //UTC
+                LocalDateTime dateTimeEnd = rs.getTimestamp("End").toLocalDateTime();          //UTC
+                int customerID = rs.getInt("Customer_ID");
+                int userID = rs.getInt("User_ID");
+                int contactID = rs.getInt("Contact_ID");
+                String contactName = rs.getString("Contact_Name");
+
+                Appointments appointment = new Appointments(apptID, apptTitle, apptDesc, apptLocation, apptType,
+                        dateTimeStart, dateTimeEnd, customerID, userID, contactID, contactName);
+                apptByCustomerList.add(appointment);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return apptByCustomerList;
+    }
+
 }
 
 

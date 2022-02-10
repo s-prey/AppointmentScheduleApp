@@ -1,8 +1,5 @@
 package model;
 
-import javafx.beans.value.ObservableValue;
-
-import javax.print.attribute.standard.RequestingUserName;
 import java.time.LocalDateTime;
 
 public class Appointments {
@@ -56,15 +53,13 @@ public class Appointments {
         return apptType;
     }
 
-    /*public String getApptStartDateTime() {
+    public LocalDateTime getApptStartDateTime() {
         return apptStartDateTime;
     }
 
-    public String getApptEndDateTime() {
+    public LocalDateTime getApptEndDateTime() {
         return apptEndDateTime;
     }
-
-     */
 
     public int getCustomerID() {
         return customerID;
