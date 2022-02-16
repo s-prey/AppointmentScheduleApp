@@ -6,8 +6,8 @@ public class Customers {
     private String customerAddress;
     private String customerPostal;
     private String customerPhone;
-    private String createdBy;
-    private String updatedBy;
+    //private String createdBy;
+    //private String updatedBy;
     private int divisionID;
     private int countryID;
 
@@ -48,13 +48,13 @@ public class Customers {
         return customerPhone;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
-    }
+    //public String getCreatedBy() {
+        //return createdBy;
+    //}
 
-    public String getUpdatedBy() {
-        return updatedBy;
-    }
+    //public String getUpdatedBy() {
+        //return updatedBy;
+    //}
 
     public int getDivisionID() {
         return divisionID;
@@ -84,13 +84,13 @@ public class Customers {
         this.customerPhone = customerPhone;
     }
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
+    //public void setCreatedBy(String createdBy) {
+        //this.createdBy = createdBy;
+   // }
 
-    public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
-    }
+    //public void setUpdatedBy(String updatedBy) {
+        //this.updatedBy = updatedBy;
+    //}
 
     public void setDivisionID(int divisionID) {
         this.divisionID = divisionID;

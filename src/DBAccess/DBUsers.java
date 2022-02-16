@@ -3,16 +3,21 @@ package DBAccess;
 import Database.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import model.Users;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class DBUsers {
     public static Users loggedUser;
-    static ResultSet resultSet = null;
+    //static ResultSet resultSet = null;
+
+
     public static ObservableList<Users> getAllUsers() {
         ObservableList<Users> usersObservableList = FXCollections.observableArrayList();
 
@@ -29,26 +34,64 @@ public class DBUsers {
                 Users user = new Users(userID, userName, userPassword);
                 usersObservableList.add(user);
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
         return usersObservableList;
     }
 
-    public static Users getUser(int userID, Connection connection) throws SQLException {
-        Users user = new Users();
-        String sql = "SELECT * from users WHERE User_ID=?";
+
+    public static int getUser(String userID, String userPassword) {
+
+        int userMatch = 0;
+
+        try {
+
+        String sql = "SELECT User_Name, Password FROM client_schedule.users WHERE User_ID = ? AND Password = ?";
         PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
-        ps.setInt(1, userID);
-        ps.execute();
-        resultSet = ps.getResultSet();
+        ps.setString(1, userID);
+        ps.setString(2, userPassword);
+        ResultSet rs = ps.executeQuery();
 
-        if (resultSet.next()) {
-            user = userResultSet(resultSet);
+        ResourceBundle rb = ResourceBundle.getBundle("Nat", Locale.getDefault());
+
+        if (!rs.next()) {
+            if (Locale.getDefault().getLanguage().equals("fr")) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle(rb.getString("loginErrorTitle"));
+                alert.setContentText(rb.getString("loginErrorMessage"));
+                alert.showAndWait();
+
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle(rb.getString("loginErrorTitle"));
+                alert.setContentText(rb.getString("loginErrorMessage"));
+                alert.showAndWait();
+            }
+            userMatch = 0;
+
+        } else {
+            if (Locale.getDefault().getLanguage().equals("fr")) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle(rb.getString("loginStatusTitle"));
+                alert.setContentText(rb.getString("loginStatusMessage"));
+                alert.showAndWait();
+
+            } else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle(rb.getString("loginStatusTitle"));
+                alert.setContentText(rb.getString("loginStatusMessage"));
+                alert.showAndWait();
+            }
+            userMatch = 1;
         }
-        resultSet.close();
 
-        return user;
+
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+       return userMatch;
     }
 
 
@@ -63,5 +106,31 @@ public class DBUsers {
         user.setUserPassword(resultSet.getString("Password"));
 
         return user;
+    }
+
+    public static ObservableList<Users> getDBUserMatch(String userName, String userPassword) {
+        ObservableList<Users> userDBMatchList = FXCollections.observableArrayList();
+
+        try {
+            String sql = "SELECT User_ID, User_Name, Password FROM client_schedule.users WHERE User_Name = ?, AND Password = ?";
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            ps.setString(1, userName);
+            ps.setString(2, userPassword);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                int userID = rs.getInt("User_ID");
+                String user_Name = rs.getString("User_Name");
+                String user_Password = rs.getString("Password");
+
+                Users user = new Users(userID, user_Name, user_Password);
+                userDBMatchList.add(user);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return userDBMatchList;
     }
 }
