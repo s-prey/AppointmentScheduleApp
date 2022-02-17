@@ -33,6 +33,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static DBAccess.DBCountries.getAllCountries;
+import static DBAccess.DBFirstLevelDivisions.*;
+
 public class CustomerMenuController implements Initializable {
 
     Stage stage;
@@ -89,19 +92,22 @@ public class CustomerMenuController implements Initializable {
 
     public ObservableList<Customers> customerData = FXCollections.observableArrayList();
 
-    public ObservableList<FirstLevelDivisions> divisions = FXCollections.observableArrayList();
-    public ObservableList<Countries> countriesList = DBCountries.getAllCountries();
+    //public ObservableList<FirstLevelDivisions> divisions = FXCollections.observableArrayList();
+    //public ObservableList<Countries> countriesList = DBCountries.getAllCountries();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         refreshTableView();
+
     }
 
     public void refreshTableView() {
-        divisions = DBFirstLevelDivisions.getAllFirstLevelDivisions();
+        //divisions = DBFirstLevelDivisions.getAllFirstLevelDivisions();
 
+        //countryCmboBox.setItems(DBCountries.getAllCountries());
+        //firstLevelDivisionCmboBox.setItems(divisions);
+        firstLevelDivisionCmboBox.setItems(DBFirstLevelDivisions.getAllFirstLevelDivisions());
         countryCmboBox.setItems(DBCountries.getAllCountries());
-        firstLevelDivisionCmboBox.setItems(divisions);
 
         customerTableView.setItems(DBCustomers.getAllCustomers());
         customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
@@ -120,7 +126,7 @@ public class CustomerMenuController implements Initializable {
         postalCodeTxtField.setText(selectedCustomer.getCustomerPostal());
         phoneNumberTxtField.setText(selectedCustomer.getCustomerPhone());
 
-        divisions = DBFirstLevelDivisions.getAllFirstLevelDivisions();
+        /*divisions = DBFirstLevelDivisions.getAllFirstLevelDivisions();
         for (FirstLevelDivisions FLD : divisions) {
             if (selectedCustomer.getDivisionID() == FLD.getDivisionID()) {
                 System.out.println(FLD);
@@ -133,6 +139,8 @@ public class CustomerMenuController implements Initializable {
                 }
             }
         }
+
+         */
     }
 
     public Boolean errorCheck(String customer_ID) {
@@ -382,8 +390,16 @@ public class CustomerMenuController implements Initializable {
 
 
 
-    public void onActionFilterCountryCmboBox(javafx.scene.input.MouseEvent mouseEvent) throws SQLException {
-       try {
+    public void onActionFilterCountryCmboBox(ActionEvent event) {
+
+       Countries country = countryCmboBox.getSelectionModel().getSelectedItem();
+
+       int countryID;
+       countryID = country.getCountryID();
+
+       firstLevelDivisionCmboBox.setItems(getDivisionsByCountry(countryID));
+
+        /*try {
 
            String sql = "SELECT * from countries";
            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
@@ -397,11 +413,13 @@ public class CustomerMenuController implements Initializable {
        } catch (SQLException ex) {
            ex.printStackTrace();
        }
+
+        */
     }
 
 
-    public void onActionFilterFirstLevelDivisionCmboBox(javafx.scene.input.MouseEvent mouseEvent) {
-        try {
+   public void onActionFilterFirstLevelDivisionCmboBox(javafx.scene.input.MouseEvent mouseEvent) {
+        /*(try {
             //boolean isComboBoxEmpty = countryCmboBox.getSelectionModel().isEmpty();
             if (countryCmboBox.getValue() == null) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -423,5 +441,9 @@ public class CustomerMenuController implements Initializable {
         } catch (NumberFormatException e) {
 
         }
+
+         */
     }
+
+
 }

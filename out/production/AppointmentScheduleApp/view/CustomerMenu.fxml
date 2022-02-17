@@ -62,7 +62,7 @@
                   <HBox prefHeight="32.0" prefWidth="303.0">
                      <children>
                         <Label prefHeight="25.0" prefWidth="130.0" text="Country:" />
-                        <ComboBox fx:id="countryCmboBox" onMouseClicked="#onActionFilterCountryCmboBox" prefHeight="25.0" prefWidth="180.0" />
+                        <ComboBox fx:id="countryCmboBox" onAction="#onActionFilterCountryCmboBox" prefHeight="25.0" prefWidth="180.0" />
                      </children>
                   </HBox>
                   <HBox prefHeight="32.0" prefWidth="303.0">

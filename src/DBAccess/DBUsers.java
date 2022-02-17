@@ -41,50 +41,55 @@ public class DBUsers {
     }
 
 
-    public static int getUser(String userID, String userPassword) {
+    public static int getUser(String userName, String userPassword) {
 
         int userMatch = 0;
 
         try {
 
-        String sql = "SELECT User_Name, Password FROM client_schedule.users WHERE User_ID = ? AND Password = ?";
-        PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
-        ps.setString(1, userID);
-        ps.setString(2, userPassword);
-        ResultSet rs = ps.executeQuery();
+            String sql = "SELECT User_Name, Password FROM client_schedule.users WHERE User_Name = ? AND Password = ?";
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            ps.setString(1, userName);
+            ps.setString(2, userPassword);
+            ResultSet rs = ps.executeQuery();
 
-        ResourceBundle rb = ResourceBundle.getBundle("Nat", Locale.getDefault());
+            ResourceBundle rb = ResourceBundle.getBundle("C195.AppointmentScheduleApp/Nat", Locale.getDefault());
 
-        if (!rs.next()) {
-            if (Locale.getDefault().getLanguage().equals("fr")) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle(rb.getString("loginErrorTitle"));
-                alert.setContentText(rb.getString("loginErrorMessage"));
-                alert.showAndWait();
+            if (!rs.next()) {
+                if (Locale.getDefault().getLanguage().equals("fr")) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle(rb.getString("loginErrorTitle"));
+                    alert.setContentText(rb.getString("loginErrorMessage"));
+                    alert.showAndWait();
 
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle(rb.getString("loginErrorTitle"));
-                alert.setContentText(rb.getString("loginErrorMessage"));
-                alert.showAndWait();
-            }
-            userMatch = 0;
-
-        } else {
-            if (Locale.getDefault().getLanguage().equals("fr")) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle(rb.getString("loginStatusTitle"));
-                alert.setContentText(rb.getString("loginStatusMessage"));
-                alert.showAndWait();
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle(rb.getString("loginErrorTitle"));
+                    alert.setContentText(rb.getString("loginErrorMessage"));
+                    alert.showAndWait();
+                }
+                userMatch = 0;
 
             } else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle(rb.getString("loginStatusTitle"));
-                alert.setContentText(rb.getString("loginStatusMessage"));
-                alert.showAndWait();
+
+                if (Locale.getDefault().getLanguage().equals("fr")) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle(rb.getString("loginStatusTitle"));
+                    alert.setContentText(rb.getString("loginStatusMessage"));
+                    alert.showAndWait();
+
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle(rb.getString("loginStatusTitle"));
+                    //alert.setTitle("Success");
+                    alert.setContentText(rb.getString("loginStatusMessage"));
+                    alert.setHeaderText(null);
+                    //alert.setContentText("Log-In Successful!");
+                    alert.showAndWait();
+                }
+                userMatch = 1;
+
             }
-            userMatch = 1;
-        }
 
 
 
@@ -117,6 +122,7 @@ public class DBUsers {
             ps.setString(1, userName);
             ps.setString(2, userPassword);
             ResultSet rs = ps.executeQuery();
+
 
             while (rs.next()) {
 

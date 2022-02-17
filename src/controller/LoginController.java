@@ -1,5 +1,7 @@
 package controller;
 
+import DBAccess.DBAppointments;
+import DBAccess.DBUsers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +25,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.Objects;
@@ -85,9 +88,71 @@ public class LoginController implements Initializable {
 
     @FXML
     void onActionUserLogin(ActionEvent event) throws Exception{
-        String userID = loginUsernameTxtField.getText();
-        String password = loginPasswordTxtField.getText();
+        String userName = loginUsernameTxtField.getText();
+        String userPassword = loginPasswordTxtField.getText();
 
+    // add code here
+        LocalDate dateNow = LocalDate.now();
+        LocalTime timeNow = LocalTime.now();
+
+
+        if (DBUsers.getUser(userName, userPassword) == 0) {
+            System.out.println(userName);
+            System.out.println(userPassword);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Login Failed");
+            alert.setHeaderText("Incorrect Username or Password");
+            alert.setContentText("Please try again");
+            alert.showAndWait();
+            successfulLogIn = false;
+            return;
+
+        } else {
+
+            if (DBUsers.getDBUserMatch(userName, userPassword).size() > 0) {
+
+                int userID = DBUsers.getDBUserMatch(userName, userPassword).get(0).getUserID();
+
+                //******** I DONT THINK I NEED AN ALERT TO SAY NO APPOINTSMENTS, REMOVE *************************************
+                if (DBAppointments.getApppointments15Minutes(userID).isEmpty()) {
+
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("No appointments");
+                    alert.setHeaderText(null);
+                    alert.setContentText("No upcoming appointments");
+                    alert.showAndWait();
+                } else {
+
+                    int appointmentID = DBAppointments.getApppointments15Minutes(userID).get(0).getApptID();
+
+                    LocalDateTime apptStart = DBAppointments.getApppointments15Minutes(userID).get(0).getApptStartDateTime();
+                    LocalDateTime apptEnd = DBAppointments.getApppointments15Minutes(userID).get(0).getApptEndDateTime();
+
+                    LocalDate startDate = apptStart.toLocalDate();
+                    LocalTime startTime = apptStart.toLocalTime();
+                    LocalTime endTime = apptEnd.toLocalTime();
+
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("You have an upcoming appointment");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Appointment ID: " + appointmentID + "\n" + "Start Date: " + startDate + " Start Time: " + startTime +
+                            "\n" + "End Time: " + endTime);
+
+                    alert.showAndWait();
+
+
+
+                }
+
+            }
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/View/AppointmentMenu.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
+            successfulLogIn = true;
+        }
+        loginActivityTracker();
+/*
         if (userID.equals("test") && password.equals("test")) {
             stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/View/AppointmentMenu.fxml"));
@@ -107,6 +172,8 @@ public class LoginController implements Initializable {
             successfulLogIn = false;
         }
         loginActivityTracker();
+
+ */
     }
 
     public void loginActivityTracker() throws IOException {
