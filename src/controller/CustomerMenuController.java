@@ -40,26 +40,18 @@ public class CustomerMenuController implements Initializable {
 
     Stage stage;
     Parent scene;
+    private int customerID;
 
-    @FXML
-    private TableView<Customers> customerTableView;
-    @FXML
-    private TableColumn<Customers, Integer> customerIDCol;
-    @FXML
-    private TableColumn<Customers, String> customerNameCol;
-    @FXML
-    private TableColumn<Customers, String> customerAddressCol;
-    @FXML
-    private TableColumn<Customers, String> customerPostalCol;
-    @FXML
-    private TableColumn<Customers, Integer> customerDivisionCol;
-    @FXML
-    private TableColumn<Customers, String> customerPhoneCol;
+    @FXML private TableView<Customers> customerTableView;
+    @FXML private TableColumn<Customers, Integer> customerIDCol;
+    @FXML private TableColumn<Customers, String> customerNameCol;
+    @FXML private TableColumn<Customers, String> customerAddressCol;
+    @FXML private TableColumn<Customers, String> customerPostalCol;
+    @FXML private TableColumn<Customers, Integer> customerDivisionCol;
+    @FXML private TableColumn<Customers, String> customerPhoneCol;
 
-    @FXML
-    private ComboBox<Countries> countryCmboBox;
-    @FXML
-    private ComboBox<FirstLevelDivisions> firstLevelDivisionCmboBox;
+    @FXML private ComboBox<Countries> countryCmboBox;
+    @FXML private ComboBox<FirstLevelDivisions> firstLevelDivisionCmboBox;
 
     @FXML
     private TextField customerIDTxtField;
@@ -92,12 +84,23 @@ public class CustomerMenuController implements Initializable {
 
     public ObservableList<Customers> customerData = FXCollections.observableArrayList();
 
+
     //public ObservableList<FirstLevelDivisions> divisions = FXCollections.observableArrayList();
     //public ObservableList<Countries> countriesList = DBCountries.getAllCountries();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        refreshTableView();
+        firstLevelDivisionCmboBox.setItems(DBFirstLevelDivisions.getAllFirstLevelDivisions());
+        countryCmboBox.setItems(DBCountries.getAllCountries());
+        customerTableView.setItems(DBCustomers.getAllCustomers());
+        customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        customerAddressCol.setCellValueFactory(new PropertyValueFactory<>("customerAddress"));
+        customerPostalCol.setCellValueFactory(new PropertyValueFactory<>("customerPostal"));
+        customerDivisionCol.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
+        customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("customerPhone"));
+
+        //refreshTableView();
 
     }
 
@@ -106,6 +109,7 @@ public class CustomerMenuController implements Initializable {
 
         //countryCmboBox.setItems(DBCountries.getAllCountries());
         //firstLevelDivisionCmboBox.setItems(divisions);
+
         firstLevelDivisionCmboBox.setItems(DBFirstLevelDivisions.getAllFirstLevelDivisions());
         countryCmboBox.setItems(DBCountries.getAllCountries());
 
@@ -118,7 +122,11 @@ public class CustomerMenuController implements Initializable {
         customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("customerPhone"));
     }
 
-    public void selectedCustomerData() throws SQLException {
+    public void selectedCustomerData() throws IOException {
+
+
+
+
         Customers selectedCustomer = customerTableView.getSelectionModel().getSelectedItem();
         customerIDTxtField.setText(String.valueOf(selectedCustomer.getCustomerID()));
         customerNameTxtField.setText(selectedCustomer.getCustomerName());
@@ -126,7 +134,11 @@ public class CustomerMenuController implements Initializable {
         postalCodeTxtField.setText(selectedCustomer.getCustomerPostal());
         phoneNumberTxtField.setText(selectedCustomer.getCustomerPhone());
 
-        /*divisions = DBFirstLevelDivisions.getAllFirstLevelDivisions();
+        countryCmboBox.setValue(Countries.getDivisionAndCountryMatch(selectedCustomer.getCountryID()));
+        onActionFilterCountryCmboBox(null);
+        firstLevelDivisionCmboBox.setValue(FirstLevelDivisions.getDivisionIDMatch(selectedCustomer.getDivisionID()));
+        /*
+        divisions = DBFirstLevelDivisions.getAllFirstLevelDivisions();
         for (FirstLevelDivisions FLD : divisions) {
             if (selectedCustomer.getDivisionID() == FLD.getDivisionID()) {
                 System.out.println(FLD);
@@ -200,15 +212,22 @@ public class CustomerMenuController implements Initializable {
 
     @FXML
     void onActionAddNewCustomer(ActionEvent event) throws IOException, SQLException {
+
+
         Boolean noError = errorCheck(customerIDTxtField.getText());
         if (noError) {
             String customerName = customerNameTxtField.getText();
             String customerAddress = customerAddressTxtField.getText();
             String customerPostal = postalCodeTxtField.getText();
             String customerPhone = phoneNumberTxtField.getText();
-            FirstLevelDivisions divisions = firstLevelDivisionCmboBox.getValue();
 
+            //FirstLevelDivisions divisions = firstLevelDivisionCmboBox.getValue();
+            FirstLevelDivisions divisions = firstLevelDivisionCmboBox.getSelectionModel().getSelectedItem();
+            int divisionID = divisions.getDivisionID();
 
+            DBCustomers.addCustomer(customerName, customerAddress, customerPostal, customerPhone, divisionID);
+
+/*
             //DBCustomers.addCustomer(customerName, customerAddress, customerPostal, customerPhone, divisions.getDivisionID());
             ObservableList<FirstLevelDivisions> flDivisions = FXCollections.observableArrayList();
             flDivisions = DBFirstLevelDivisions.getAllFirstLevelDivisions();
@@ -236,19 +255,28 @@ public class CustomerMenuController implements Initializable {
             ps.setString(8, lastUpdatedByToAdd);
             ps.setInt(9, divisions.getDivisionID());
             ps.execute();
-            /*
-            customerTableView.setItems(DBCustomers.getAllCustomers());
-            customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-            customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
-            customerAddressCol.setCellValueFactory(new PropertyValueFactory<>("customerAddress"));
-            customerPostalCol.setCellValueFactory(new PropertyValueFactory<>("customerPostal"));
-            customerDivisionCol.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
-            customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("customerPhone"));
 
-             */
-            refreshTableView();
-            clearInfomrationFields();
+ */
+
+            //customerTableView.setItems(DBCustomers.getAllCustomers());
+            //customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+            //customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+            //customerAddressCol.setCellValueFactory(new PropertyValueFactory<>("customerAddress"));
+            //customerPostalCol.setCellValueFactory(new PropertyValueFactory<>("customerPostal"));
+            //customerDivisionCol.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
+            //customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("customerPhone"));
+
+
+
+            //refreshTableView();
+            //clearInfomrationFields();
+            System.out.println("Add Customer successful.");
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/View/CustomerMenu.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
         }
+
 
     }
 
@@ -323,6 +351,7 @@ public class CustomerMenuController implements Initializable {
     void onActionUpdateCustomer(ActionEvent event) throws SQLException {
         Boolean noError = errorCheck(customerIDTxtField.getText());
         if (noError) {
+
             int customerID = Integer.parseInt(customerIDTxtField.getText());
             String customerName = customerNameTxtField.getText();
             String customerAddress = customerAddressTxtField.getText();
@@ -390,7 +419,7 @@ public class CustomerMenuController implements Initializable {
 
 
 
-    public void onActionFilterCountryCmboBox(ActionEvent event) {
+    public void onActionFilterCountryCmboBox(ActionEvent event) throws IOException {
 
        Countries country = countryCmboBox.getSelectionModel().getSelectedItem();
 

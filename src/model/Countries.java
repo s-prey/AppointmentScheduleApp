@@ -1,5 +1,6 @@
 package model;
 
+import DBAccess.DBCountries;
 import javafx.collections.ObservableList;
 
 public class Countries {
@@ -29,6 +30,24 @@ public class Countries {
 
     public void setCountryName(String countryName) {
         this.countryName = countryName;
+    }
+
+    public static Countries getDivisionAndCountryMatch(int countryID) {
+        ObservableList<Countries> divisions = DBCountries.getAllCountries();
+
+        Countries country = null;
+
+        for (int i = 0; i < divisions.size(); i++) {
+            Countries selectCountry = divisions.get(i);
+
+            if (selectCountry.getCountryID() != countryID) {
+                continue;
+            } else {
+                country = selectCountry;
+                break;
+            }
+        }
+        return country;
     }
 
     @Override

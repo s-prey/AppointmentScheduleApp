@@ -19,7 +19,8 @@ public class DBAppointments {
         ObservableList<Appointments> allAppointments = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT * from appointments";
+            String sql = "SELECT Appointment_ID, Title, Description, Location, contacts.Contact_Name, contacts.Contact_ID, Type, Start, End, customers.Customer_ID, User_ID " +
+                    "FROM appointments, contacts, customers WHERE appointments.Contact_ID=contacts.Contact_ID AND appointments.Customer_ID=customers.Customer_ID";
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 

@@ -129,7 +129,7 @@ public class AppointmentMenuController implements Initializable {
 
     }
 
-    public ResultSet accessDB() {
+    /*public ResultSet accessDB() {
         Connection conn = null;
         boolean res = false;
         ResultSet rs = null;
@@ -151,6 +151,8 @@ public class AppointmentMenuController implements Initializable {
 
         return rs;
     }
+
+     */
 
     public void addDataToTableView() throws SQLException {
         ObservableList<Appointments> allAppointments = getAllAppointments();

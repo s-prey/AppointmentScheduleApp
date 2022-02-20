@@ -50,8 +50,8 @@ public class FirstLevelDivisions {
 
     @Override
     public String toString() {
-        //return "[" + divisionID + "]" + divisionName;
-        return divisionName;
+        return "[" + divisionID + "]" + divisionName;
+        //return divisionName;
     }
 
 }

@@ -117,7 +117,7 @@ public class DBUsers {
         ObservableList<Users> userDBMatchList = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT User_ID, User_Name, Password FROM client_schedule.users WHERE User_Name = ?, AND Password = ?";
+            String sql = "SELECT User_ID, User_Name, Password FROM client_schedule.users WHERE User_Name = ? AND Password = ?";
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
             ps.setString(1, userName);
             ps.setString(2, userPassword);
