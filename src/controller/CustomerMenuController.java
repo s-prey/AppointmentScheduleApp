@@ -310,7 +310,15 @@ public class CustomerMenuController implements Initializable {
 
     @FXML
     void onActionClearInformationFields(ActionEvent event) {
-        clearInfomrationFields();
+
+        try {
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/View/CustomerMenu.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void deleteCustomersAppointments() {
@@ -318,7 +326,7 @@ public class CustomerMenuController implements Initializable {
             String sql = "DELETE FROM client_schedule.appointments WHERE Customer_ID = ?";
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
             ps.setString(1, String.valueOf(customerTableView.getSelectionModel().getSelectedItem().getCustomerID()));
-            int result = ps.executeUpdate();
+            //int result = ps.executeUpdate();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -329,21 +337,51 @@ public class CustomerMenuController implements Initializable {
 
     @FXML
     void onActionDeleteCustomer(ActionEvent event) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Deleting selected customer and associated appointments. Do you wish to continue?");
-        Optional<ButtonType> results = alert.showAndWait();
-        try {
-            if (results.isPresent() && results.get() == ButtonType.OK) {
-                int customerID = customerTableView.getSelectionModel().getSelectedItem().getCustomerID();
-                String sql = "DELETE FROM client_schedule.customers WHERE Customer_ID = ?";
-                PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
-                ps.setInt(1, customerID);
-                int result = ps.executeUpdate();
-                deleteCustomersAppointments();
+        //Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Deleting selected customer and associated appointments. Do you wish to continue?");
+        //Optional<ButtonType> results = alert.showAndWait();
 
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+
+            //if (results.isPresent() && results.get() == ButtonType.OK) {
+                Customers selectedCustomer = customerTableView.getSelectionModel().getSelectedItem();
+
+                if (selectedCustomer == null) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("No customer selected for delete.");
+                    alert.setContentText("Select customer to delete.");
+                    alert.showAndWait();
+                    return;
+                }
+
+                int customerID = selectedCustomer.getCustomerID();
+
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Deleting selected customer and associated appointments. Do you wish to continue?");
+                Optional<ButtonType> results = alert.showAndWait();
+
+                if (results.isPresent() && results.get() == ButtonType.OK) {
+                    DBCustomers.deleteCustomer(customerID);
+
+                    try {
+                        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+                        scene = FXMLLoader.load(getClass().getResource("/View/CustomerMenu.fxml"));
+                        stage.setScene(new Scene(scene));
+                        stage.show();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+
+
+                        //int customerID = customerTableView.getSelectionModel().getSelectedItem().getCustomerID();
+
+
+                        //String sql = "DELETE FROM client_schedule.customers WHERE Customer_ID = ?";
+                        //PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+                        // ps.setInt(1, customerID);
+                        //int result = ps.executeUpdate();
+                        //deleteCustomersAppointments();
+
+                    }
+                }
+
     }
 
 
@@ -375,22 +413,23 @@ public class CustomerMenuController implements Initializable {
 
          */
 
-            String customerName = customerNameTxtField.getText();
-            String customerAddress = customerAddressTxtField.getText();
-            String customerPostal = postalCodeTxtField.getText();
-            String customerPhone = phoneNumberTxtField.getText();
+        String customerName = customerNameTxtField.getText();
+        String customerAddress = customerAddressTxtField.getText();
+        String customerPostal = postalCodeTxtField.getText();
+        String customerPhone = phoneNumberTxtField.getText();
 
 
-            FirstLevelDivisions divisions = firstLevelDivisionCmboBox.getSelectionModel().getSelectedItem();
-            int divisionID = divisions.getDivisionID();
+        FirstLevelDivisions divisions = firstLevelDivisionCmboBox.getSelectionModel().getSelectedItem();
+        int divisionID = divisions.getDivisionID();
 
-            DBCustomers.updateCustomer(customerID, customerName, customerAddress, customerPostal, customerPhone, divisionID);
+        DBCustomers.updateCustomer(customerID, customerName, customerAddress, customerPostal, customerPhone, divisionID);
 
-            System.out.println("Update Customer successful.");
-            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            scene = FXMLLoader.load(getClass().getResource("/View/CustomerMenu.fxml"));
-            stage.setScene(new Scene(scene));
-            stage.show();
+        System.out.println("Update Customer successful.");
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("/View/CustomerMenu.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+    }
         /*
         Boolean noError = errorCheck(customerIDTxtField.getText());
         if (noError) {
@@ -461,7 +500,7 @@ public class CustomerMenuController implements Initializable {
 
          */
 
-    }
+    //}
 
 
 
