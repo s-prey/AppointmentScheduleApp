@@ -4,6 +4,7 @@ import Database.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Customers;
+import model.Users;
 
 import java.net.PortUnreachableException;
 import java.sql.*;
@@ -44,13 +45,22 @@ public class DBCustomers {
     public static void addCustomer(String customerName, String customerAddress, String customerPostal, String customerPhone, Integer divisionID) {
 
         try {
-            String sql = "INSERT INTO client_schedule.customers VALUES (NULL, ?, ?, ?, ?, NULL, NULL, NULL, NULL, ?)";
+            LocalDateTime localDateTimeToAdd = LocalDateTime.now();
+            String createdByToAdd = "test";
+            Timestamp lastUpdateToAdd = Timestamp.valueOf(LocalDateTime.now());
+            String lastUpdatedByToAdd = "test";
+
+            String sql = "INSERT INTO client_schedule.customers VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
             ps.setString(1, customerName);
             ps.setString(2, customerAddress);
             ps.setString(3, customerPostal);
             ps.setString(4, customerPhone);
-            ps.setInt(5, divisionID);
+            ps.setTimestamp(5, Timestamp.valueOf(localDateTimeToAdd));
+            ps.setString(6, createdByToAdd);
+            ps.setTimestamp(7, lastUpdateToAdd);
+            ps.setString(8, lastUpdatedByToAdd);
+            ps.setInt(9, divisionID);
             ps.execute();
 
 
@@ -60,18 +70,25 @@ public class DBCustomers {
 
     }
 
-   public static void updateCustomer(String customerName, String customerAddress, String customerPostal, String customerPhone, Integer divisionID, String customerID) {
+   public static void updateCustomer(int customerID, String customerName, String customerAddress, String customerPostal, String customerPhone, Integer divisionID) {
         try {
-            String sql = "UPDATE client_schedule.customers SET Customer_Name=?, Address=?, Postal_Code=?, phone=?, Division_ID=? WHERE Customer_ID=?";
+            Timestamp lastUpdateToAdd = Timestamp.valueOf(LocalDateTime.now());
+            String lastUpdatedByToAdd = "test";
+
+            String sql = "UPDATE client_schedule.customers SET Customer_Name =?, Address=?, Postal_Code=?, phone=?, Last_Update=?, Last_Updated_By=?, Division_ID=? WHERE Customer_ID=?;";
+            //"UPDATE client_schedule.customers SET Customer_Name=?, Address=?, Postal_Code=?, phone=?, Last_Update=?, Last_Updated_By=?, Division_ID=? WHERE Customer_ID=?";
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+
 
 
             ps.setString(1, customerName);
             ps.setString(2, customerAddress);
             ps.setString(3, customerPostal);
             ps.setString(4, customerPhone);
-            ps.setInt(5, divisionID);
-            ps.setString(6, customerID);
+            ps.setTimestamp(5, lastUpdateToAdd);
+            ps.setString(6, lastUpdatedByToAdd);
+            ps.setInt(7, divisionID);
+            ps.setInt(8, customerID);
             ps.execute();
 
 
