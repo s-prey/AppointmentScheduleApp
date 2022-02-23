@@ -30,15 +30,16 @@ public class DBAppointments {
                 String apptDescription = rs.getString("Description");
                 String apptLocation = rs.getString("Location");
                 String apptType = rs.getString("Type");
+                String contactName = rs.getString("Contact_Name");
                 LocalDateTime apptStartDateTime = rs.getTimestamp("Start").toLocalDateTime();
                 LocalDateTime apptEndDateTime = rs.getTimestamp("End").toLocalDateTime();
                 int customerID = rs.getInt("Customer_ID");
                 int userID = rs.getInt("User_ID");
                 int contactID = rs.getInt("Contact_ID");
-                String contactName = rs.getString("Contact_Name");
 
-                Appointments appointment = new Appointments(apptID, apptTitle, apptDescription, apptLocation, apptType,
-                        apptStartDateTime, apptEndDateTime, customerID, userID, contactID, contactName);
+
+                Appointments appointment = new Appointments(apptID, apptTitle, apptDescription, apptLocation,
+                        contactName, apptType, apptStartDateTime, apptEndDateTime, customerID, userID, contactID);
                 allAppointments.add(appointment);
             }
 
@@ -173,8 +174,8 @@ public class DBAppointments {
                     int contactID = rs.getInt("Contact_ID");
                     String contactName = rs.getString("Contact_Name");
 
-                    Appointments appointment = new Appointments(apptID, apptTitle, apptDesc, apptLocation, apptType,
-                            dateTimeStart, dateTimeEnd, customerID, userID, contactID, contactName);
+                    Appointments appointment = new Appointments(apptID, apptTitle, apptDesc, apptLocation, contactName,
+                            apptType, dateTimeStart, dateTimeEnd, customerID, userID, contactID);
                     todaysAppointmentsList.add(appointment);
                 }
 
@@ -209,8 +210,8 @@ public class DBAppointments {
                 int contactID = rs.getInt("Contact_ID");
                 String contactName = rs.getString("Contact_Name");
 
-                Appointments appointment = new Appointments(apptID, apptTitle, apptDesc, apptLocation, apptType,
-                        dateTimeStart, dateTimeEnd, customerID, userID, contactID, contactName);
+                Appointments appointment = new Appointments(apptID, apptTitle, apptDesc, apptLocation, contactName,
+                        apptType, dateTimeStart, dateTimeEnd, customerID, userID, contactID);
                 apptByMonthList.add(appointment);
             }
 
@@ -263,8 +264,8 @@ public class DBAppointments {
                 int contactID = rs.getInt("Contact_ID");
                 String contactName = rs.getString("Contact_Name");
 
-                Appointments appointment = new Appointments(apptID, apptTitle, apptDesc, apptLocation, apptType,
-                        dateTimeStart, dateTimeEnd, customerID, userID, contactID, contactName);
+                Appointments appointment = new Appointments(apptID, apptTitle, apptDesc, apptLocation, contactName,
+                        apptType, dateTimeStart, dateTimeEnd, customerID, userID, contactID);
                 apptByWeekList.add(appointment);
             }
 
@@ -299,8 +300,8 @@ public class DBAppointments {
                 int contactID = rs.getInt("Contact_ID");
                 String contactName = rs.getString("Contact_Name");
 
-                Appointments appointment = new Appointments(apptID, apptTitle, apptDesc, apptLocation, apptType,
-                        dateTimeStart, dateTimeEnd, customerID, userID, contactID, contactName);
+                Appointments appointment = new Appointments(apptID, apptTitle, apptDesc, apptLocation, contactName,
+                        apptType, dateTimeStart, dateTimeEnd, customerID, userID, contactID);
                 apptByContactList.add(appointment);
             }
 
@@ -336,8 +337,8 @@ public class DBAppointments {
                 int contactID = rs.getInt("Contact_ID");
                 String contactName = rs.getString("Contact_Name");
 
-                Appointments appointment = new Appointments(apptID, apptTitle, apptDesc, apptLocation, apptType,
-                        dateTimeStart, dateTimeEnd, customerID, userID, contactID, contactName);
+                Appointments appointment = new Appointments(apptID, apptTitle, apptDesc, apptLocation, contactName,
+                        apptType, dateTimeStart, dateTimeEnd, customerID, userID, contactID);
                 apptByCustomerList.add(appointment);
             }
 

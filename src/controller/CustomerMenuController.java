@@ -3,11 +3,9 @@ package controller;
 import DBAccess.DBCountries;
 import DBAccess.DBCustomers;
 import DBAccess.DBFirstLevelDivisions;
-import DBAccess.DBUsers;
 import Database.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,19 +19,13 @@ import javafx.stage.Stage;
 import model.Countries;
 import model.Customers;
 import model.FirstLevelDivisions;
-import model.Users;
 
-import javax.swing.*;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
-import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static DBAccess.DBCountries.getAllCountries;
 import static DBAccess.DBFirstLevelDivisions.*;
 
 public class CustomerMenuController implements Initializable {
@@ -154,9 +146,9 @@ public class CustomerMenuController implements Initializable {
          */
     }
 
-    public boolean errorCheck(/*String customer_ID*/) {
+    public boolean emptyFieldCheck(/*String customer_ID*/) {
         //ObservableList<Customers> customersList = DBCustomers.getAllCustomers();
-        boolean errorCheck = false;
+        boolean emptyField = false;
 
         if (customerNameTxtField.getText().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -164,7 +156,7 @@ public class CustomerMenuController implements Initializable {
             alert.setHeaderText("Name Empty");
             alert.setContentText("Input Customer Name");
             alert.showAndWait();
-            errorCheck = true;
+            emptyField = true;
         }
         else if  (customerAddressTxtField.getText().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -173,7 +165,7 @@ public class CustomerMenuController implements Initializable {
             alert.setContentText("Input Customer Address");
             alert.showAndWait();
             //return false;
-            errorCheck = true;
+            emptyField = true;
         }
         else if (postalCodeTxtField.getText().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -182,7 +174,7 @@ public class CustomerMenuController implements Initializable {
             alert.setContentText("Input Customer Postal Code");
             alert.showAndWait();
             //return false;
-            errorCheck = true;
+            emptyField = true;
         }
 
         else if (firstLevelDivisionCmboBox.getSelectionModel().isEmpty()) {
@@ -192,7 +184,7 @@ public class CustomerMenuController implements Initializable {
             alert.setContentText("Select Customer First Level Division");
             alert.showAndWait();
             //return false;
-            errorCheck = true;
+            emptyField = true;
         }
 
         else if (countryCmboBox.getSelectionModel().isEmpty()) {
@@ -202,7 +194,7 @@ public class CustomerMenuController implements Initializable {
             alert.setContentText("Select Customer Country");
             alert.showAndWait();
             //return false;
-            errorCheck = true;
+            emptyField = true;
         }
 
         else if (phoneNumberTxtField.getText().isEmpty()) {
@@ -212,12 +204,12 @@ public class CustomerMenuController implements Initializable {
             alert.setContentText("Input Customer Phone Number");
             alert.showAndWait();
             //return false;
-            errorCheck = true;
+            emptyField = true;
         } else {
-            errorCheck = false;
+            emptyField = false;
         }
 
-        return errorCheck;
+        return emptyField;
     }
 
     @FXML
@@ -225,7 +217,7 @@ public class CustomerMenuController implements Initializable {
 
 
         //Boolean noError = errorCheck(customerIDTxtField.getText());
-        if (errorCheck() == true) {
+        if (emptyFieldCheck() == true) {
             return;
 
         } else {

@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="1200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.2" fx:controller="controller.AppointmentMenuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AppointmentMenuController">
    <children>
       <Label alignment="CENTER" layoutX="424.0" layoutY="14.0" prefHeight="19.0" prefWidth="351.0" text="Appointment Menu">
          <font>
@@ -20,12 +30,12 @@
                 <TableColumn fx:id="apptTitleCol" prefWidth="134.0" text="Title" />
                  <TableColumn fx:id="apptDescriptionCol" prefWidth="200.0" text="Description" />
                  <TableColumn fx:id="apptLocationCol" prefWidth="91.0" text="Location" />
-                 <TableColumn fx:id="apptTypeCol" prefWidth="115.0" text="Type" />
+                 <TableColumn fx:id="contactCol" prefWidth="102.0" text="Contact" />
+                 <TableColumn fx:id="apptTypeCol" prefWidth="92.0" text="Type" />
                  <TableColumn fx:id="apptStartDateTime" prefWidth="160.0" text="Start Date/Time" />
-                 <TableColumn fx:id="apptEndDateTime" prefWidth="160.0" text="End Date/Time" />
-                 <TableColumn fx:id="customerIDCol" prefWidth="86.0" text="Customer ID" />
+                 <TableColumn fx:id="apptEndDateTime" prefWidth="168.0" text="End Date/Time" />
+                 <TableColumn fx:id="customerIDCol" prefWidth="78.0" text="Customer ID" />
                  <TableColumn fx:id="userIDCol" prefWidth="62.0" text="User ID" />
-                 <TableColumn fx:id="contactIDCol" prefWidth="79.0" text="Contact ID" />
               </columns>
             </TableView>
          </children>
@@ -75,25 +85,25 @@
                               <Insets left="30.0" />
                            </HBox.margin>
                         </Label>
-                        <ComboBox fx:id="customerIDCmboBox" onAction="#onActionFilterCustomerIDCmboBox" prefHeight="25.0" prefWidth="210.0" promptText="Select Customer ID" />
+                        <ComboBox fx:id="customerIDCmboBox" onAction="#onActionFilterCustomerIDCmboBox" prefHeight="25.0" prefWidth="210.0" />
                      </children>
                   </HBox>
                   <HBox prefHeight="32.0" prefWidth="284.0">
                      <children>
                         <Label prefHeight="25.0" prefWidth="120.0" text="Title:" />
-                        <TextField fx:id="titleTxtField" prefHeight="25.0" prefWidth="210.0" />
+                        <TextField fx:id="apptTitleTxtField" prefHeight="25.0" prefWidth="210.0" />
                         <Label prefHeight="25.0" prefWidth="120.0" text="User ID:">
                            <HBox.margin>
                               <Insets left="30.0" />
                            </HBox.margin>
                         </Label>
-                        <ComboBox fx:id="userIDCmboBox" onAction="#onActionFilterUserIDCmboBox" prefHeight="25.0" prefWidth="210.0" promptText="Select User ID" />
+                        <ComboBox fx:id="userIDCmboBox" onAction="#onActionFilterUserIDCmboBox" prefHeight="25.0" prefWidth="210.0" />
                      </children>
                   </HBox>
                   <HBox prefHeight="32.0" prefWidth="284.0">
                      <children>
                         <Label prefHeight="25.0" prefWidth="120.0" text="Desciption:" />
-                        <TextField fx:id="descriptionTxtField" prefHeight="25.0" prefWidth="210.0" />
+                        <TextField fx:id="apptDescriptionTxtField" prefHeight="25.0" prefWidth="210.0" />
                         <Label prefHeight="25.0" prefWidth="120.0" text="Start Date:">
                            <HBox.margin>
                               <Insets left="30.0" />
@@ -105,19 +115,19 @@
                   <HBox prefHeight="32.0" prefWidth="284.0">
                      <children>
                         <Label prefHeight="25.0" prefWidth="120.0" text="Location:" />
-                        <TextField fx:id="locationTxtField" prefHeight="25.0" prefWidth="210.0" />
+                        <TextField fx:id="apptLocationTxtField" prefHeight="25.0" prefWidth="210.0" />
                         <Label prefHeight="25.0" prefWidth="120.0" text="Start Time:">
                            <HBox.margin>
                               <Insets left="30.0" />
                            </HBox.margin>
                         </Label>
-                        <ComboBox fx:id="startTimeCmboBox" onAction="#onActionFilterStartTimeCmboBox" prefHeight="25.0" prefWidth="210.0" promptText="Select Time" />
+                        <ComboBox fx:id="startTimeCmboBox" onAction="#onActionFilterStartTimeCmboBox" prefHeight="25.0" prefWidth="210.0" />
                      </children>
                   </HBox>
                   <HBox prefHeight="32.0" prefWidth="284.0">
                      <children>
                         <Label prefHeight="25.0" prefWidth="120.0" text="Contact:" />
-                        <ComboBox fx:id="contactCmboBox" onAction="#onActionFilterContactCmboBox" prefHeight="25.0" prefWidth="210.0" promptText="Select Contact" />
+                        <ComboBox fx:id="contactCmboBox" onAction="#onActionFilterContactCmboBox" prefHeight="25.0" prefWidth="210.0" />
                         <Label prefHeight="25.0" prefWidth="120.0" text="End Date:">
                            <HBox.margin>
                               <Insets left="30.0" />
@@ -129,13 +139,13 @@
                   <HBox prefHeight="32.0" prefWidth="284.0">
                      <children>
                         <Label prefHeight="25.0" prefWidth="120.0" text="Appointment Type:" />
-                        <TextField fx:id="appointmentTypeCmboBox" prefHeight="25.0" prefWidth="210.0" />
+                        <TextField fx:id="apptTypeTxtField" prefHeight="25.0" prefWidth="210.0" />
                         <Label prefHeight="25.0" prefWidth="120.0" text="End Time:">
                            <HBox.margin>
                               <Insets left="30.0" />
                            </HBox.margin>
                         </Label>
-                        <ComboBox fx:id="endTimeCmboBox" onAction="#onActionFilterEndTimeCmboBox" prefHeight="25.0" prefWidth="210.0" promptText="Select Time" />
+                        <ComboBox fx:id="endTimeCmboBox" onAction="#onActionFilterEndTimeCmboBox" prefHeight="25.0" prefWidth="210.0" />
                      </children>
                   </HBox>
                </children>
