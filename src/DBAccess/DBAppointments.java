@@ -54,7 +54,12 @@ public class DBAppointments {
                                       LocalDateTime apptStartDatetime, LocalDateTime apptEndDateTime, int customerID,
                                       int userID, int contactID) {
         try {
-            String sql = "INSERT INTO client_schedule.appointments VALUES(NULL, ?, ?, ?, ?, ?, ?, NULL, NULL, NULL, NULL, ?, ?, ?)";
+            LocalDateTime localDateTimeToAdd = LocalDateTime.now();
+            String createdByToAdd = "test";
+            Timestamp lastUpdateToAdd = Timestamp.valueOf(LocalDateTime.now());
+            String lastUpdatedByToAdd = "test";
+
+            String sql = "INSERT INTO client_schedule.appointments VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
             ps.setString(1, apptTitle);
@@ -63,9 +68,14 @@ public class DBAppointments {
             ps.setString(4, apptType);
             ps.setTimestamp(5, valueOf(apptStartDatetime));
             ps.setTimestamp(6, valueOf(apptEndDateTime));
-            ps.setInt(7, customerID);
-            ps.setInt(8, userID);
-            ps.setInt(9, customerID);
+            ps.setTimestamp(7, Timestamp.valueOf(localDateTimeToAdd));
+            ps.setString(8, createdByToAdd);
+            ps.setTimestamp(9, lastUpdateToAdd);
+            ps.setString(10, lastUpdatedByToAdd);
+
+            ps.setInt(11, customerID);
+            ps.setInt(12, userID);
+            ps.setInt(13, contactID);
             ps.execute();
 
 

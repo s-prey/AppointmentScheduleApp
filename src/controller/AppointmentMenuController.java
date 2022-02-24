@@ -21,26 +21,19 @@ import model.*;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.ResourceBundle;
-import java.util.SortedMap;
-
-import static DBAccess.DBAppointments.getAllAppointments;
 
 public class AppointmentMenuController implements Initializable {
 
     Stage stage;
     Parent scene;
-    private LocalTime startTime = LocalTime.of(8, 0);
-    private LocalTime endTime = LocalTime.of(22, 0);
+    private final LocalTime businessStart = LocalTime.of(8, 0);
+    private final LocalTime businessEnd = LocalTime.of(22, 0);
     private LocalDateTime startLocalDateTime;
     private LocalDateTime endLocalDateTime;
-    private int customerIDCombo;
+    private int customerIDCombo; //RENAME VARIABLE!!!
 
 
     @FXML private TableView<Appointments> appointmentsTableView;
@@ -116,15 +109,15 @@ public class AppointmentMenuController implements Initializable {
         customerIDCmboBox.setItems(DBCustomers.getAllCustomers());
         userIDCmboBox.setItems(DBUsers.getAllUsers());
 
-        LocalTime startTime1 = startTime;
-        LocalTime endTime1 = endTime.minusMinutes(15);
+        LocalTime startTime1 = businessStart;
+        LocalTime endTime1 = businessEnd.minusMinutes(15);
         while (startTime1.isBefore(endTime1.plusSeconds(1))) {
             startTimeCmboBox.getItems().add(startTime1);
             startTime1 = startTime1.plusMinutes(15);
         }
 
-        LocalTime startTime2 = startTime.plusMinutes(15);
-        LocalTime endTime2 = endTime;
+        LocalTime startTime2 = businessStart.plusMinutes(15);
+        LocalTime endTime2 = businessEnd;
         while (startTime2.isBefore(endTime2.plusMinutes(15))) {
             endTimeCmboBox.getItems().add(startTime2);
             startTime2 = startTime2.plusMinutes(15);
@@ -173,11 +166,126 @@ public class AppointmentMenuController implements Initializable {
 
     @FXML
     void onActionAddNewAppointment(ActionEvent event) {
-        System.out.println("working");
-        ObservableList<Appointments> appointmentsObservableList = getAllAppointments();
-        for (Appointments A : appointmentsObservableList) {
-            System.out.println("Appointment ID : " + A.getApptID() + " Title : " + A.getApptTitle());
+        if (emptyFieldCheck()) {
+            return;
+
         }
+
+        String apptTitle = apptTitleTxtField.getText();
+        String apptDescription = apptDescriptionTxtField.getText();
+        String apptLocation = apptLocationTxtField.getText();
+
+        Contacts contact = contactCmboBox.getSelectionModel().getSelectedItem();
+        //NOT SURE IF I WANT TO USE THIS, Obtain String contact name based on combo box selection.
+        int contactID = contact.getContactID();
+
+        String apptType = apptTypeTxtField.getText();
+
+        Customers customer = customerIDCmboBox.getSelectionModel().getSelectedItem();
+        //SAME - NOT SURE IF I WANT TO USE THIS, Obtain String contact name based on combo box selection.
+        customerIDCombo = customer.getCustomerID();
+
+        Users user = userIDCmboBox.getSelectionModel().getSelectedItem();
+        int userID = user.getUserID();
+
+        //Gets appointment start/end dates and times from form date pickers and combo boxes.
+        LocalDate startDate = startDatePicker.getValue();
+        LocalTime startTime = startTimeCmboBox.getValue();
+        LocalDate endDate = endDatePicker.getValue();
+        LocalTime endTime = endTimeCmboBox.getValue();
+
+        //Combines date and time into single variables for start and end datetimes.
+        startLocalDateTime = LocalDateTime.of(startDate, startTime);
+        endLocalDateTime = LocalDateTime.of(endDate, endTime);
+
+        //Assigns users system default time
+        ZoneId systemZoneID = ZoneId.systemDefault();
+        //assigns selected times to user default times.
+        ZonedDateTime systemStartZoneDateTime = ZonedDateTime.of(startLocalDateTime, systemZoneID);
+        ZonedDateTime systemEndZoneDateTime = ZonedDateTime.of(endLocalDateTime, systemZoneID);
+
+        //Assigns EST zone for business hours to a variable.
+        ZoneId estZoneID = ZoneId.of("US/Eastern");
+        //Converts selected system default time to Eastern Time Business hours zone.
+        ZonedDateTime estZoneStartDateTime = systemStartZoneDateTime.withZoneSameInstant(estZoneID);
+        ZonedDateTime estZoneEndDateTime = systemEndZoneDateTime.withZoneSameInstant(estZoneID);
+
+        //Converts EST zone to user LocalDateTime
+        LocalTime selectedStartEST = estZoneStartDateTime.toLocalDateTime().toLocalTime();
+        LocalTime selectedEndEST = estZoneEndDateTime.toLocalDateTime().toLocalTime();
+
+        // move this to separate time verification method?
+        if (selectedEndEST.isAfter(businessEnd)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Selected appointment end time is after business hours.");
+            alert.setContentText("Please select a time before end of business hours.");
+            alert.showAndWait();
+            return;
+        }
+
+        if (selectedStartEST.isBefore(businessStart)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Selected appointment start time is before business hours.");
+            alert.setContentText("Please select a time after start of business hours.");
+            alert.showAndWait();
+            return;
+        }
+
+        if (overlapApptVerify()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Appointment Scheduling Error.");
+            alert.setHeaderText("Scheduled time overlaps with another appointment for the customer.");
+            alert.setContentText("Please select a different appointment date/time for the customer.");
+            alert.showAndWait();
+            return;
+
+        }  else {
+            DBAppointments.addAppointment(apptTitle, apptDescription, apptLocation, apptType, startLocalDateTime,
+                    endLocalDateTime, customerIDCombo, userID, contactID);
+
+            try {
+                stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+                scene = FXMLLoader.load(getClass().getResource("/View/AppointmentMenu.fxml"));
+                stage.setScene(new Scene(scene));
+                stage.show();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
+        }
+
+
+    }
+
+    private boolean overlapApptVerify() {
+        ObservableList<Appointments> apptOverlaps = DBAppointments.getAppointmentsByCustomer(customerIDCombo);
+         boolean overlap = false;
+
+         for (int i = 0; i < apptOverlaps.size(); i++) {
+             Appointments appointment = apptOverlaps.get(i);
+             LocalDateTime apptStart = appointment.getApptStartDateTime();
+             LocalDateTime apptEnd = appointment.getApptEndDateTime();
+
+             if (startLocalDateTime.isBefore(apptStart.plusMinutes(1)) && endLocalDateTime.isAfter(apptEnd.minusMinutes(1))) {
+                 overlap = true;
+                 break;
+
+             } else if (startLocalDateTime.isAfter(apptStart.minusMinutes(1)) && startLocalDateTime.isBefore(apptEnd.plusMinutes(1))) {
+                 overlap = true;
+                 break;
+
+             } else if (endLocalDateTime.isAfter(apptStart.minusMinutes(1)) && endLocalDateTime.isBefore(apptEnd.plusMinutes(1))) {
+                 overlap = true;
+                 break;
+
+             } else {
+                 overlap = false;
+                 continue;
+             }
+         }
+         return overlap;
     }
 
     @FXML
