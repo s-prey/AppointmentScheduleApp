@@ -14,16 +14,16 @@
       </Label>
       <VBox layoutX="25.0" layoutY="60.0" prefHeight="233.0" prefWidth="1150.0">
          <children>
-            <TableView fx:id="appointmentsTableView" prefHeight="300.0" prefWidth="845.0">
+            <TableView fx:id="appointmentsTableView" onMouseClicked="#selectedAppointmentData" prefHeight="300.0" prefWidth="845.0">
               <columns>
                 <TableColumn fx:id="apptIDCol" prefWidth="62.0" text="Appt. ID" />
                 <TableColumn fx:id="apptTitleCol" prefWidth="134.0" text="Title" />
                  <TableColumn fx:id="apptDescriptionCol" prefWidth="147.0" text="Description" />
                  <TableColumn fx:id="apptLocationCol" prefWidth="131.0" text="Location" />
                  <TableColumn fx:id="contactCol" prefWidth="122.0" text="Contact" />
-                 <TableColumn fx:id="apptTypeCol" prefWidth="186.0" text="Type" />
+                 <TableColumn fx:id="apptTypeCol" prefWidth="169.0" text="Type" />
                  <TableColumn fx:id="apptStartDateTime" prefWidth="120.0" text="Start Date/Time" />
-                 <TableColumn fx:id="apptEndDateTime" prefWidth="100.0" text="End Date/Time" />
+                 <TableColumn fx:id="apptEndDateTime" prefWidth="120.0" text="End Date/Time" />
                  <TableColumn fx:id="customerIDCol" prefWidth="85.0" text="Customer ID" />
                  <TableColumn fx:id="userIDCol" prefWidth="62.0" text="User ID" />
               </columns>

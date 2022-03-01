@@ -88,8 +88,12 @@ public class DBAppointments {
                                          String apptType, LocalDateTime apptStartDatetime, LocalDateTime apptEndDateTime,
                                          int customerID, int userID, int contactID) {
         try {
-            String sql = "UPDATE client_schedule.appointments set Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Customer_ID = ?, User_ID = ?, Contact_ID " +
-                    "WHERE Appointment_ID = ?";
+            Timestamp lastUpdateToAdd = Timestamp.valueOf(LocalDateTime.now());
+            String lastUpdatedByToAdd = "test";
+
+            String sql = "UPDATE client_schedule.appointments set Title = ?, Description = ?, Location = ?, Type = ?, " +
+                        "Start = ?, End = ?, Last_Update = ?, Last_Updated_By = ?,Customer_ID = ?, User_ID = ?, " +
+                        "Contact_ID = ? WHERE Appointment_ID = ?";
 
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
             ps.setString(1, apptTitle);
@@ -98,10 +102,12 @@ public class DBAppointments {
             ps.setString(4, apptType);
             ps.setTimestamp(5, valueOf(apptStartDatetime));
             ps.setTimestamp(6, valueOf(apptEndDateTime));
-            ps.setInt(7, customerID);
-            ps.setInt(8, userID);
+            ps.setTimestamp(7, lastUpdateToAdd);
+            ps.setString(8, lastUpdatedByToAdd);
             ps.setInt(9, customerID);
-            ps.setInt(10, apptID);
+            ps.setInt(10, userID);
+            ps.setInt(11, contactID);
+            ps.setInt(12, apptID);
             ps.execute();
 
         } catch (SQLException ex) {

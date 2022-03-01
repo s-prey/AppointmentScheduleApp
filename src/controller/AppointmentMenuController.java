@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.*;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class AppointmentMenuController implements Initializable {
@@ -33,7 +34,9 @@ public class AppointmentMenuController implements Initializable {
     private final LocalTime businessEnd = LocalTime.of(22, 0);
     private LocalDateTime startLocalDateTime;
     private LocalDateTime endLocalDateTime;
-    private int customerIDCombo; //RENAME VARIABLE!!!
+    private int customerID; //RENAME VARIABLE!!!
+    private int apptID;
+    private String apptType;
 
 
     @FXML private TableView<Appointments> appointmentsTableView;
@@ -132,6 +135,48 @@ public class AppointmentMenuController implements Initializable {
 
     }
 
+    public void selectedAppointmentData() throws IOException {
+
+        Appointments selectedAppointment = appointmentsTableView.getSelectionModel().getSelectedItem();
+        appointmentIDTxtField.setText(String.valueOf(selectedAppointment.getApptID()));
+        apptID = selectedAppointment.getApptID();
+        apptTitleTxtField.setText(selectedAppointment.getApptTitle());
+        apptDescriptionTxtField.setText(selectedAppointment.getApptDescription());
+        apptLocationTxtField.setText(selectedAppointment.getApptLocation());
+
+        for (Contacts contact : contactCmboBox.getItems()) {
+            if (contact.getContactID() == selectedAppointment.getContactID()) {
+                contactCmboBox.setValue(contact);
+                break;
+            }
+        }
+        apptTypeTxtField.setText(selectedAppointment.getApptType());
+
+        for (Customers customer : customerIDCmboBox.getItems()) {
+            if (customer.getCustomerID() == selectedAppointment.getCustomerID()) {
+                customerIDCmboBox.setValue(customer);
+            }
+        }
+
+        for (Users user : userIDCmboBox.getItems()) {
+            if (user.getUserID() == selectedAppointment.getUserID()) {
+                userIDCmboBox.setValue(user);
+            }
+        }
+
+        LocalDateTime apptStart = selectedAppointment.getApptStartDateTime();
+        LocalDateTime apptEnd = selectedAppointment.getApptEndDateTime();
+        LocalDate apptStartDate = apptStart.toLocalDate();
+        LocalTime apptStartTime = apptStart.toLocalTime();
+        LocalDate apptEndDate = apptEnd.toLocalDate();
+        LocalTime apptEndTime = apptEnd.toLocalTime();
+
+        startDatePicker.setValue(apptStartDate);
+        startTimeCmboBox.setValue(apptStartTime);
+        endDatePicker.setValue(apptEndDate);
+        endTimeCmboBox.setValue(apptEndTime);
+    }
+
     /*public ResultSet accessDB() {
         Connection conn = null;
         boolean res = false;
@@ -183,7 +228,7 @@ public class AppointmentMenuController implements Initializable {
 
         Customers customer = customerIDCmboBox.getSelectionModel().getSelectedItem();
         //SAME - NOT SURE IF I WANT TO USE THIS, Obtain String contact name based on combo box selection.
-        customerIDCombo = customer.getCustomerID();
+        customerID = customer.getCustomerID();
 
         Users user = userIDCmboBox.getSelectionModel().getSelectedItem();
         int userID = user.getUserID();
@@ -198,6 +243,13 @@ public class AppointmentMenuController implements Initializable {
         startLocalDateTime = LocalDateTime.of(startDate, startTime);
         endLocalDateTime = LocalDateTime.of(endDate, endTime);
 
+
+        if (timeVerification()) {
+            return;
+        }
+
+
+        /*
         //Assigns users system default time
         ZoneId systemZoneID = ZoneId.systemDefault();
         //assigns selected times to user default times.
@@ -232,8 +284,8 @@ public class AppointmentMenuController implements Initializable {
             alert.showAndWait();
             return;
         }
-
-        if (overlapApptVerify()) {
+*/
+        if (overlapApptVerification()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Appointment Scheduling Error.");
             alert.setHeaderText("Scheduled time overlaps with another appointment for the customer.");
@@ -241,9 +293,10 @@ public class AppointmentMenuController implements Initializable {
             alert.showAndWait();
             return;
 
+
         }  else {
             DBAppointments.addAppointment(apptTitle, apptDescription, apptLocation, apptType, startLocalDateTime,
-                    endLocalDateTime, customerIDCombo, userID, contactID);
+                    endLocalDateTime, customerID, userID, contactID);
 
             try {
                 stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
@@ -259,34 +312,9 @@ public class AppointmentMenuController implements Initializable {
 
     }
 
-    private boolean overlapApptVerify() {
-        ObservableList<Appointments> apptOverlaps = DBAppointments.getAppointmentsByCustomer(customerIDCombo);
-         boolean overlap = false;
 
-         for (int i = 0; i < apptOverlaps.size(); i++) {
-             Appointments appointment = apptOverlaps.get(i);
-             LocalDateTime apptStart = appointment.getApptStartDateTime();
-             LocalDateTime apptEnd = appointment.getApptEndDateTime();
 
-             if (startLocalDateTime.isBefore(apptStart.plusMinutes(1)) && endLocalDateTime.isAfter(apptEnd.minusMinutes(1))) {
-                 overlap = true;
-                 break;
 
-             } else if (startLocalDateTime.isAfter(apptStart.minusMinutes(1)) && startLocalDateTime.isBefore(apptEnd.plusMinutes(1))) {
-                 overlap = true;
-                 break;
-
-             } else if (endLocalDateTime.isAfter(apptStart.minusMinutes(1)) && endLocalDateTime.isBefore(apptEnd.plusMinutes(1))) {
-                 overlap = true;
-                 break;
-
-             } else {
-                 overlap = false;
-                 continue;
-             }
-         }
-         return overlap;
-    }
 
     @FXML
     void onActionAppointmentsByMonth(ActionEvent event) {
@@ -300,12 +328,46 @@ public class AppointmentMenuController implements Initializable {
 
     @FXML
     void onActionClearInformationFields(ActionEvent event) {
-
+        try {
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/View/AppointmentMenu.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     void onActionDeleteAppointment(ActionEvent event) {
+        Appointments selectedAppointment = appointmentsTableView.getSelectionModel().getSelectedItem();
 
+        if (selectedAppointment == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("No appointment selected for delete.");
+            alert.setContentText("Select appointment to delete.");
+            alert.showAndWait();
+            return;
+        }
+
+        int appointmentID = selectedAppointment.getApptID();
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Deleting selected appointment. Do you wish to continue?");
+        Optional<ButtonType> results = alert.showAndWait();
+
+        if (results.isPresent() && results.get() == ButtonType.OK) {
+            DBAppointments.deleteAppointment(appointmentID);
+
+            try {
+                stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+                scene = FXMLLoader.load(getClass().getResource("/View/AppointmentMenu.fxml"));
+                stage.setScene(new Scene(scene));
+                stage.show();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     @FXML
@@ -367,7 +429,141 @@ public class AppointmentMenuController implements Initializable {
     @FXML
     void onActionUpdateAppointment(ActionEvent event) {
 
+        String apptTitle = apptTitleTxtField.getText();
+        String apptDescription = apptDescriptionTxtField.getText();
+        String apptLocation = apptLocationTxtField.getText();
+
+        Contacts contact = contactCmboBox.getSelectionModel().getSelectedItem();
+        //NOT SURE IF I WANT TO USE THIS, Obtain String contact name based on combo box selection.
+        int contactID = contact.getContactID();
+
+        String apptType = apptTypeTxtField.getText();
+
+        Customers customer = customerIDCmboBox.getSelectionModel().getSelectedItem();
+        //SAME - NOT SURE IF I WANT TO USE THIS, Obtain String contact name based on combo box selection.
+        customerID = customer.getCustomerID();
+
+        Users user = userIDCmboBox.getSelectionModel().getSelectedItem();
+        int userID = user.getUserID();
+
+        //Gets appointment start/end dates and times from form date pickers and combo boxes.
+        LocalDate startDate = startDatePicker.getValue();
+        LocalTime startTime = startTimeCmboBox.getValue();
+        LocalDate endDate = endDatePicker.getValue();
+        LocalTime endTime = endTimeCmboBox.getValue();
+
+        //Combines date and time into single variables for start and end datetimes.
+        startLocalDateTime = LocalDateTime.of(startDate, startTime);
+        endLocalDateTime = LocalDateTime.of(endDate, endTime);
+
+
+        if (timeVerification()) {
+            return;
+        }
+/*
+        if (overlapApptVerification()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Appointment Scheduling Error.");
+            alert.setHeaderText("Scheduled time overlaps with another appointment for the customer.");
+            alert.setContentText("Please select a different appointment date/time for the customer.");
+            alert.showAndWait();
+            return;
+
+
+        }
+
+ */
+        else {
+            if (emptyFieldCheck()) {
+                return;
+
+            }
+            DBAppointments.updateAppointment(apptID, apptTitle, apptDescription, apptLocation, apptType, startLocalDateTime,
+                    endLocalDateTime, customerID, userID, contactID);
+
+            try {
+                stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+                scene = FXMLLoader.load(getClass().getResource("/View/AppointmentMenu.fxml"));
+                stage.setScene(new Scene(scene));
+                stage.show();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
+        }
+
+
     }
+
+    public boolean timeVerification() {
+        boolean outsideBusinessHours = false;
+
+        //Assigns users system default time
+        ZoneId systemZoneID = ZoneId.systemDefault();
+        //assigns selected times to user default times.
+        ZonedDateTime systemStartZoneDateTime = ZonedDateTime.of(startLocalDateTime, systemZoneID);
+        ZonedDateTime systemEndZoneDateTime = ZonedDateTime.of(endLocalDateTime, systemZoneID);
+
+        //Assigns EST zone for business hours to a variable.
+        ZoneId estZoneID = ZoneId.of("US/Eastern");
+        //Converts selected system default time to Eastern Time Business hours zone.
+        ZonedDateTime estZoneStartDateTime = systemStartZoneDateTime.withZoneSameInstant(estZoneID);
+        ZonedDateTime estZoneEndDateTime = systemEndZoneDateTime.withZoneSameInstant(estZoneID);
+
+        //Converts EST zone to user LocalDateTime
+        LocalTime selectedStartEST = estZoneStartDateTime.toLocalDateTime().toLocalTime();
+        LocalTime selectedEndEST = estZoneEndDateTime.toLocalDateTime().toLocalTime();
+
+        // move this to separate time verification method?
+        if (selectedEndEST.isAfter(businessEnd)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Selected appointment end time is after business hours.");
+            alert.setContentText("Please select a time before the end of business hours.");
+            alert.showAndWait();
+            outsideBusinessHours = true;
+        }
+
+        if (selectedStartEST.isBefore(businessStart)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Selected appointment start time is before business hours.");
+            alert.setContentText("Please select a time after the start of business hours.");
+            alert.showAndWait();
+            outsideBusinessHours = true;
+        }
+        return outsideBusinessHours;
+    }
+
+    private boolean overlapApptVerification() {
+        ObservableList<Appointments> apptOverlaps = DBAppointments.getAppointmentsByCustomer(customerID);
+        boolean overlap = false;
+
+        for (int i = 0; i < apptOverlaps.size(); i++) {
+            Appointments appointment = apptOverlaps.get(i);
+            LocalDateTime apptStart = appointment.getApptStartDateTime();
+            LocalDateTime apptEnd = appointment.getApptEndDateTime();
+
+            if (startLocalDateTime.isBefore(apptStart.plusMinutes(1)) && endLocalDateTime.isAfter(apptEnd.minusMinutes(1))) {
+                overlap = true;
+                break;
+
+            } else if (startLocalDateTime.isAfter(apptStart.minusMinutes(1)) && startLocalDateTime.isBefore(apptEnd.plusMinutes(1))) {
+                overlap = true;
+                break;
+
+            } else if (endLocalDateTime.isAfter(apptStart.minusMinutes(1)) && endLocalDateTime.isBefore(apptEnd.plusMinutes(1))) {
+                overlap = true;
+                break;
+
+            } else {
+                overlap = false;
+                continue;
+            }
+        }
+        return overlap;
+    }
+
 
     public boolean emptyFieldCheck() {
         boolean emptyField = false;
