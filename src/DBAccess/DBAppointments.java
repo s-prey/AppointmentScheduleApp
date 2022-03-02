@@ -206,8 +206,9 @@ public class DBAppointments {
         ObservableList<Appointments> apptByMonthList = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT Appointment_ID, Title, Description, Location, contacts.Contact_ID, contacts.Contact_Name, Type, Start, End, customers.Customer_ID, User_ID " +
-                    "FROM appointments, contacts, customers WHERE appointments.Contact_ID=contacts.Contact_ID AND appointments.Customer_ID=customers.Customer_ID " +
+            String sql = "SELECT Appointment_ID, Title, Description, Location, contacts.Contact_ID, contacts.Contact_Name, " +
+                    "Type, Start, End, customers.Customer_ID, User_ID FROM appointments, contacts, customers " +
+                    "WHERE appointments.Contact_ID=contacts.Contact_ID AND appointments.Customer_ID=customers.Customer_ID " +
                     "AND month(Start) = month(now())";
 
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);

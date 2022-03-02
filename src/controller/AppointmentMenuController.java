@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -30,8 +31,10 @@ public class AppointmentMenuController implements Initializable {
 
     Stage stage;
     Parent scene;
-    private final LocalTime businessStart = LocalTime.of(8, 0);
-    private final LocalTime businessEnd = LocalTime.of(22, 0);
+    private LocalTime businessStart = LocalTime.of(8, 0);
+    private LocalTime businessEnd = LocalTime.of(22, 0);
+    private int weekStart = DayOfWeek.MONDAY.getValue();
+    private int weekEnd = DayOfWeek.FRIDAY.getValue();
     private LocalDateTime startLocalDateTime;
     private LocalDateTime endLocalDateTime;
     private int customerID; //RENAME VARIABLE!!!
@@ -67,16 +70,15 @@ public class AppointmentMenuController implements Initializable {
 
     @FXML private Button addNewAppointmentButton;
 
-    @FXML private RadioButton allAppointmentsRadioBtn;
+
 
     @FXML private ToggleGroup appointmentFilterTG;
 
     @FXML private TextField appointmentIDTxtField;
 
 
-
+    @FXML private RadioButton allAppointmentsRadioBtn;
     @FXML private RadioButton appointmentsByMoRadioBtn;
-
     @FXML private RadioButton appointmentsByWkRadioBtn;
 
 
@@ -112,18 +114,34 @@ public class AppointmentMenuController implements Initializable {
         customerIDCmboBox.setItems(DBCustomers.getAllCustomers());
         userIDCmboBox.setItems(DBUsers.getAllUsers());
 
-        LocalTime startTime1 = businessStart;
-        LocalTime endTime1 = businessEnd.minusMinutes(15);
-        while (startTime1.isBefore(endTime1.plusSeconds(1))) {
-            startTimeCmboBox.getItems().add(startTime1);
-            startTime1 = startTime1.plusMinutes(15);
+        LocalTime firstApptTime1 = businessStart;
+        LocalTime lastApptTime1 = businessEnd.minusMinutes(15);
+/*
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        ObservableList<String> appointmentTimes = FXCollections.observableArrayList();
+        LocalTime firstApptTime = LocalTime.MIN.plusHours(8);
+        LocalTime lastApptTime = LocalTime.MAX.minusHours(1).minusMinutes(59);
+
+        while (firstApptTime.isBefore(lastApptTime)) {
+            appointmentTimes.add(dateTimeFormatter.format(firstApptTime));
+            firstApptTime = firstApptTime.plusMinutes(15);
+        }
+        startTimeCmboBox.setItems(appointmentTimes);
+        startTimeCmboBox.setEditable(true);
+        startTimeCmboBox.getEditor().setEditable(false);
+
+ */
+
+        while (firstApptTime1.isBefore(lastApptTime1.plusSeconds(1))) {
+            startTimeCmboBox.getItems().add(firstApptTime1);
+            firstApptTime1 = firstApptTime1.plusMinutes(15);
         }
 
-        LocalTime startTime2 = businessStart.plusMinutes(15);
-        LocalTime endTime2 = businessEnd;
-        while (startTime2.isBefore(endTime2.plusMinutes(15))) {
-            endTimeCmboBox.getItems().add(startTime2);
-            startTime2 = startTime2.plusMinutes(15);
+        LocalTime firstApptTime2 = businessStart.plusMinutes(15);
+        LocalTime lastApptTime2 = businessEnd;
+        while (firstApptTime2.isBefore(lastApptTime2.plusMinutes(15))) {
+            endTimeCmboBox.getItems().add(firstApptTime2);
+            firstApptTime2 = firstApptTime2.plusMinutes(15);
         }
 
 
@@ -172,6 +190,7 @@ public class AppointmentMenuController implements Initializable {
         LocalTime apptEndTime = apptEnd.toLocalTime();
 
         startDatePicker.setValue(apptStartDate);
+        //startTimeCmboBox.setValue(selectedAppointment.getApptStartDateTime().toLocalTime().toString());
         startTimeCmboBox.setValue(apptStartTime);
         endDatePicker.setValue(apptEndDate);
         endTimeCmboBox.setValue(apptEndTime);
@@ -234,7 +253,9 @@ public class AppointmentMenuController implements Initializable {
         int userID = user.getUserID();
 
         //Gets appointment start/end dates and times from form date pickers and combo boxes.
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         LocalDate startDate = startDatePicker.getValue();
+        //LocalTime startTime = LocalTime.parse(startTimeCmboBox.getValue(), timeFormatter);
         LocalTime startTime = startTimeCmboBox.getValue();
         LocalDate endDate = endDatePicker.getValue();
         LocalTime endTime = endTimeCmboBox.getValue();
@@ -312,18 +333,28 @@ public class AppointmentMenuController implements Initializable {
 
     }
 
+    @FXML
+    void onActionShowAllAppointments(ActionEvent event) {
+        if (allAppointmentsRadioBtn.isSelected()) {
+            appointmentsTableView.setItems(DBAppointments.getAllAppointments());
+        }
 
+    }
 
 
 
     @FXML
     void onActionAppointmentsByMonth(ActionEvent event) {
-
+        if (appointmentsByMoRadioBtn.isSelected()) {
+            appointmentsTableView.setItems(DBAppointments.getAppointmentsByMonth());
+        }
     }
 
     @FXML
     void onActionAppointmentsByWeek(ActionEvent event) {
-
+        if (appointmentsByWkRadioBtn.isSelected()) {
+            appointmentsTableView.setItems(DBAppointments.getAppointmentsByWeek());
+        }
     }
 
     @FXML
@@ -400,10 +431,7 @@ public class AppointmentMenuController implements Initializable {
 
     }
 
-    @FXML
-    void onActionShowAllAppointments(ActionEvent event) {
 
-    }
 
     @FXML
     void onActionStartDate(ActionEvent event) {
@@ -447,10 +475,13 @@ public class AppointmentMenuController implements Initializable {
         int userID = user.getUserID();
 
         //Gets appointment start/end dates and times from form date pickers and combo boxes.
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         LocalDate startDate = startDatePicker.getValue();
         LocalTime startTime = startTimeCmboBox.getValue();
+        //LocalTime startTime = LocalTime.parse(startTimeCmboBox.getValue(), timeFormatter);
         LocalDate endDate = endDatePicker.getValue();
         LocalTime endTime = endTimeCmboBox.getValue();
+
 
         //Combines date and time into single variables for start and end datetimes.
         startLocalDateTime = LocalDateTime.of(startDate, startTime);
@@ -460,7 +491,7 @@ public class AppointmentMenuController implements Initializable {
         if (timeVerification()) {
             return;
         }
-/*
+
         if (overlapApptVerification()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Appointment Scheduling Error.");
@@ -472,7 +503,7 @@ public class AppointmentMenuController implements Initializable {
 
         }
 
- */
+
         else {
             if (emptyFieldCheck()) {
                 return;
@@ -514,7 +545,33 @@ public class AppointmentMenuController implements Initializable {
         LocalTime selectedStartEST = estZoneStartDateTime.toLocalDateTime().toLocalTime();
         LocalTime selectedEndEST = estZoneEndDateTime.toLocalDateTime().toLocalTime();
 
-        // move this to separate time verification method?
+        //Test
+        DayOfWeek selectedDayStart = estZoneStartDateTime.toLocalDate().getDayOfWeek();
+        int selectedDayStartInt = selectedDayStart.getValue();
+        DayOfWeek selectedDayEnd = estZoneEndDateTime.toLocalDate().getDayOfWeek();
+        int selectedDayEndInt = selectedDayEnd.getValue();
+
+        if (selectedStartEST.isBefore(businessStart) || selectedStartEST.isAfter(businessEnd) ||
+            selectedEndEST.isBefore(businessStart) || selectedEndEST.isAfter(businessEnd)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Selected appointment is outside of business hours.");
+            alert.setContentText("Please select a time between 8:00 and 22:00 EST.");
+            alert.showAndWait();
+            outsideBusinessHours = true;
+        }
+
+        if (selectedDayStartInt < weekStart || selectedDayStartInt > weekEnd ||
+        selectedDayEndInt < weekStart || selectedDayEndInt > weekEnd) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Selected appointment is outside of business days.");
+            alert.setContentText("Please select a time between Monday and Friday.");
+            alert.showAndWait();
+            outsideBusinessHours = true;
+        }
+
+        /*
         if (selectedEndEST.isAfter(businessEnd)) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -532,6 +589,9 @@ public class AppointmentMenuController implements Initializable {
             alert.showAndWait();
             outsideBusinessHours = true;
         }
+
+         */
+
         return outsideBusinessHours;
     }
 
@@ -541,8 +601,14 @@ public class AppointmentMenuController implements Initializable {
 
         for (int i = 0; i < apptOverlaps.size(); i++) {
             Appointments appointment = apptOverlaps.get(i);
+            int appt_ID = appointment.getApptID();
             LocalDateTime apptStart = appointment.getApptStartDateTime();
             LocalDateTime apptEnd = appointment.getApptEndDateTime();
+
+
+            if (appt_ID == apptID) {
+                break;
+            }
 
             if (startLocalDateTime.isBefore(apptStart.plusMinutes(1)) && endLocalDateTime.isAfter(apptEnd.minusMinutes(1))) {
                 overlap = true;
