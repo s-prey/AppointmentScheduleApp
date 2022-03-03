@@ -4,6 +4,7 @@ import Database.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Appointments;
+import model.Reports;
 
 import java.net.PortUnreachableException;
 import java.sql.*;
@@ -326,6 +327,35 @@ public class DBAppointments {
             ex.printStackTrace();
         }
         return apptByContactList;
+    }
+
+    //******************* METHOD FOR APPOINTMENT TOTAL BY MONTH ***************************************************************
+    public static ObservableList<Reports> getAppointmentTotalByMonth() {
+        ObservableList<Reports> apptByMonthTotalList = FXCollections.observableArrayList();
+
+        try {
+            String sql = "SELECT date_format(Start, '%M') AS Month,count(Start) AS Count \n" +
+                    "FROM client_schedule.appointments \n" +
+                    "group by date_format(Start, '%M') \n" +
+                    "order by date_format(Start, '%M')";
+
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String month = rs.getString("Month");
+                String count = rs.getString("Count");
+                apptByMonthTotalList.add(new Reports(month, count));
+
+
+
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return apptByMonthTotalList;
     }
 
 //********************* SEE IF SQL STATEMENT CAN BE AJDUSTED *********************************************************************

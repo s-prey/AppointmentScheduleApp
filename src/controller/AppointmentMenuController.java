@@ -253,7 +253,7 @@ public class AppointmentMenuController implements Initializable {
         int userID = user.getUserID();
 
         //Gets appointment start/end dates and times from form date pickers and combo boxes.
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+       // DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         LocalDate startDate = startDatePicker.getValue();
         //LocalTime startTime = LocalTime.parse(startTimeCmboBox.getValue(), timeFormatter);
         LocalTime startTime = startTimeCmboBox.getValue();

@@ -1,16 +1,24 @@
 package controller;
 
+import DBAccess.DBAppointments;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TableColumn;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import model.Appointments;
+import model.Contacts;
+import model.Customers;
+import model.Reports;
 
+import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class ReportsMenuController implements Initializable {
@@ -18,68 +26,93 @@ public class ReportsMenuController implements Initializable {
     Stage stage;
     Parent scene;
 
-    @FXML
-    private Button appointmentMenuButton;
+    //Report 1 - Customer Appointment total by Month
+    @FXML private Tab appointmentTotalTab;
+    @FXML private TableView<Reports> customerApptMonthTotalTableView;
+    @FXML private TableColumn<Reports, String> customerApptTotalMonthCol;
+    @FXML private TableColumn<Reports, String> customerApptMonthTotalCol;
 
-    @FXML
-    private Tab appointmentTotalTab;
+    //Report 1 - Customer Appointment total by Type
+    @FXML private TableView<Appointments> customerApptTypeTotalTableView;
+    @FXML private TableColumn<Appointments, String> customerApptTotalTypeCol;
+    @FXML private TableColumn<Appointments, Integer> customerApptTypeTotalCol;
+    //@FXML private TableView<Appointments> customerApptTotalTableView;
+    //@FXML private TableColumn<Appointments, Integer> customerApptTotalCol;
 
-    @FXML
-    private Tab appointmentsByContactTab;
 
-    @FXML
-    private TableColumn<?, ?> apptByContactApptDescCol;
+    //Report 2
+    @FXML private Tab appointmentsByContactTab;
+    @FXML private ComboBox<Contacts> contactComboBox;
+    @FXML private TableView<Appointments> appointmentsByContactTableView;
+    @FXML private TableColumn<Appointments, Integer> apptByContactApptID;
+    @FXML private TableColumn<Appointments, String> apptByContactApptTitleCol;
+    @FXML private TableColumn<Appointments, String> apptByContactApptTypeCol;
+    @FXML private TableColumn<Appointments, String> apptByContactApptDescCol;
+    @FXML private TableColumn<Appointments, LocalDateTime> apptByContactStartDateTimeCol;
+    @FXML private TableColumn<Appointments, LocalDateTime> apptByContactEndDateTimeCol;
+    @FXML private TableColumn<Appointments, Integer> apptByContactCustomerIDCol;
 
-    @FXML
-    private TableColumn<?, ?> apptByContactApptID;
 
-    @FXML
-    private TableColumn<?, ?> apptByContactApptTitleCol;
+    //Report 3
+    @FXML private Tab totalCustomersByCountryTab;
+    @FXML private TableView<Customers> totalCustomersByCntryTableView;
+    @FXML private TableColumn<Customers, String> totalCustomersByCountryCountryCol;
+    @FXML private TableColumn<Customers, Integer> totalCustomersByCountryCustomerTotalCol;
 
-    @FXML
-    private TableColumn<?, ?> apptByContactApptTypeCol;
 
-    @FXML
-    private TableColumn<?, ?> apptByContactCustomerIDCol;
 
-    @FXML
-    private TableColumn<?, ?> apptByContactEndDateTimeCol;
+    @FXML private Button customerMenuButton;
+    @FXML private Button appointmentMenuButton;
 
-    @FXML
-    private TableColumn<?, ?> apptByContactStartDateTimeCol;
 
-    @FXML
-    private ComboBox<?> contactComboBox;
 
-    @FXML
-    private TableColumn<?, ?> customerApptTotalCol;
 
-    @FXML
-    private TableColumn<?, ?> customerApptTotalMonthCol;
 
-    @FXML
-    private TableColumn<?, ?> customerApptTotalTypeCol;
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
 
-    @FXML
-    private Button customerMenuButton;
+        customerApptMonthTotalTableView.setItems(DBAppointments.getAppointmentTotalByMonth());
+        customerApptTotalMonthCol.setCellValueFactory(new PropertyValueFactory<>("month"));
+        customerApptMonthTotalCol.setCellValueFactory(new PropertyValueFactory<>("count"));
+        //customerApptTypeTotalTableView.setItems(DBAppointments.g);
+        customerApptTotalTypeCol.setCellValueFactory(new PropertyValueFactory<>("apptType"));
+        customerApptTypeTotalCol.setCellValueFactory(new PropertyValueFactory<>("apptTypeTotal"));
 
-    @FXML
-    private TableColumn<?, ?> totalCustomersByCountryCountryCol;
+        apptByContactApptID.setCellValueFactory(new PropertyValueFactory<>("apptID"));
+        apptByContactApptTitleCol.setCellValueFactory(new PropertyValueFactory<>("apptTitle"));
+        apptByContactApptTypeCol.setCellValueFactory(new PropertyValueFactory<>("apptType"));
+        apptByContactApptDescCol.setCellValueFactory(new PropertyValueFactory<>("apptDescription"));
+        apptByContactStartDateTimeCol.setCellValueFactory(new PropertyValueFactory<>("apptStartDateTime"));
+        apptByContactEndDateTimeCol.setCellValueFactory(new PropertyValueFactory<>("apptEndDateTime"));
+        apptByContactCustomerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
 
-    @FXML
-    private TableColumn<?, ?> totalCustomersByCountryCustomerTotalCol;
-
-    @FXML
-    private Tab totalCustomersByCountryTab;
-
-    @FXML
-    void onActionSwitchToAppointmentMenu(ActionEvent event) {
+        totalCustomersByCountryCountryCol.setCellValueFactory(new PropertyValueFactory<>("customerCountry"));
+        totalCustomersByCountryCustomerTotalCol.setCellValueFactory(new PropertyValueFactory<>("customerCountryTotal"));
 
     }
 
     @FXML
-    void onActionSwitchToCustomerMenu(ActionEvent event) {
+    void onActionSwitchToAppointmentMenu(ActionEvent event) {
+        try {
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/View/AppointmentMenu.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    @FXML
+    void onActionSwitchToCustomerMenu(ActionEvent event) {
+        try {
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/View/CustomerMenu.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -103,8 +136,5 @@ public class ReportsMenuController implements Initializable {
     }
 
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
 
-    }
 }
