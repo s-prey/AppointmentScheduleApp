@@ -16,6 +16,9 @@ public class Appointments {
     public int userID;
     public int contactID;
     public String contactName;
+    public String month;
+    public String count;
+    public int apptTypeTotal;
 
 
     public Appointments(int apptID, String apptTitle, String apptDescription, String apptLocation, String contactName,
@@ -32,6 +35,24 @@ public class Appointments {
         this.userID = userID;
         this.contactID = contactID;
 
+    }
+
+    public Appointments(String month, String count) {
+        this.month = month;
+        this.count = count;
+    }
+
+    public int getApptTypeTotal() {
+        return apptTypeTotal;
+    }
+
+    public void setApptTypeTotal(int apptTypeTotal) {
+        this.apptTypeTotal = apptTypeTotal;
+    }
+
+    public Appointments(String apptType, int apptTypeTotal) {
+        this.apptType = apptType;
+        this.apptTypeTotal = apptTypeTotal;
     }
 
 
@@ -122,5 +143,21 @@ public class Appointments {
 
     public void setContactName(String contactName) {
         this.contactName = contactName;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
+
+    public String getCount() {
+        return count;
+    }
+
+    public void setCount(String count) {
+        this.count = count;
     }
 }

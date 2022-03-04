@@ -1,6 +1,7 @@
 package controller;
 
 import DBAccess.DBAppointments;
+import DBAccess.DBContacts;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,12 +26,13 @@ public class ReportsMenuController implements Initializable {
 
     Stage stage;
     Parent scene;
+    private int contactID;
 
     //Report 1 - Customer Appointment total by Month
     @FXML private Tab appointmentTotalTab;
-    @FXML private TableView<Reports> customerApptMonthTotalTableView;
-    @FXML private TableColumn<Reports, String> customerApptTotalMonthCol;
-    @FXML private TableColumn<Reports, String> customerApptMonthTotalCol;
+    @FXML private TableView<Appointments> customerApptMonthTotalTableView;
+    @FXML private TableColumn<Appointments, String> customerApptTotalMonthCol;
+    @FXML private TableColumn<Appointments, String> customerApptMonthTotalCol;
 
     //Report 1 - Customer Appointment total by Type
     @FXML private TableView<Appointments> customerApptTypeTotalTableView;
@@ -75,9 +77,11 @@ public class ReportsMenuController implements Initializable {
         customerApptTotalMonthCol.setCellValueFactory(new PropertyValueFactory<>("month"));
         customerApptMonthTotalCol.setCellValueFactory(new PropertyValueFactory<>("count"));
         //customerApptTypeTotalTableView.setItems(DBAppointments.g);
+        customerApptTypeTotalTableView.setItems(DBAppointments.getAppointmentTotalByType());
         customerApptTotalTypeCol.setCellValueFactory(new PropertyValueFactory<>("apptType"));
         customerApptTypeTotalCol.setCellValueFactory(new PropertyValueFactory<>("apptTypeTotal"));
 
+        contactComboBox.setItems(DBContacts.getAllContacts());
         apptByContactApptID.setCellValueFactory(new PropertyValueFactory<>("apptID"));
         apptByContactApptTitleCol.setCellValueFactory(new PropertyValueFactory<>("apptTitle"));
         apptByContactApptTypeCol.setCellValueFactory(new PropertyValueFactory<>("apptType"));
@@ -131,8 +135,23 @@ public class ReportsMenuController implements Initializable {
     }
 
     @FXML
-    void selectContact(ActionEvent event) {
+    void onActionSelectContact(ActionEvent event) {
 
+        Contacts contact = contactComboBox.getSelectionModel().getSelectedItem();
+
+        contactID = contact.getContactID();
+    }
+
+    @FXML
+    void onActionGetContactAppointments(javafx.scene.input.MouseEvent mouseEvent) {
+        appointmentsByContactTableView.setItems(DBAppointments.getAppointmentsByContact(contactID));
+        apptByContactApptID.setCellValueFactory(new PropertyValueFactory<>("apptID"));
+        apptByContactApptTitleCol.setCellValueFactory(new PropertyValueFactory<>("apptTitle"));
+        apptByContactApptTypeCol.setCellValueFactory(new PropertyValueFactory<>("apptType"));
+        apptByContactApptDescCol.setCellValueFactory(new PropertyValueFactory<>("apptDescription"));
+        apptByContactStartDateTimeCol.setCellValueFactory(new PropertyValueFactory<>("apptStartDateTime"));
+        apptByContactEndDateTimeCol.setCellValueFactory(new PropertyValueFactory<>("apptEndDateTime"));
+        apptByContactCustomerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
     }
 
 

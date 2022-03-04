@@ -330,8 +330,8 @@ public class DBAppointments {
     }
 
     //******************* METHOD FOR APPOINTMENT TOTAL BY MONTH ***************************************************************
-    public static ObservableList<Reports> getAppointmentTotalByMonth() {
-        ObservableList<Reports> apptByMonthTotalList = FXCollections.observableArrayList();
+    public static ObservableList<Appointments> getAppointmentTotalByMonth() {
+        ObservableList<Appointments> apptByMonthTotalList = FXCollections.observableArrayList();
 
         try {
             String sql = "SELECT date_format(Start, '%M') AS Month,count(Start) AS Count \n" +
@@ -345,7 +345,10 @@ public class DBAppointments {
             while (rs.next()) {
                 String month = rs.getString("Month");
                 String count = rs.getString("Count");
-                apptByMonthTotalList.add(new Reports(month, count));
+
+                Appointments appointment = new Appointments(month, count);
+                apptByMonthTotalList.add(appointment);
+                //apptByMonthTotalList.add(new Reports(month, count));
 
 
 
@@ -356,6 +359,34 @@ public class DBAppointments {
         }
 
         return apptByMonthTotalList;
+    }
+
+    public static ObservableList<Appointments> getAppointmentTotalByType() {
+        ObservableList<Appointments> apptByTypeTotalList = FXCollections.observableArrayList();
+
+
+        try {
+            String sql = "SELECT Type,count(Type) AS Type_Count FROM client_schedule.appointments GROUP BY Type";
+
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+
+            while (rs.next()) {
+                String apptType = rs.getString("Type");
+                int apptTypeTotal = Integer.parseInt(rs.getString("Type_Count"));
+                System.out.println(apptType + " " + apptTypeTotal);
+
+                Appointments appointment = new Appointments(apptType, apptTypeTotal);
+                apptByTypeTotalList.add(appointment);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return apptByTypeTotalList;
     }
 
 //********************* SEE IF SQL STATEMENT CAN BE AJDUSTED *********************************************************************

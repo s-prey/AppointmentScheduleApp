@@ -48,7 +48,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <TableView fx:id="appointmentsByContactTableView" layoutY="55.0" prefHeight="271.0" prefWidth="1150.0">
+                        <TableView fx:id="appointmentsByContactTableView" layoutX="6.0" layoutY="50.0" prefHeight="271.0" prefWidth="1150.0">
                           <columns>
                             <TableColumn fx:id="apptByContactApptID" prefWidth="109.0" text="Appointment ID" />
                             <TableColumn fx:id="apptByContactApptTitleCol" minWidth="0.0" prefWidth="129.0" text="Appointment Title" />
@@ -59,7 +59,7 @@
                             <TableColumn fx:id="apptByContactCustomerIDCol" prefWidth="86.0" text="Customer ID" />
                           </columns>
                         </TableView>
-                        <ComboBox fx:id="contactComboBox" layoutX="14.0" layoutY="14.0" onAction="#selectContact" prefWidth="150.0" promptText="Select Contact" />
+                        <ComboBox fx:id="contactComboBox" layoutX="14.0" layoutY="14.0" onAction="#onActionSelectContact" onMouseReleased="#onActionGetContactAppointments" prefWidth="150.0" promptText="Select Contact" />
                      </children>
                   </AnchorPane>
             </content>
