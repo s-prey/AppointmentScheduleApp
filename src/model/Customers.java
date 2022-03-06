@@ -10,6 +10,8 @@ public class Customers {
     //private String updatedBy;
     private int divisionID;
     private int countryID;
+    private String countryName;
+    private String customerCount;
 
     public Customers() {
 
@@ -25,6 +27,11 @@ public class Customers {
         this.divisionID = divisionID;
         this.countryID = countryID;
 
+    }
+
+    public Customers(String countryName, String customerCount) {
+        this.countryName = countryName;
+        this.customerCount = customerCount;
     }
 
 
@@ -98,6 +105,22 @@ public class Customers {
 
     public void setCountryID(int countryID) {
         this.countryID = countryID;
+    }
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
+
+    public String getCustomerCount() {
+        return customerCount;
+    }
+
+    public void setCustomerCount(String customerCount) {
+        this.customerCount = customerCount;
     }
 /*
     @Override

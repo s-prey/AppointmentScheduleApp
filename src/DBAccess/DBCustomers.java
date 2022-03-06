@@ -114,6 +114,30 @@ public class DBCustomers {
         }
     }
 
+    public static ObservableList<Customers> getCustomerCountByCountry() {
+        ObservableList<Customers> customersByCountryList = FXCollections.observableArrayList();
+
+        try {
+            String sql = "Select count(Customer_ID) AS Customer_Count, Country FROM client_schedule.customers c " +
+                    "JOIN first_level_divisions f ON c.Division_ID=f.Division_ID JOIN countries o " +
+                    "ON f.Country_ID=o.Country_ID group by Country";
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String countryName = rs.getString("Country");
+                String customerCount = rs.getString("Customer_Count");
+
+                Customers customer = new Customers(countryName, customerCount);
+                customersByCountryList.add(customer);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return customersByCountryList;
+    }
+
 
 
 }

@@ -2,6 +2,7 @@ package controller;
 
 import DBAccess.DBAppointments;
 import DBAccess.DBContacts;
+import DBAccess.DBCustomers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -45,6 +46,7 @@ public class ReportsMenuController implements Initializable {
     //Report 2
     @FXML private Tab appointmentsByContactTab;
     @FXML private ComboBox<Contacts> contactComboBox;
+    @FXML private Button runReportBtn;
     @FXML private TableView<Appointments> appointmentsByContactTableView;
     @FXML private TableColumn<Appointments, Integer> apptByContactApptID;
     @FXML private TableColumn<Appointments, String> apptByContactApptTitleCol;
@@ -90,8 +92,9 @@ public class ReportsMenuController implements Initializable {
         apptByContactEndDateTimeCol.setCellValueFactory(new PropertyValueFactory<>("apptEndDateTime"));
         apptByContactCustomerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
 
-        totalCustomersByCountryCountryCol.setCellValueFactory(new PropertyValueFactory<>("customerCountry"));
-        totalCustomersByCountryCustomerTotalCol.setCellValueFactory(new PropertyValueFactory<>("customerCountryTotal"));
+        totalCustomersByCntryTableView.setItems(DBCustomers.getCustomerCountByCountry());
+        totalCustomersByCountryCountryCol.setCellValueFactory(new PropertyValueFactory<>("countryName"));
+        totalCustomersByCountryCustomerTotalCol.setCellValueFactory(new PropertyValueFactory<>("customerCount"));
 
     }
 
@@ -143,7 +146,12 @@ public class ReportsMenuController implements Initializable {
     }
 
     @FXML
-    void onActionGetContactAppointments(javafx.scene.input.MouseEvent mouseEvent) {
+    void onActionGetContactAppointments(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onActionGetApptsByContact(ActionEvent event) {
         appointmentsByContactTableView.setItems(DBAppointments.getAppointmentsByContact(contactID));
         apptByContactApptID.setCellValueFactory(new PropertyValueFactory<>("apptID"));
         apptByContactApptTitleCol.setCellValueFactory(new PropertyValueFactory<>("apptTitle"));
