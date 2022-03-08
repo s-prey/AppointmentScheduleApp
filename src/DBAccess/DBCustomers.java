@@ -38,7 +38,6 @@ public class DBCustomers {
             ex.printStackTrace();
         }
         return customersList;
-
     }
 
 
@@ -63,12 +62,11 @@ public class DBCustomers {
             ps.setInt(9, divisionID);
             ps.execute();
 
-
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-
     }
+
 
    public static void updateCustomer(int customerID, String customerName, String customerAddress, String customerPostal, String customerPhone, Integer divisionID) {
         try {
@@ -76,10 +74,7 @@ public class DBCustomers {
             String lastUpdatedByToAdd = "test";
 
             String sql = "UPDATE client_schedule.customers SET Customer_Name =?, Address=?, Postal_Code=?, phone=?, Last_Update=?, Last_Updated_By=?, Division_ID=? WHERE Customer_ID=?;";
-            //"UPDATE client_schedule.customers SET Customer_Name=?, Address=?, Postal_Code=?, phone=?, Last_Update=?, Last_Updated_By=?, Division_ID=? WHERE Customer_ID=?";
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
-
-
 
             ps.setString(1, customerName);
             ps.setString(2, customerAddress);
@@ -91,13 +86,14 @@ public class DBCustomers {
             ps.setInt(8, customerID);
             ps.execute();
 
-
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
+
     public static void deleteCustomer(int customerID) {
+
         try {
             String sqlDelAppt = "DELETE FROM client_schedule.appointments WHERE Customer_ID = ?";
             PreparedStatement psAppt = DBConnection.getConnection().prepareStatement(sqlDelAppt);
@@ -113,6 +109,9 @@ public class DBCustomers {
             ex.printStackTrace();
         }
     }
+
+
+
 
     public static ObservableList<Customers> getCustomerCountByCountry() {
         ObservableList<Customers> customersByCountryList = FXCollections.observableArrayList();
@@ -137,7 +136,5 @@ public class DBCustomers {
         }
         return customersByCountryList;
     }
-
-
 
 }

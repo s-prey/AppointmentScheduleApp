@@ -22,9 +22,8 @@ public class DBFirstLevelDivisions {
             while (rs.next()) {
                 int divisionID = rs.getInt("Division_ID");
                 String divisionName = rs.getString("Division");
-                //int countryID = rs.getInt("Country_ID");
 
-                FirstLevelDivisions firstLevelDivision = new FirstLevelDivisions(divisionID, divisionName/*countryID*/);
+                FirstLevelDivisions firstLevelDivision = new FirstLevelDivisions(divisionID, divisionName);
                 firstLevelDivisionsList.add(firstLevelDivision);
             }
         } catch (SQLException ex) {
@@ -48,7 +47,6 @@ public class DBFirstLevelDivisions {
                 String divisionName = rs.getString("Division");
                 FirstLevelDivisions firstLevelDivisions = new FirstLevelDivisions(divisionID, divisionName);
                 firstLevelDivisionsByCountryList.add(firstLevelDivisions);
-
             }
 
         } catch (SQLException ex) {
@@ -56,4 +54,5 @@ public class DBFirstLevelDivisions {
         }
         return firstLevelDivisionsByCountryList;
     }
+
 }

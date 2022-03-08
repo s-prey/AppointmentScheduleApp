@@ -26,14 +26,12 @@ public class Customers {
         this.customerPhone = customerPhone;
         this.divisionID = divisionID;
         this.countryID = countryID;
-
     }
 
     public Customers(String countryName, String customerCount) {
         this.countryName = countryName;
         this.customerCount = customerCount;
     }
-
 
     public int getCustomerID() {
         return customerID;
@@ -54,14 +52,6 @@ public class Customers {
     public String getCustomerPhone() {
         return customerPhone;
     }
-
-    //public String getCreatedBy() {
-        //return createdBy;
-    //}
-
-    //public String getUpdatedBy() {
-        //return updatedBy;
-    //}
 
     public int getDivisionID() {
         return divisionID;
@@ -90,14 +80,6 @@ public class Customers {
     public void setCustomerPhone(String customerPhone) {
         this.customerPhone = customerPhone;
     }
-
-    //public void setCreatedBy(String createdBy) {
-        //this.createdBy = createdBy;
-   // }
-
-    //public void setUpdatedBy(String updatedBy) {
-        //this.updatedBy = updatedBy;
-    //}
 
     public void setDivisionID(int divisionID) {
         this.divisionID = divisionID;
@@ -130,6 +112,6 @@ public class Customers {
  */
     @Override
     public String toString() {
-        return "[" + customerID + "]" + customerName;
+        return "(" + customerID + ") " + customerName;
     }
 }

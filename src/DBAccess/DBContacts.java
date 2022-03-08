@@ -26,6 +26,7 @@ public class DBContacts {
 
                 Contacts contact = new Contacts(contactID, contactName, contactEmail);
                 contactsList.add(contact);
+
             }
         } catch (SQLException ex) {
             ex.printStackTrace();

@@ -93,11 +93,10 @@ public class AppointmentMenuController implements Initializable {
 
 
 
-    public ObservableList<Appointments> appointmentData = FXCollections.observableArrayList();
+    //public ObservableList<Appointments> appointmentData = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         appointmentsTableView.setItems(DBAppointments.getAllAppointments());
         apptIDCol.setCellValueFactory(new PropertyValueFactory<>("apptID"));
         apptTitleCol.setCellValueFactory(new PropertyValueFactory<>("apptTitle"));
@@ -116,21 +115,6 @@ public class AppointmentMenuController implements Initializable {
 
         LocalTime firstApptTime1 = businessStart;
         LocalTime lastApptTime1 = businessEnd.minusMinutes(15);
-/*
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-        ObservableList<String> appointmentTimes = FXCollections.observableArrayList();
-        LocalTime firstApptTime = LocalTime.MIN.plusHours(8);
-        LocalTime lastApptTime = LocalTime.MAX.minusHours(1).minusMinutes(59);
-
-        while (firstApptTime.isBefore(lastApptTime)) {
-            appointmentTimes.add(dateTimeFormatter.format(firstApptTime));
-            firstApptTime = firstApptTime.plusMinutes(15);
-        }
-        startTimeCmboBox.setItems(appointmentTimes);
-        startTimeCmboBox.setEditable(true);
-        startTimeCmboBox.getEditor().setEditable(false);
-
- */
 
         while (firstApptTime1.isBefore(lastApptTime1.plusSeconds(1))) {
             startTimeCmboBox.getItems().add(firstApptTime1);
@@ -143,18 +127,11 @@ public class AppointmentMenuController implements Initializable {
             endTimeCmboBox.getItems().add(firstApptTime2);
             firstApptTime2 = firstApptTime2.plusMinutes(15);
         }
-
-
-
-
-
-        //appointmentsTableView.setItems(appointmentData);
         System.out.println("Completed Appointment Menu Controller initialize.");
-
     }
 
-    public void selectedAppointmentData() throws IOException {
 
+    public void selectedAppointmentData() throws IOException {
         Appointments selectedAppointment = appointmentsTableView.getSelectionModel().getSelectedItem();
         appointmentIDTxtField.setText(String.valueOf(selectedAppointment.getApptID()));
         apptID = selectedAppointment.getApptID();
@@ -190,42 +167,18 @@ public class AppointmentMenuController implements Initializable {
         LocalTime apptEndTime = apptEnd.toLocalTime();
 
         startDatePicker.setValue(apptStartDate);
-        //startTimeCmboBox.setValue(selectedAppointment.getApptStartDateTime().toLocalTime().toString());
         startTimeCmboBox.setValue(apptStartTime);
         endDatePicker.setValue(apptEndDate);
         endTimeCmboBox.setValue(apptEndTime);
     }
 
-    /*public ResultSet accessDB() {
-        Connection conn = null;
-        boolean res = false;
-        ResultSet rs = null;
-
-        Statement stmt;
-
-        try {
-
-            stmt = conn.createStatement();
-            rs = stmt.executeQuery("SELECT city, country, start FROM city, country, appointment WHERE city.countryID = country.countryID");
-            while (rs.next()) {
-                System.out.println(rs.getString(1));
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-
-
-
-        return rs;
-    }
-
-     */
-
+/*
     public void addDataToTableView() throws SQLException {
         ObservableList<Appointments> allAppointments = getAllAppointments();
         appointmentsTableView.setItems(allAppointments);
     }
 
+ */
 
 
     @FXML
@@ -269,43 +222,6 @@ public class AppointmentMenuController implements Initializable {
             return;
         }
 
-
-        /*
-        //Assigns users system default time
-        ZoneId systemZoneID = ZoneId.systemDefault();
-        //assigns selected times to user default times.
-        ZonedDateTime systemStartZoneDateTime = ZonedDateTime.of(startLocalDateTime, systemZoneID);
-        ZonedDateTime systemEndZoneDateTime = ZonedDateTime.of(endLocalDateTime, systemZoneID);
-
-        //Assigns EST zone for business hours to a variable.
-        ZoneId estZoneID = ZoneId.of("US/Eastern");
-        //Converts selected system default time to Eastern Time Business hours zone.
-        ZonedDateTime estZoneStartDateTime = systemStartZoneDateTime.withZoneSameInstant(estZoneID);
-        ZonedDateTime estZoneEndDateTime = systemEndZoneDateTime.withZoneSameInstant(estZoneID);
-
-        //Converts EST zone to user LocalDateTime
-        LocalTime selectedStartEST = estZoneStartDateTime.toLocalDateTime().toLocalTime();
-        LocalTime selectedEndEST = estZoneEndDateTime.toLocalDateTime().toLocalTime();
-
-        // move this to separate time verification method?
-        if (selectedEndEST.isAfter(businessEnd)) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Selected appointment end time is after business hours.");
-            alert.setContentText("Please select a time before end of business hours.");
-            alert.showAndWait();
-            return;
-        }
-
-        if (selectedStartEST.isBefore(businessStart)) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Selected appointment start time is before business hours.");
-            alert.setContentText("Please select a time after start of business hours.");
-            alert.showAndWait();
-            return;
-        }
-*/
         if (overlapApptVerification()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Appointment Scheduling Error.");
@@ -500,11 +416,7 @@ public class AppointmentMenuController implements Initializable {
             alert.showAndWait();
             return;
 
-
-        }
-
-
-        else {
+        } else {
             if (emptyFieldCheck()) {
                 return;
 
@@ -571,30 +483,9 @@ public class AppointmentMenuController implements Initializable {
             outsideBusinessHours = true;
         }
 
-        /*
-        if (selectedEndEST.isAfter(businessEnd)) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Selected appointment end time is after business hours.");
-            alert.setContentText("Please select a time before the end of business hours.");
-            alert.showAndWait();
-            outsideBusinessHours = true;
-        }
-
-        if (selectedStartEST.isBefore(businessStart)) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Selected appointment start time is before business hours.");
-            alert.setContentText("Please select a time after the start of business hours.");
-            alert.showAndWait();
-            outsideBusinessHours = true;
-        }
-
-         */
-
         return outsideBusinessHours;
     }
-
+//**************************************** POTENTIAL FOR LAMBDA EXRESSION ********************************************************************
     private boolean overlapApptVerification() {
         ObservableList<Appointments> apptOverlaps = DBAppointments.getAppointmentsByCustomer(customerID);
         boolean overlap = false;

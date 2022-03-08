@@ -35,8 +35,8 @@ public class LoginController implements Initializable {
 
     Stage stage;
     Parent scene;
-    String logInErrorMessage; //= "Invalid Username or Password";
-    String logInErrorTitle; //= "Login Failed";
+    String logInErrorMessage;
+    String logInErrorTitle;
     boolean successfulLogIn = false;
 
 
@@ -91,14 +91,19 @@ public class LoginController implements Initializable {
         String userName = loginUsernameTxtField.getText();
         String userPassword = loginPasswordTxtField.getText();
 
-    // add code here
-        LocalDate dateNow = LocalDate.now();
-        LocalTime timeNow = LocalTime.now();
+        //LocalDate dateNow = LocalDate.now();
+        //LocalTime timeNow = LocalTime.now();
 
 
         if (DBUsers.getUser(userName, userPassword) == 0) {
-            System.out.println(userName);
-            System.out.println(userPassword);
+//***************************************************** LAMBDA **********************************************************************
+            Runnable runProcess = () -> {
+                System.out.println(Thread.currentThread().getName() + " is running");
+            };
+            runProcess.run();
+//*************************************************************************************************************************************
+
+
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Login Failed");
             alert.setHeaderText("Incorrect Username or Password");
@@ -139,11 +144,7 @@ public class LoginController implements Initializable {
                             "\n" + "End Time: " + endTime);
 
                     alert.showAndWait();
-
-
-
                 }
-
             }
             stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/View/AppointmentMenu.fxml"));
@@ -152,36 +153,15 @@ public class LoginController implements Initializable {
             successfulLogIn = true;
         }
         loginActivityTracker();
-/*
-        if (userID.equals("test") && password.equals("test")) {
-            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            scene = FXMLLoader.load(getClass().getResource("/View/AppointmentMenu.fxml"));
-            stage.setScene(new Scene(scene));
-            stage.show();
-
-
-            successfulLogIn = true;
-        }
-        else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Login Failed");
-            alert.setHeaderText("Incorrect Username or Password");
-            alert.setContentText("Please try again");
-            alert.showAndWait();
-
-            successfulLogIn = false;
-        }
-        loginActivityTracker();
-
- */
     }
 
+
     public void loginActivityTracker() throws IOException {
-        LocalDate attemptDate = LocalDateTime.now().toLocalDate();
+
         Timestamp attemptTimeStamp = Timestamp.valueOf(LocalDateTime.now());
         FileWriter fileWriter = new FileWriter("login_activity.txt", true);
+
         PrintWriter outputFile = new PrintWriter(fileWriter);
-        //outputFile.print("Date: " + attemptDate + " -- ");
         outputFile.print("Timestamp: " + attemptTimeStamp + " -- ");
         if (successfulLogIn) {
             outputFile.print("Login Attempt Successful\n");
@@ -189,9 +169,6 @@ public class LoginController implements Initializable {
         else {
             outputFile.print("Login Attempt Unsuccessful\n");
         }
-
         outputFile.close();
-
     }
-
 }

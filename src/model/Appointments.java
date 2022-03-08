@@ -55,8 +55,6 @@ public class Appointments {
         this.apptTypeTotal = apptTypeTotal;
     }
 
-
-
     public int getApptID() {
         return apptID;
     }

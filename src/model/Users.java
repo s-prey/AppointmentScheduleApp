@@ -41,6 +41,6 @@ public class Users {
 
     @Override
     public String toString() {
-        return "[" + userID + "]" + userName;
+        return "(" + userID + ") " + userName;
     }
 }

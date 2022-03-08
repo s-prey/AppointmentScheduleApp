@@ -4,7 +4,7 @@ import Database.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Appointments;
-import model.Reports;
+//import model.Reports;
 
 import java.net.PortUnreachableException;
 import java.sql.*;
@@ -37,7 +37,6 @@ public class DBAppointments {
                 int customerID = rs.getInt("Customer_ID");
                 int userID = rs.getInt("User_ID");
                 int contactID = rs.getInt("Contact_ID");
-
 
                 Appointments appointment = new Appointments(apptID, apptTitle, apptDescription, apptLocation,
                         contactName, apptType, apptStartDateTime, apptEndDateTime, customerID, userID, contactID);
@@ -116,6 +115,7 @@ public class DBAppointments {
         }
     }
 
+
     public static void deleteAppointment(int apptID) {
 
         try {
@@ -129,6 +129,7 @@ public class DBAppointments {
             ex.printStackTrace();
         }
     }
+
 //************************* NEED TO CHECK IF THIS CAN ADJUSTED / THIS IS A LAMBDA EXPRESSSION *************************************************************
     public static ObservableList<Appointments> getApppointments15Minutes(int userID) {
         ObservableList<Appointments> allApptList = getAllAppointments();
@@ -155,8 +156,8 @@ public class DBAppointments {
 
 
 
-//************** NEED TO CHECK IF THIS CAN BE ADJUSTED *********************************************************************
-    public static ObservableList<Appointments> getTodaysAppointments() {
+//************** not being u *********************************************************************
+   /* public static ObservableList<Appointments> getTodaysAppointments() {
         ObservableList<Appointments> todaysAppointmentsList = FXCollections.observableArrayList();
 
         try {
@@ -201,6 +202,8 @@ public class DBAppointments {
         }
         return todaysAppointmentsList;
     }
+
+    */
 
     //*************************** SEE IF SQL STATEMENT CAN BE ADJUSTED ***************************
     public static ObservableList<Appointments> getAppointmentsByMonth() {

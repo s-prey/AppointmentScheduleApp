@@ -10,8 +10,7 @@ public class DBConnection {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/"+databaseName;
     private static final String username = "sqlUser";
     private static final String password = "Passw0rd!";
-    private static Connection conn = null;
-
+   private static Connection conn = null;
     private static final String MYSQLJBCDriver = "com.mysql.jdbc.Driver";
 
 
@@ -29,9 +28,7 @@ public class DBConnection {
             e.printStackTrace();
         }
         return conn;
-
-
-        }
+    }
 
 
 
@@ -40,7 +37,7 @@ public class DBConnection {
     }
 
 
-    public static void closeConnection() {//throws ClassNotFoundException, SQLException, Exception {
+    public static void closeConnection() {
         try {
             conn.close();
         } catch (SQLException e) {

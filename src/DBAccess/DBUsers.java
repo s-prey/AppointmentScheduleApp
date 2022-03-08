@@ -100,9 +100,6 @@ public class DBUsers {
     }
 
 
-
-
-
     private static Users userResultSet(ResultSet resultSet) throws SQLException {
         Users user = new Users();
 
@@ -113,6 +110,7 @@ public class DBUsers {
         return user;
     }
 
+
     public static ObservableList<Users> getDBUserMatch(String userName, String userPassword) {
         ObservableList<Users> userDBMatchList = FXCollections.observableArrayList();
 
@@ -122,7 +120,6 @@ public class DBUsers {
             ps.setString(1, userName);
             ps.setString(2, userPassword);
             ResultSet rs = ps.executeQuery();
-
 
             while (rs.next()) {
 
@@ -139,4 +136,5 @@ public class DBUsers {
         }
         return userDBMatchList;
     }
+
 }

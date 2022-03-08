@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import model.Appointments;
 import model.Contacts;
 import model.Customers;
-import model.Reports;
+//import model.Reports;
 
 import java.io.IOException;
 import java.net.URL;
@@ -39,9 +39,6 @@ public class ReportsMenuController implements Initializable {
     @FXML private TableView<Appointments> customerApptTypeTotalTableView;
     @FXML private TableColumn<Appointments, String> customerApptTotalTypeCol;
     @FXML private TableColumn<Appointments, Integer> customerApptTypeTotalCol;
-    //@FXML private TableView<Appointments> customerApptTotalTableView;
-    //@FXML private TableColumn<Appointments, Integer> customerApptTotalCol;
-
 
     //Report 2
     @FXML private Tab appointmentsByContactTab;
@@ -56,29 +53,21 @@ public class ReportsMenuController implements Initializable {
     @FXML private TableColumn<Appointments, LocalDateTime> apptByContactEndDateTimeCol;
     @FXML private TableColumn<Appointments, Integer> apptByContactCustomerIDCol;
 
-
     //Report 3
     @FXML private Tab totalCustomersByCountryTab;
     @FXML private TableView<Customers> totalCustomersByCntryTableView;
     @FXML private TableColumn<Customers, String> totalCustomersByCountryCountryCol;
     @FXML private TableColumn<Customers, Integer> totalCustomersByCountryCustomerTotalCol;
 
-
-
     @FXML private Button customerMenuButton;
     @FXML private Button appointmentMenuButton;
 
 
-
-
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         customerApptMonthTotalTableView.setItems(DBAppointments.getAppointmentTotalByMonth());
         customerApptTotalMonthCol.setCellValueFactory(new PropertyValueFactory<>("month"));
         customerApptMonthTotalCol.setCellValueFactory(new PropertyValueFactory<>("count"));
-        //customerApptTypeTotalTableView.setItems(DBAppointments.g);
         customerApptTypeTotalTableView.setItems(DBAppointments.getAppointmentTotalByType());
         customerApptTotalTypeCol.setCellValueFactory(new PropertyValueFactory<>("apptType"));
         customerApptTypeTotalCol.setCellValueFactory(new PropertyValueFactory<>("apptTypeTotal"));
@@ -95,8 +84,8 @@ public class ReportsMenuController implements Initializable {
         totalCustomersByCntryTableView.setItems(DBCustomers.getCustomerCountByCountry());
         totalCustomersByCountryCountryCol.setCellValueFactory(new PropertyValueFactory<>("countryName"));
         totalCustomersByCountryCustomerTotalCol.setCellValueFactory(new PropertyValueFactory<>("customerCount"));
-
     }
+
 
     @FXML
     void onActionSwitchToAppointmentMenu(ActionEvent event) {
@@ -110,6 +99,7 @@ public class ReportsMenuController implements Initializable {
         }
     }
 
+
     @FXML
     void onActionSwitchToCustomerMenu(ActionEvent event) {
         try {
@@ -122,20 +112,24 @@ public class ReportsMenuController implements Initializable {
         }
     }
 
+
     @FXML
     void queryAppointmentsByContact(ActionEvent event) {
 
     }
+
 
     @FXML
     void queryCustomerAppointmentTotal(ActionEvent event) {
 
     }
 
+
     @FXML
     void queryTotalCustomersByCountry(ActionEvent event) {
 
     }
+
 
     @FXML
     void onActionSelectContact(ActionEvent event) {
@@ -145,10 +139,12 @@ public class ReportsMenuController implements Initializable {
         contactID = contact.getContactID();
     }
 
+
     @FXML
     void onActionGetContactAppointments(ActionEvent event) {
 
     }
+
 
     @FXML
     void onActionGetApptsByContact(ActionEvent event) {
@@ -161,7 +157,5 @@ public class ReportsMenuController implements Initializable {
         apptByContactEndDateTimeCol.setCellValueFactory(new PropertyValueFactory<>("apptEndDateTime"));
         apptByContactCustomerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
     }
-
-
 
 }
