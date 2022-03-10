@@ -22,8 +22,10 @@ import model.FirstLevelDivisions;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.Date;
 import java.util.function.Consumer;
 
 import static DBAccess.DBFirstLevelDivisions.*;
@@ -79,7 +81,7 @@ public class CustomerMenuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        firstLevelDivisionCmboBox.setItems(DBFirstLevelDivisions.getAllFirstLevelDivisions());
+        //firstLevelDivisionCmboBox.setItems(DBFirstLevelDivisions.getAllFirstLevelDivisions());
         countryCmboBox.setItems(DBCountries.getAllCountries());
         customerTableView.setItems(DBCustomers.getAllCustomers());
         customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
@@ -88,7 +90,11 @@ public class CustomerMenuController implements Initializable {
         customerPostalCol.setCellValueFactory(new PropertyValueFactory<>("customerPostal"));
         customerDivisionCol.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
         customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("customerPhone"));
+
+
     }
+
+
 
 /*
     public void refreshTableView() {
@@ -108,7 +114,6 @@ public class CustomerMenuController implements Initializable {
 
 
     public void selectedCustomerData() throws IOException {
-
 
         Customers selectedCustomer = customerTableView.getSelectionModel().getSelectedItem();
         customerIDTxtField.setText(String.valueOf(selectedCustomer.getCustomerID()));

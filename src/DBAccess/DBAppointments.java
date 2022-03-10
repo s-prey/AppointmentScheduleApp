@@ -1,6 +1,7 @@
 package DBAccess;
 
 import Database.DBConnection;
+import controller.LoginController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Appointments;
@@ -153,6 +154,8 @@ public class DBAppointments {
         });
             return apptsWithin15MinsList;
     }
+    
+
 
 
 
@@ -224,8 +227,8 @@ public class DBAppointments {
                 String apptDesc = rs.getString("Description");
                 String apptLocation = rs.getString("Location");
                 String apptType = rs.getString("Type");
-                LocalDateTime dateTimeStart = rs.getTimestamp("Start").toLocalDateTime();       //UTC
-                LocalDateTime dateTimeEnd = rs.getTimestamp("End").toLocalDateTime();          //UTC
+                LocalDateTime dateTimeStart = rs.getTimestamp("Start").toLocalDateTime();
+                LocalDateTime dateTimeEnd = rs.getTimestamp("End").toLocalDateTime();
                 int customerID = rs.getInt("Customer_ID");
                 int userID = rs.getInt("User_ID");
                 int contactID = rs.getInt("Contact_ID");
@@ -411,8 +414,8 @@ public class DBAppointments {
                 String apptDesc = rs.getString("Description");
                 String apptLocation = rs.getString("Location");
                 String apptType = rs.getString("Type");
-                LocalDateTime dateTimeStart = rs.getTimestamp("Start").toLocalDateTime();       //UTC
-                LocalDateTime dateTimeEnd = rs.getTimestamp("End").toLocalDateTime();          //UTC
+                LocalDateTime dateTimeStart = rs.getTimestamp("Start").toLocalDateTime();
+                LocalDateTime dateTimeEnd = rs.getTimestamp("End").toLocalDateTime();
                 int customerID = rs.getInt("Customer_ID");
                 int userID = rs.getInt("User_ID");
                 int contactID = rs.getInt("Contact_ID");

@@ -1,7 +1,5 @@
 package controller;
 
-import static DBAccess.DBAppointments.getAllAppointments;
-
 import DBAccess.DBAppointments;
 import DBAccess.DBContacts;
 import DBAccess.DBCustomers;
@@ -21,9 +19,8 @@ import model.*;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -37,7 +34,7 @@ public class AppointmentMenuController implements Initializable {
     private int weekEnd = DayOfWeek.FRIDAY.getValue();
     private LocalDateTime startLocalDateTime;
     private LocalDateTime endLocalDateTime;
-    private int customerID; //RENAME VARIABLE!!!
+    private int customerID;
     private int apptID;
     private String apptType;
 
@@ -91,7 +88,10 @@ public class AppointmentMenuController implements Initializable {
     @FXML private Button updateAppointmentButton;
 
 
-
+    private static ObservableList<LocalTime> localStartTimes = FXCollections.observableArrayList();
+    private static ObservableList<LocalTime> localEndTimes = FXCollections.observableArrayList();
+    public static final ZonedDateTime EST_START_TIME = ZonedDateTime.of(LocalDate.now(), LocalTime.of(8,0), ZoneId.of("America/New_York"));
+    public static final ZonedDateTime EST_END_TIME = ZonedDateTime.of(LocalDate.now(), LocalTime.of(22,0), ZoneId.of("America/New_York"));
 
     //public ObservableList<Appointments> appointmentData = FXCollections.observableArrayList();
 
@@ -109,27 +109,45 @@ public class AppointmentMenuController implements Initializable {
         customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         userIDCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
 
+
         contactCmboBox.setItems(DBContacts.getAllContacts());
         customerIDCmboBox.setItems(DBCustomers.getAllCustomers());
         userIDCmboBox.setItems(DBUsers.getAllUsers());
+        startTimeCmboBox.setItems(AppointmentMenuController.getLocalStartTimes());
+        endTimeCmboBox.setItems(AppointmentMenuController.getLocalEndTimes());
 
-        LocalTime firstApptTime1 = businessStart;
-        LocalTime lastApptTime1 = businessEnd.minusMinutes(15);
 
-        while (firstApptTime1.isBefore(lastApptTime1.plusSeconds(1))) {
-            startTimeCmboBox.getItems().add(firstApptTime1);
-            firstApptTime1 = firstApptTime1.plusMinutes(15);
-        }
 
-        LocalTime firstApptTime2 = businessStart.plusMinutes(15);
-        LocalTime lastApptTime2 = businessEnd;
-        while (firstApptTime2.isBefore(lastApptTime2.plusMinutes(15))) {
-            endTimeCmboBox.getItems().add(firstApptTime2);
-            firstApptTime2 = firstApptTime2.plusMinutes(15);
-        }
-        System.out.println("Completed Appointment Menu Controller initialize.");
+
     }
 
+    private static void poplulateLocalTimeList () {
+        localStartTimes.clear();
+        localEndTimes.clear();
+        ZonedDateTime start = EST_START_TIME.withZoneSameInstant(ZoneId.systemDefault());
+        ZonedDateTime end = EST_END_TIME.withZoneSameInstant(ZoneId.systemDefault());
+
+        while (start.isBefore(end)) {
+            localStartTimes.add(start.toLocalTime());
+            start = start.plusMinutes(15);
+            localEndTimes.add(start.toLocalTime());
+        }
+    }
+
+    public static ObservableList<LocalTime> getLocalStartTimes () {
+        if (localStartTimes.size()<1) {
+            poplulateLocalTimeList();
+        }
+        System.out.println("local start times has items = " + localStartTimes.size());
+        return localStartTimes;
+    }
+
+    public static ObservableList<LocalTime> getLocalEndTimes () {
+        if (localEndTimes.size()<1) {
+            poplulateLocalTimeList();
+        }
+        return localEndTimes;
+    }
 
     public void selectedAppointmentData() throws IOException {
         Appointments selectedAppointment = appointmentsTableView.getSelectionModel().getSelectedItem();
@@ -172,14 +190,6 @@ public class AppointmentMenuController implements Initializable {
         endTimeCmboBox.setValue(apptEndTime);
     }
 
-/*
-    public void addDataToTableView() throws SQLException {
-        ObservableList<Appointments> allAppointments = getAllAppointments();
-        appointmentsTableView.setItems(allAppointments);
-    }
-
- */
-
 
     @FXML
     void onActionAddNewAppointment(ActionEvent event) {
@@ -207,15 +217,47 @@ public class AppointmentMenuController implements Initializable {
 
         //Gets appointment start/end dates and times from form date pickers and combo boxes.
        // DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        ZoneId systemZoneID = ZoneId.systemDefault();
+        System.out.println("System Zone ID is: " + systemZoneID);
+
         LocalDate startDate = startDatePicker.getValue();
-        //LocalTime startTime = LocalTime.parse(startTimeCmboBox.getValue(), timeFormatter);
         LocalTime startTime = startTimeCmboBox.getValue();
+
         LocalDate endDate = endDatePicker.getValue();
         LocalTime endTime = endTimeCmboBox.getValue();
 
         //Combines date and time into single variables for start and end datetimes.
         startLocalDateTime = LocalDateTime.of(startDate, startTime);
         endLocalDateTime = LocalDateTime.of(endDate, endTime);
+        System.out.println("startLocalDateTime is: " + startLocalDateTime);
+        System.out.println("endLocalDateTime is: " + endLocalDateTime);
+
+        //Assigns seleted time to user defalut system time. This is the time selected from the combo box.
+        ZonedDateTime systemStartZoneDateTime = ZonedDateTime.of(startLocalDateTime, systemZoneID);
+        ZonedDateTime systemEndZoneDateTime = ZonedDateTime.of(endLocalDateTime, systemZoneID);
+        System.out.println("systemStartZoneDateTime is: " + systemStartZoneDateTime);
+        System.out.println("systemEndZoneDateTime is: " + systemEndZoneDateTime);
+
+        //Assigns EST zone for business hours to a variable
+        ZoneId estZoneID = ZoneId.of("America/New_York");
+        System.out.println("EST is: " + estZoneID);
+
+        //Converts selected system default time to EST buisness hours. this converts the time selected above (cmbobox) and converts it to EST
+        ZonedDateTime estZoneStartDateTime = systemStartZoneDateTime.withZoneSameInstant(estZoneID);
+        ZonedDateTime estZoneEndDateTime = systemEndZoneDateTime.withZoneSameInstant(estZoneID);
+        System.out.println("system default start time to EST: " + estZoneStartDateTime);
+        System.out.println("system default end time to EST: " + estZoneEndDateTime);
+
+        //Converts EST zone too user local DateTime
+        LocalTime selectedStartEST = estZoneStartDateTime.toLocalDateTime().toLocalTime();
+        LocalTime selectedEndEST = estZoneEndDateTime.toLocalDateTime().toLocalTime();
+        System.out.println("EST zone to user start local datetime: " + selectedStartEST);
+        System.out.println("EST zone to user end local datetime: " + selectedEndEST);
+
+
+
+
+
 
 
         if (timeVerification()) {
@@ -391,10 +433,10 @@ public class AppointmentMenuController implements Initializable {
         int userID = user.getUserID();
 
         //Gets appointment start/end dates and times from form date pickers and combo boxes.
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
         LocalDate startDate = startDatePicker.getValue();
         LocalTime startTime = startTimeCmboBox.getValue();
-        //LocalTime startTime = LocalTime.parse(startTimeCmboBox.getValue(), timeFormatter);
+
         LocalDate endDate = endDatePicker.getValue();
         LocalTime endTime = endTimeCmboBox.getValue();
 
@@ -448,7 +490,7 @@ public class AppointmentMenuController implements Initializable {
         ZonedDateTime systemEndZoneDateTime = ZonedDateTime.of(endLocalDateTime, systemZoneID);
 
         //Assigns EST zone for business hours to a variable.
-        ZoneId estZoneID = ZoneId.of("US/Eastern");
+        ZoneId estZoneID = ZoneId.of("America/New_York");
         //Converts selected system default time to Eastern Time Business hours zone.
         ZonedDateTime estZoneStartDateTime = systemStartZoneDateTime.withZoneSameInstant(estZoneID);
         ZonedDateTime estZoneEndDateTime = systemEndZoneDateTime.withZoneSameInstant(estZoneID);

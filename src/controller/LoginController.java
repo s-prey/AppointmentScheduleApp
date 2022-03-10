@@ -96,13 +96,6 @@ public class LoginController implements Initializable {
 
 
         if (DBUsers.getUser(userName, userPassword) == 0) {
-//***************************************************** LAMBDA **********************************************************************
-            Runnable runProcess = () -> {
-                System.out.println(Thread.currentThread().getName() + " is running");
-            };
-            runProcess.run();
-//*************************************************************************************************************************************
-
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Login Failed");
@@ -119,6 +112,7 @@ public class LoginController implements Initializable {
                 int userID = DBUsers.getDBUserMatch(userName, userPassword).get(0).getUserID();
 
                 //******** I DONT THINK I NEED AN ALERT TO SAY NO APPOINTSMENTS, REMOVE *************************************
+
                 if (DBAppointments.getApppointments15Minutes(userID).isEmpty()) {
 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -145,6 +139,8 @@ public class LoginController implements Initializable {
 
                     alert.showAndWait();
                 }
+
+
             }
             stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/View/AppointmentMenu.fxml"));
