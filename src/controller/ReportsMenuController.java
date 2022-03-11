@@ -20,7 +20,6 @@ import model.Customers;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class ReportsMenuController implements Initializable {
@@ -33,12 +32,13 @@ public class ReportsMenuController implements Initializable {
     @FXML private Tab appointmentTotalTab;
     @FXML private TableView<Appointments> customerApptMonthTotalTableView;
     @FXML private TableColumn<Appointments, String> customerApptTotalMonthCol;
+    @FXML private TableColumn<Appointments, String> customerApptTotalTypeCol;
     @FXML private TableColumn<Appointments, String> customerApptMonthTotalCol;
 
     //Report 1 - Customer Appointment total by Type
-    @FXML private TableView<Appointments> customerApptTypeTotalTableView;
-    @FXML private TableColumn<Appointments, String> customerApptTotalTypeCol;
-    @FXML private TableColumn<Appointments, Integer> customerApptTypeTotalCol;
+    //@FXML private TableView<Appointments> customerApptTypeTotalTableView;
+    //@FXML private TableColumn<Appointments, String> customerApptTotalTypeCol;
+    //@FXML private TableColumn<Appointments, Integer> customerApptTypeTotalCol;
 
     //Report 2
     @FXML private Tab appointmentsByContactTab;
@@ -65,12 +65,15 @@ public class ReportsMenuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        customerApptMonthTotalTableView.setItems(DBAppointments.getAppointmentTotalByMonth());
+        customerApptMonthTotalTableView.setItems(DBAppointments.getAppointmentTotalByMonthType());
         customerApptTotalMonthCol.setCellValueFactory(new PropertyValueFactory<>("month"));
+        customerApptTotalTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         customerApptMonthTotalCol.setCellValueFactory(new PropertyValueFactory<>("count"));
-        customerApptTypeTotalTableView.setItems(DBAppointments.getAppointmentTotalByType());
-        customerApptTotalTypeCol.setCellValueFactory(new PropertyValueFactory<>("apptType"));
-        customerApptTypeTotalCol.setCellValueFactory(new PropertyValueFactory<>("apptTypeTotal"));
+
+
+        //customerApptTypeTotalTableView.setItems(DBAppointments.getAppointmentTotalByType());
+        //customerApptTotalTypeCol.setCellValueFactory(new PropertyValueFactory<>("apptType"));
+        //customerApptTypeTotalCol.setCellValueFactory(new PropertyValueFactory<>("apptTypeTotal"));
 
         contactComboBox.setItems(DBContacts.getAllContacts());
         apptByContactApptID.setCellValueFactory(new PropertyValueFactory<>("apptID"));

@@ -19,7 +19,6 @@ import model.*;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Timestamp;
 import java.time.*;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -93,7 +92,6 @@ public class AppointmentMenuController implements Initializable {
     public static final ZonedDateTime EST_START_TIME = ZonedDateTime.of(LocalDate.now(), LocalTime.of(8,0), ZoneId.of("America/New_York"));
     public static final ZonedDateTime EST_END_TIME = ZonedDateTime.of(LocalDate.now(), LocalTime.of(22,0), ZoneId.of("America/New_York"));
 
-    //public ObservableList<Appointments> appointmentData = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -109,19 +107,15 @@ public class AppointmentMenuController implements Initializable {
         customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         userIDCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
 
-
         contactCmboBox.setItems(DBContacts.getAllContacts());
         customerIDCmboBox.setItems(DBCustomers.getAllCustomers());
         userIDCmboBox.setItems(DBUsers.getAllUsers());
         startTimeCmboBox.setItems(AppointmentMenuController.getLocalStartTimes());
         endTimeCmboBox.setItems(AppointmentMenuController.getLocalEndTimes());
 
-
-
-
     }
 
-    private static void poplulateLocalTimeList () {
+    private static void poplulateApptLocalTimeLists() {
         localStartTimes.clear();
         localEndTimes.clear();
         ZonedDateTime start = EST_START_TIME.withZoneSameInstant(ZoneId.systemDefault());
@@ -136,7 +130,7 @@ public class AppointmentMenuController implements Initializable {
 
     public static ObservableList<LocalTime> getLocalStartTimes () {
         if (localStartTimes.size()<1) {
-            poplulateLocalTimeList();
+            poplulateApptLocalTimeLists();
         }
         System.out.println("local start times has items = " + localStartTimes.size());
         return localStartTimes;
@@ -144,7 +138,7 @@ public class AppointmentMenuController implements Initializable {
 
     public static ObservableList<LocalTime> getLocalEndTimes () {
         if (localEndTimes.size()<1) {
-            poplulateLocalTimeList();
+            poplulateApptLocalTimeLists();
         }
         return localEndTimes;
     }
@@ -229,6 +223,8 @@ public class AppointmentMenuController implements Initializable {
         //Combines date and time into single variables for start and end datetimes.
         startLocalDateTime = LocalDateTime.of(startDate, startTime);
         endLocalDateTime = LocalDateTime.of(endDate, endTime);
+
+       /*
         System.out.println("startLocalDateTime is: " + startLocalDateTime);
         System.out.println("endLocalDateTime is: " + endLocalDateTime);
 
@@ -254,9 +250,7 @@ public class AppointmentMenuController implements Initializable {
         System.out.println("EST zone to user start local datetime: " + selectedStartEST);
         System.out.println("EST zone to user end local datetime: " + selectedEndEST);
 
-
-
-
+        */
 
 
 

@@ -17,6 +17,10 @@ public class Appointments {
     public int contactID;
     public String contactName;
     public String month;
+    public String type;
+
+
+
     public String count;
     public int apptTypeTotal;
 
@@ -37,8 +41,9 @@ public class Appointments {
 
     }
 
-    public Appointments(String month, String count) {
+    public Appointments(String month, String type, String count) {
         this.month = month;
+        this.type = type;
         this.count = count;
     }
 
@@ -157,5 +162,13 @@ public class Appointments {
 
     public void setCount(String count) {
         this.count = count;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

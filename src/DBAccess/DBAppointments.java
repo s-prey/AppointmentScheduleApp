@@ -336,23 +336,23 @@ public class DBAppointments {
     }
 
     //******************* METHOD FOR APPOINTMENT TOTAL BY MONTH ***************************************************************
-    public static ObservableList<Appointments> getAppointmentTotalByMonth() {
+    public static ObservableList<Appointments> getAppointmentTotalByMonthType() {
         ObservableList<Appointments> apptByMonthTotalList = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT date_format(Start, '%M') AS Month,count(Start) AS Count \n" +
-                    "FROM client_schedule.appointments \n" +
-                    "group by date_format(Start, '%M') \n" +
-                    "order by date_format(Start, '%M')";
+            String sql = "SELECT date_format(Start, '%M') AS Month, Type, count(Start) AS Count " +
+                    "FROM client_schedule.appointments group by date_format(Start, '%M'), " +
+                    "Type order by date_format(Start, '%M')";
 
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 String month = rs.getString("Month");
+                String type = rs.getString("Type");
                 String count = rs.getString("Count");
 
-                Appointments appointment = new Appointments(month, count);
+                Appointments appointment = new Appointments(month, type, count);
                 apptByMonthTotalList.add(appointment);
                 //apptByMonthTotalList.add(new Reports(month, count));
 

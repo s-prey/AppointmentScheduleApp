@@ -41,6 +41,7 @@ public class CustomerMenuController implements Initializable {
     @FXML private TableColumn<Customers, String> customerNameCol;
     @FXML private TableColumn<Customers, String> customerAddressCol;
     @FXML private TableColumn<Customers, String> customerPostalCol;
+    @FXML private TableColumn<Customers, String> customerCountryCol;
     @FXML private TableColumn<Customers, Integer> customerDivisionCol;
     @FXML private TableColumn<Customers, String> customerPhoneCol;
 
@@ -88,6 +89,7 @@ public class CustomerMenuController implements Initializable {
         customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         customerAddressCol.setCellValueFactory(new PropertyValueFactory<>("customerAddress"));
         customerPostalCol.setCellValueFactory(new PropertyValueFactory<>("customerPostal"));
+        customerCountryCol.setCellValueFactory(new PropertyValueFactory<>("countryID"));
         customerDivisionCol.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
         customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("customerPhone"));
 
@@ -204,6 +206,7 @@ public class CustomerMenuController implements Initializable {
             String customerAddress = customerAddressTxtField.getText();
             String customerPostal = postalCodeTxtField.getText();
             String customerPhone = phoneNumberTxtField.getText();
+
 
             FirstLevelDivisions divisions = firstLevelDivisionCmboBox.getSelectionModel().getSelectedItem();
             int divisionID = divisions.getDivisionID();
