@@ -2,9 +2,6 @@ package controller;
 
 import DBAccess.DBCountries;
 import DBAccess.DBCustomers;
-import DBAccess.DBFirstLevelDivisions;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,20 +9,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Countries;
 import model.Customers;
 import model.FirstLevelDivisions;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
-import java.time.*;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.Date;
 import java.util.function.Consumer;
 
 import static DBAccess.DBFirstLevelDivisions.*;
@@ -48,41 +40,15 @@ public class CustomerMenuController implements Initializable {
     @FXML private ComboBox<Countries> countryCmboBox;
     @FXML private ComboBox<FirstLevelDivisions> firstLevelDivisionCmboBox;
 
-    @FXML
-    private TextField customerIDTxtField;
-    @FXML
-    private TextField customerNameTxtField;
-    @FXML
-    private TextField customerAddressTxtField;
-    @FXML
-    private TextField postalCodeTxtField;
-    @FXML
-    private TextField phoneNumberTxtField;
+    @FXML private TextField customerIDTxtField;
+    @FXML private TextField customerNameTxtField;
+    @FXML private TextField customerAddressTxtField;
+    @FXML private TextField postalCodeTxtField;
+    @FXML private TextField phoneNumberTxtField;
 
-    @FXML
-    private Button addNewCustomerButton;
-
-    @FXML
-    private Button appointmentMenuButton;
-
-    @FXML
-    private Button clearInformationFieldsButton;
-
-    @FXML
-    private Button deleteCustomerButton;
-
-    @FXML
-    private Button reportsMenuButton;
-
-    @FXML
-    private Button updateCustomerButton;
-
-    public ObservableList<Customers> customerData = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        //firstLevelDivisionCmboBox.setItems(DBFirstLevelDivisions.getAllFirstLevelDivisions());
         countryCmboBox.setItems(DBCountries.getAllCountries());
         customerTableView.setItems(DBCustomers.getAllCustomers());
         customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
@@ -92,31 +58,10 @@ public class CustomerMenuController implements Initializable {
         customerCountryCol.setCellValueFactory(new PropertyValueFactory<>("countryID"));
         customerDivisionCol.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
         customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("customerPhone"));
-
-
     }
-
-
-
-/*
-    public void refreshTableView() {
-        firstLevelDivisionCmboBox.setItems(DBFirstLevelDivisions.getAllFirstLevelDivisions());
-        countryCmboBox.setItems(DBCountries.getAllCountries());
-
-        customerTableView.setItems(DBCustomers.getAllCustomers());
-        customerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-        customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
-        customerAddressCol.setCellValueFactory(new PropertyValueFactory<>("customerAddress"));
-        customerPostalCol.setCellValueFactory(new PropertyValueFactory<>("customerPostal"));
-        customerDivisionCol.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
-        customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("customerPhone"));
-    }
-
- */
 
 
     public void selectedCustomerData() throws IOException {
-
         Customers selectedCustomer = customerTableView.getSelectionModel().getSelectedItem();
         customerIDTxtField.setText(String.valueOf(selectedCustomer.getCustomerID()));
         customerID = selectedCustomer.getCustomerID();
@@ -132,7 +77,6 @@ public class CustomerMenuController implements Initializable {
 
 
     public boolean emptyFieldCheck() {
-
         boolean emptyField = false;
 
         if (customerNameTxtField.getText().isEmpty()) {
@@ -149,7 +93,6 @@ public class CustomerMenuController implements Initializable {
             alert.setHeaderText("Address Empty");
             alert.setContentText("Input Customer Address");
             alert.showAndWait();
-            //return false;
             emptyField = true;
         }
         else if (postalCodeTxtField.getText().isEmpty()) {
@@ -158,7 +101,6 @@ public class CustomerMenuController implements Initializable {
             alert.setHeaderText("Postal Code Empty");
             alert.setContentText("Input Customer Postal Code");
             alert.showAndWait();
-            //return false;
             emptyField = true;
         }
 
@@ -168,7 +110,6 @@ public class CustomerMenuController implements Initializable {
             alert.setHeaderText("First Level Division Box Empty");
             alert.setContentText("Select Customer First Level Division");
             alert.showAndWait();
-            //return false;
             emptyField = true;
         }
 
@@ -178,7 +119,6 @@ public class CustomerMenuController implements Initializable {
             alert.setHeaderText("Country Box Empty");
             alert.setContentText("Select Customer Country");
             alert.showAndWait();
-            //return false;
             emptyField = true;
         }
 
@@ -188,13 +128,14 @@ public class CustomerMenuController implements Initializable {
             alert.setHeaderText("Phone Number Empty");
             alert.setContentText("Input Customer Phone Number");
             alert.showAndWait();
-            //return false;
             emptyField = true;
+
         } else {
             emptyField = false;
         }
         return emptyField;
     }
+
 
     @FXML
     public void onActionAddNewCustomer(ActionEvent event) throws IOException, SQLException {
@@ -206,7 +147,6 @@ public class CustomerMenuController implements Initializable {
             String customerAddress = customerAddressTxtField.getText();
             String customerPostal = postalCodeTxtField.getText();
             String customerPhone = phoneNumberTxtField.getText();
-
 
             FirstLevelDivisions divisions = firstLevelDivisionCmboBox.getSelectionModel().getSelectedItem();
             int divisionID = divisions.getDivisionID();
@@ -221,22 +161,9 @@ public class CustomerMenuController implements Initializable {
         }
     }
 
-    public void clearInfomrationFields () {
-        customerIDTxtField.setText("Auto-Generated");
-        customerNameTxtField.clear();
-        customerAddressTxtField.clear();
-        postalCodeTxtField.clear();
-        countryCmboBox.getSelectionModel().clearSelection();
-        countryCmboBox.setValue(null);
-        firstLevelDivisionCmboBox.getSelectionModel().clearSelection();
-        firstLevelDivisionCmboBox.setValue(null);
-        phoneNumberTxtField.clear();
-    }
-
 
     @FXML
     void onActionClearInformationFields(ActionEvent event) {
-
         try {
             stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/View/CustomerMenu.fxml"));
@@ -246,23 +173,6 @@ public class CustomerMenuController implements Initializable {
             e.printStackTrace();
         }
     }
-
-/*
-    public void deleteCustomersAppointments() {
-        try {
-            String sql = "DELETE FROM client_schedule.appointments WHERE Customer_ID = ?";
-            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
-            ps.setString(1, String.valueOf(customerTableView.getSelectionModel().getSelectedItem().getCustomerID()));
-            //int result = ps.executeUpdate();
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        refreshTableView();
-        clearInfomrationFields();
-    }
-
- */
 
 
     @FXML
@@ -277,7 +187,7 @@ public class CustomerMenuController implements Initializable {
             alert.showAndWait();
             return;
         }
-
+        // Lambda Expression
         int customerID = selectedCustomer.getCustomerID();
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirm Delete");
@@ -297,27 +207,6 @@ public class CustomerMenuController implements Initializable {
                 }
             }
         });
-
-/*
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Deleting selected customer and associated appointments. Do you wish to continue?");
-        Optional<ButtonType> results = alert.showAndWait();
-
-        if (results.isPresent() && results.get() == ButtonType.OK) {
-            DBCustomers.deleteCustomer(customerID);
-
-
-            try {
-                stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-                scene = FXMLLoader.load(getClass().getResource("/View/CustomerMenu.fxml"));
-                stage.setScene(new Scene(scene));
-                stage.show();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-
- */
-
     }
 
 
@@ -362,10 +251,8 @@ public class CustomerMenuController implements Initializable {
 
 
     public void onActionFilterCountryCmboBox(ActionEvent event) throws IOException {
-
        Countries country = countryCmboBox.getSelectionModel().getSelectedItem();
        int countryID = country.getCountryID();
        firstLevelDivisionCmboBox.setItems(getDivisionsByCountry(countryID));
     }
-
 }

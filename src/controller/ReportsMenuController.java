@@ -28,22 +28,15 @@ public class ReportsMenuController implements Initializable {
     Parent scene;
     private int contactID;
 
-    //Report 1 - Customer Appointment total by Month
-    @FXML private Tab appointmentTotalTab;
+    //Report 1
     @FXML private TableView<Appointments> customerApptMonthTotalTableView;
     @FXML private TableColumn<Appointments, String> customerApptTotalMonthCol;
     @FXML private TableColumn<Appointments, String> customerApptTotalTypeCol;
     @FXML private TableColumn<Appointments, String> customerApptMonthTotalCol;
 
-    //Report 1 - Customer Appointment total by Type
-    //@FXML private TableView<Appointments> customerApptTypeTotalTableView;
-    //@FXML private TableColumn<Appointments, String> customerApptTotalTypeCol;
-    //@FXML private TableColumn<Appointments, Integer> customerApptTypeTotalCol;
 
     //Report 2
-    @FXML private Tab appointmentsByContactTab;
     @FXML private ComboBox<Contacts> contactComboBox;
-    @FXML private Button runReportBtn;
     @FXML private TableView<Appointments> appointmentsByContactTableView;
     @FXML private TableColumn<Appointments, Integer> apptByContactApptID;
     @FXML private TableColumn<Appointments, String> apptByContactApptTitleCol;
@@ -54,27 +47,20 @@ public class ReportsMenuController implements Initializable {
     @FXML private TableColumn<Appointments, Integer> apptByContactCustomerIDCol;
 
     //Report 3
-    @FXML private Tab totalCustomersByCountryTab;
     @FXML private TableView<Customers> totalCustomersByCntryTableView;
     @FXML private TableColumn<Customers, String> totalCustomersByCountryCountryCol;
     @FXML private TableColumn<Customers, Integer> totalCustomersByCountryCustomerTotalCol;
 
-    @FXML private Button customerMenuButton;
-    @FXML private Button appointmentMenuButton;
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        //Initialize Report 1
         customerApptMonthTotalTableView.setItems(DBAppointments.getAppointmentTotalByMonthType());
         customerApptTotalMonthCol.setCellValueFactory(new PropertyValueFactory<>("month"));
         customerApptTotalTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         customerApptMonthTotalCol.setCellValueFactory(new PropertyValueFactory<>("count"));
 
-
-        //customerApptTypeTotalTableView.setItems(DBAppointments.getAppointmentTotalByType());
-        //customerApptTotalTypeCol.setCellValueFactory(new PropertyValueFactory<>("apptType"));
-        //customerApptTypeTotalCol.setCellValueFactory(new PropertyValueFactory<>("apptTypeTotal"));
-
+        //Initialize Report 2
         contactComboBox.setItems(DBContacts.getAllContacts());
         apptByContactApptID.setCellValueFactory(new PropertyValueFactory<>("apptID"));
         apptByContactApptTitleCol.setCellValueFactory(new PropertyValueFactory<>("apptTitle"));
@@ -84,6 +70,7 @@ public class ReportsMenuController implements Initializable {
         apptByContactEndDateTimeCol.setCellValueFactory(new PropertyValueFactory<>("apptEndDateTime"));
         apptByContactCustomerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
 
+        //Initialize Report 3
         totalCustomersByCntryTableView.setItems(DBCustomers.getCustomerCountByCountry());
         totalCustomersByCountryCountryCol.setCellValueFactory(new PropertyValueFactory<>("countryName"));
         totalCustomersByCountryCustomerTotalCol.setCellValueFactory(new PropertyValueFactory<>("customerCount"));
@@ -117,35 +104,9 @@ public class ReportsMenuController implements Initializable {
 
 
     @FXML
-    void queryAppointmentsByContact(ActionEvent event) {
-
-    }
-
-
-    @FXML
-    void queryCustomerAppointmentTotal(ActionEvent event) {
-
-    }
-
-
-    @FXML
-    void queryTotalCustomersByCountry(ActionEvent event) {
-
-    }
-
-
-    @FXML
     void onActionSelectContact(ActionEvent event) {
-
         Contacts contact = contactComboBox.getSelectionModel().getSelectedItem();
-
         contactID = contact.getContactID();
-    }
-
-
-    @FXML
-    void onActionGetContactAppointments(ActionEvent event) {
-
     }
 
 
@@ -160,5 +121,4 @@ public class ReportsMenuController implements Initializable {
         apptByContactEndDateTimeCol.setCellValueFactory(new PropertyValueFactory<>("apptEndDateTime"));
         apptByContactCustomerIDCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
     }
-
 }

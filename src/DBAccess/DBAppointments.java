@@ -21,8 +21,8 @@ public class DBAppointments {
         ObservableList<Appointments> allAppointments = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT Appointment_ID, Title, Description, Location, contacts.Contact_Name, contacts.Contact_ID, Type, Start, End, customers.Customer_ID, User_ID " +
-                    "FROM appointments, contacts, customers WHERE appointments.Contact_ID=contacts.Contact_ID AND appointments.Customer_ID=customers.Customer_ID";
+            String sql = "SELECT Appointment_ID, Title, Description, Location, o.Contact_Name, o.Contact_ID, Type, Start, End, c.Customer_ID, User_ID " +
+                    "FROM appointments AS a, contacts AS o, customers AS c WHERE a.Contact_ID=o.Contact_ID AND a.Customer_ID=c.Customer_ID";
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
@@ -154,68 +154,15 @@ public class DBAppointments {
         });
             return apptsWithin15MinsList;
     }
-    
-
-
-
-
-//************** not being u *********************************************************************
-   /* public static ObservableList<Appointments> getTodaysAppointments() {
-        ObservableList<Appointments> todaysAppointmentsList = FXCollections.observableArrayList();
-
-        try {
-            String sql = "SELECT Appointment_ID, Title, Description, Location, contacts.Contact_ID, contacts.Contact_Name, Type, Start, End, customers.Customer_ID, User_ID " +
-                    "FROM appointments, contacts, customers WHERE appointments.Contact_ID=contacts.Contact_ID AND appointments.Customer_ID=customers.Customer_ID AND " +
-                    "Start >= ? AND Start <= ?";
-
-            LocalDate todaysDate = LocalDate.now();
-            LocalTime midnightTime = LocalTime.MIDNIGHT;
-            LocalTime twelveFiftyNine = LocalTime.MIDNIGHT.minusMinutes(1);
-            LocalDateTime midnightToday = LocalDateTime.of(todaysDate, midnightTime);
-            Timestamp timeStampStart = valueOf(midnightToday);
-
-            LocalDateTime lastMinToday = LocalDateTime.of(todaysDate, twelveFiftyNine);
-            Timestamp timeStampEnd = valueOf(lastMinToday);
-
-            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
-            ps.setTimestamp(1, timeStampStart);
-            ps.setTimestamp(2, timeStampEnd);
-            ResultSet rs = ps.executeQuery();
-
-                while (rs.next()) {
-                    int apptID = rs.getInt("Appointment_ID");
-                    String apptTitle = rs.getString("Title");
-                    String apptDesc = rs.getString("Description");
-                    String apptLocation = rs.getString("Location");
-                    String apptType = rs.getString("Type");
-                    LocalDateTime dateTimeStart = rs.getTimestamp("Start").toLocalDateTime();       //UTC
-                    LocalDateTime dateTimeEnd = rs.getTimestamp("End").toLocalDateTime();          //UTC
-                    int customerID = rs.getInt("Customer_ID");
-                    int userID = rs.getInt("User_ID");
-                    int contactID = rs.getInt("Contact_ID");
-                    String contactName = rs.getString("Contact_Name");
-
-                    Appointments appointment = new Appointments(apptID, apptTitle, apptDesc, apptLocation, contactName,
-                            apptType, dateTimeStart, dateTimeEnd, customerID, userID, contactID);
-                    todaysAppointmentsList.add(appointment);
-                }
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return todaysAppointmentsList;
-    }
-
-    */
 
     //*************************** SEE IF SQL STATEMENT CAN BE ADJUSTED ***************************
     public static ObservableList<Appointments> getAppointmentsByMonth() {
         ObservableList<Appointments> apptByMonthList = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT Appointment_ID, Title, Description, Location, contacts.Contact_ID, contacts.Contact_Name, " +
-                    "Type, Start, End, customers.Customer_ID, User_ID FROM appointments, contacts, customers " +
-                    "WHERE appointments.Contact_ID=contacts.Contact_ID AND appointments.Customer_ID=customers.Customer_ID " +
+            String sql = "SELECT Appointment_ID, Title, Description, Location, o.Contact_ID, o.Contact_Name, " +
+                    "Type, Start, End, c.Customer_ID, User_ID FROM appointments AS a, contacts AS o, customers AS c" +
+                    "WHERE a.Contact_ID=o.Contact_ID AND a.Customer_ID=c.Customer_ID " +
                     "AND month(Start) = month(now())";
 
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
@@ -249,9 +196,10 @@ public class DBAppointments {
         ObservableList<Appointments> apptByWeekList = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT Appointment_ID, Title, Description, Location, contacts.Contact_ID, contacts.Contact_Name, Type, Start, End, customers.Customer_ID, User_ID " +
-                    "FROM appointments, contacts, customers WHERE appointments.Contact_ID=contacts.Contact_ID AND appointments.Customer_ID=customers.Customer_ID AND " +
-                    "Start >= ? AND Start <= date_add(?, interval 7 day)";
+            String sql = "SELECT Appointment_ID, Title, Description, Location, o.Contact_ID, o.Contact_Name, Type, " +
+                    "Start, End, c.Customer_ID, User_ID FROM appointments AS a, contacts AS o, customers AS c " +
+                    "WHERE a.Contact_ID=o.Contact_ID AND a.Customer_ID=c.Customer_ID AND Start >= ? AND " +
+                    "Start <= date_add(?, interval 7 day)";
 
             // ************** Gets Monday before date now ************
 
@@ -304,8 +252,9 @@ public class DBAppointments {
         ObservableList<Appointments> apptByContactList = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT Appointment_ID, Title, Description, Location, contacts.Contact_ID, contacts.Contact_Name, Type, Start, End, customers.Customer_ID, User_ID " +
-                   "FROM appointments, contacts, customers WHERE appointments.Contact_ID=contacts.Contact_ID AND appointments.Customer_ID=customers.Customer_ID AND contacts.Contact_ID = ?";
+            String sql = "SELECT Appointment_ID, Title, Description, Location, o.Contact_ID, o.Contact_Name, Type, " +
+                    "Start, End, c.Customer_ID, User_ID FROM appointments AS a, contacts AS o, customers AS c " +
+                    "WHERE a.Contact_ID=o.Contact_ID AND a.Customer_ID=c.Customer_ID AND o.Contact_ID = ?";
 
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
             ps.setInt(1, contact_ID);
@@ -341,7 +290,7 @@ public class DBAppointments {
 
         try {
             String sql = "SELECT date_format(Start, '%M') AS Month, Type, count(Start) AS Count " +
-                    "FROM client_schedule.appointments group by date_format(Start, '%M'), " +
+                    "FROM appointments group by date_format(Start, '%M'), " +
                     "Type order by date_format(Start, '%M')";
 
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
@@ -354,10 +303,6 @@ public class DBAppointments {
 
                 Appointments appointment = new Appointments(month, type, count);
                 apptByMonthTotalList.add(appointment);
-                //apptByMonthTotalList.add(new Reports(month, count));
-
-
-
             }
 
         } catch (SQLException ex) {
@@ -367,42 +312,14 @@ public class DBAppointments {
         return apptByMonthTotalList;
     }
 
-    public static ObservableList<Appointments> getAppointmentTotalByType() {
-        ObservableList<Appointments> apptByTypeTotalList = FXCollections.observableArrayList();
 
-
-        try {
-            String sql = "SELECT Type,count(Type) AS Type_Count FROM client_schedule.appointments GROUP BY Type";
-
-            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
-
-            ResultSet rs = ps.executeQuery();
-
-
-            while (rs.next()) {
-                String apptType = rs.getString("Type");
-                int apptTypeTotal = Integer.parseInt(rs.getString("Type_Count"));
-                System.out.println(apptType + " " + apptTypeTotal);
-
-                Appointments appointment = new Appointments(apptType, apptTypeTotal);
-                apptByTypeTotalList.add(appointment);
-            }
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-
-        return apptByTypeTotalList;
-    }
-
-//********************* SEE IF SQL STATEMENT CAN BE AJDUSTED *********************************************************************
     public static ObservableList<Appointments> getAppointmentsByCustomer(int customer_ID) {
         ObservableList<Appointments> apptByCustomerList = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT Appointment_ID, Title, Description, Location, contacts.Contact_ID, contacts.Contact_Name, Type, Start, End, customers.Customer_ID, User_ID " +
-                    "FROM appointments, contacts, customers WHERE appointments.Contact_ID=contacts.Contact_ID AND appointments.Customer_ID=customers.Customer_ID " +
-                    "AND customers.Customer_ID = ?";
+            String sql = "SELECT Appointment_ID, Title, Description, Location, o.Contact_ID, o.Contact_Name, Type, Start, End, c.Customer_ID, User_ID " +
+                    "FROM appointments AS a, contacts AS o, customers AS c WHERE a.Contact_ID=o.Contact_ID AND a.Customer_ID=c.Customer_ID " +
+                    "AND c.Customer_ID = ?";
 
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
             ps.setInt(1, customer_ID);
@@ -431,7 +348,6 @@ public class DBAppointments {
         }
         return apptByCustomerList;
     }
-
 }
 
 

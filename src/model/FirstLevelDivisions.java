@@ -17,8 +17,6 @@ public class FirstLevelDivisions {
         this.countryID = countryID;
     }
 
-    //********************** MAY WANT TO CHANGE SOME VARIABLE/METHOD NAMES *****************************************************
-    //*********************** THIS MAY WORK IN CONTROLLERS, BUT IF REDUNDUNT KEEP IN HERE **************************************
 
     public static FirstLevelDivisions getDivisionIDMatch(int flDivisionID) {
         ObservableList<FirstLevelDivisions> divisions = DBFirstLevelDivisions.getAllFirstLevelDivisions();

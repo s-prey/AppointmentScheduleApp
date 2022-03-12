@@ -35,7 +35,7 @@ public class AppointmentMenuController implements Initializable {
     private LocalDateTime endLocalDateTime;
     private int customerID;
     private int apptID;
-    private String apptType;
+
 
 
     @FXML private TableView<Appointments> appointmentsTableView;
@@ -64,27 +64,10 @@ public class AppointmentMenuController implements Initializable {
     @FXML private ComboBox<LocalTime> endTimeCmboBox;
 
 
-    @FXML private Button addNewAppointmentButton;
-
-
-
-    @FXML private ToggleGroup appointmentFilterTG;
-
     @FXML private TextField appointmentIDTxtField;
-
-
     @FXML private RadioButton allAppointmentsRadioBtn;
     @FXML private RadioButton appointmentsByMoRadioBtn;
     @FXML private RadioButton appointmentsByWkRadioBtn;
-
-
-
-    @FXML private Button clearInformationFieldsButton;
-    @FXML private Button customerMenuButton;
-    @FXML private Button deleteAppointmentButton;
-
-    @FXML private Button reportsMenuButton;
-    @FXML private Button updateAppointmentButton;
 
 
     private static ObservableList<LocalTime> localStartTimes = FXCollections.observableArrayList();
@@ -132,7 +115,6 @@ public class AppointmentMenuController implements Initializable {
         if (localStartTimes.size()<1) {
             poplulateApptLocalTimeLists();
         }
-        System.out.println("local start times has items = " + localStartTimes.size());
         return localStartTimes;
     }
 
@@ -143,7 +125,7 @@ public class AppointmentMenuController implements Initializable {
         return localEndTimes;
     }
 
-    public void selectedAppointmentData() throws IOException {
+    public void selectedAppointmentData() {
         Appointments selectedAppointment = appointmentsTableView.getSelectionModel().getSelectedItem();
         appointmentIDTxtField.setText(String.valueOf(selectedAppointment.getApptID()));
         apptID = selectedAppointment.getApptID();
@@ -157,6 +139,7 @@ public class AppointmentMenuController implements Initializable {
                 break;
             }
         }
+
         apptTypeTxtField.setText(selectedAppointment.getApptType());
 
         for (Customers customer : customerIDCmboBox.getItems()) {
@@ -189,7 +172,6 @@ public class AppointmentMenuController implements Initializable {
     void onActionAddNewAppointment(ActionEvent event) {
         if (emptyFieldCheck()) {
             return;
-
         }
 
         String apptTitle = apptTitleTxtField.getText();
@@ -210,10 +192,6 @@ public class AppointmentMenuController implements Initializable {
         int userID = user.getUserID();
 
         //Gets appointment start/end dates and times from form date pickers and combo boxes.
-       // DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-        ZoneId systemZoneID = ZoneId.systemDefault();
-        System.out.println("System Zone ID is: " + systemZoneID);
-
         LocalDate startDate = startDatePicker.getValue();
         LocalTime startTime = startTimeCmboBox.getValue();
 
@@ -223,36 +201,6 @@ public class AppointmentMenuController implements Initializable {
         //Combines date and time into single variables for start and end datetimes.
         startLocalDateTime = LocalDateTime.of(startDate, startTime);
         endLocalDateTime = LocalDateTime.of(endDate, endTime);
-
-       /*
-        System.out.println("startLocalDateTime is: " + startLocalDateTime);
-        System.out.println("endLocalDateTime is: " + endLocalDateTime);
-
-        //Assigns seleted time to user defalut system time. This is the time selected from the combo box.
-        ZonedDateTime systemStartZoneDateTime = ZonedDateTime.of(startLocalDateTime, systemZoneID);
-        ZonedDateTime systemEndZoneDateTime = ZonedDateTime.of(endLocalDateTime, systemZoneID);
-        System.out.println("systemStartZoneDateTime is: " + systemStartZoneDateTime);
-        System.out.println("systemEndZoneDateTime is: " + systemEndZoneDateTime);
-
-        //Assigns EST zone for business hours to a variable
-        ZoneId estZoneID = ZoneId.of("America/New_York");
-        System.out.println("EST is: " + estZoneID);
-
-        //Converts selected system default time to EST buisness hours. this converts the time selected above (cmbobox) and converts it to EST
-        ZonedDateTime estZoneStartDateTime = systemStartZoneDateTime.withZoneSameInstant(estZoneID);
-        ZonedDateTime estZoneEndDateTime = systemEndZoneDateTime.withZoneSameInstant(estZoneID);
-        System.out.println("system default start time to EST: " + estZoneStartDateTime);
-        System.out.println("system default end time to EST: " + estZoneEndDateTime);
-
-        //Converts EST zone too user local DateTime
-        LocalTime selectedStartEST = estZoneStartDateTime.toLocalDateTime().toLocalTime();
-        LocalTime selectedEndEST = estZoneEndDateTime.toLocalDateTime().toLocalTime();
-        System.out.println("EST zone to user start local datetime: " + selectedStartEST);
-        System.out.println("EST zone to user end local datetime: " + selectedEndEST);
-
-        */
-
-
 
         if (timeVerification()) {
             return;
@@ -266,7 +214,6 @@ public class AppointmentMenuController implements Initializable {
             alert.showAndWait();
             return;
 
-
         }  else {
             DBAppointments.addAppointment(apptTitle, apptDescription, apptLocation, apptType, startLocalDateTime,
                     endLocalDateTime, customerID, userID, contactID);
@@ -279,20 +226,16 @@ public class AppointmentMenuController implements Initializable {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-
         }
-
-
     }
+
 
     @FXML
     void onActionShowAllAppointments(ActionEvent event) {
         if (allAppointmentsRadioBtn.isSelected()) {
             appointmentsTableView.setItems(DBAppointments.getAllAppointments());
         }
-
     }
-
 
 
     @FXML
@@ -302,12 +245,14 @@ public class AppointmentMenuController implements Initializable {
         }
     }
 
+
     @FXML
     void onActionAppointmentsByWeek(ActionEvent event) {
         if (appointmentsByWkRadioBtn.isSelected()) {
             appointmentsTableView.setItems(DBAppointments.getAppointmentsByWeek());
         }
     }
+
 
     @FXML
     void onActionClearInformationFields(ActionEvent event) {
@@ -320,6 +265,7 @@ public class AppointmentMenuController implements Initializable {
             e.printStackTrace();
         }
     }
+
 
     @FXML
     void onActionDeleteAppointment(ActionEvent event) {
@@ -353,42 +299,6 @@ public class AppointmentMenuController implements Initializable {
         }
     }
 
-    @FXML
-    void onActionEndDate(ActionEvent event) {
-
-    }
-
-    @FXML
-    void onActionFilterContactCmboBox(ActionEvent event) {
-
-    }
-
-    @FXML
-    void onActionFilterCustomerIDCmboBox(ActionEvent event) {
-
-    }
-
-    @FXML
-    void onActionFilterEndTimeCmboBox(ActionEvent event) {
-
-    }
-
-    @FXML
-    void onActionFilterStartTimeCmboBox(ActionEvent event) {
-
-    }
-
-    @FXML
-    void onActionFilterUserIDCmboBox(ActionEvent event) {
-
-    }
-
-
-
-    @FXML
-    void onActionStartDate(ActionEvent event) {
-
-    }
 
     @FXML
     void onActionSwitchToCustomerMenu(ActionEvent event) throws IOException {
@@ -398,6 +308,7 @@ public class AppointmentMenuController implements Initializable {
         stage.show();
     }
 
+
     @FXML
     void onActionSwitchToReportsMenu(ActionEvent event) throws IOException {
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
@@ -405,6 +316,7 @@ public class AppointmentMenuController implements Initializable {
         stage.setScene(new Scene(scene));
         stage.show();
     }
+
 
     @FXML
     void onActionUpdateAppointment(ActionEvent event) {
@@ -414,31 +326,23 @@ public class AppointmentMenuController implements Initializable {
         String apptLocation = apptLocationTxtField.getText();
 
         Contacts contact = contactCmboBox.getSelectionModel().getSelectedItem();
-        //NOT SURE IF I WANT TO USE THIS, Obtain String contact name based on combo box selection.
         int contactID = contact.getContactID();
-
         String apptType = apptTypeTxtField.getText();
-
         Customers customer = customerIDCmboBox.getSelectionModel().getSelectedItem();
-        //SAME - NOT SURE IF I WANT TO USE THIS, Obtain String contact name based on combo box selection.
         customerID = customer.getCustomerID();
-
         Users user = userIDCmboBox.getSelectionModel().getSelectedItem();
         int userID = user.getUserID();
 
         //Gets appointment start/end dates and times from form date pickers and combo boxes.
-
         LocalDate startDate = startDatePicker.getValue();
         LocalTime startTime = startTimeCmboBox.getValue();
 
         LocalDate endDate = endDatePicker.getValue();
         LocalTime endTime = endTimeCmboBox.getValue();
 
-
         //Combines date and time into single variables for start and end datetimes.
         startLocalDateTime = LocalDateTime.of(startDate, startTime);
         endLocalDateTime = LocalDateTime.of(endDate, endTime);
-
 
         if (timeVerification()) {
             return;
@@ -468,11 +372,9 @@ public class AppointmentMenuController implements Initializable {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-
         }
-
-
     }
+
 
     public boolean timeVerification() {
         boolean outsideBusinessHours = false;
@@ -521,7 +423,8 @@ public class AppointmentMenuController implements Initializable {
 
         return outsideBusinessHours;
     }
-//**************************************** POTENTIAL FOR LAMBDA EXRESSION ********************************************************************
+
+
     private boolean overlapApptVerification() {
         ObservableList<Appointments> apptOverlaps = DBAppointments.getAppointmentsByCustomer(customerID);
         boolean overlap = false;
@@ -532,7 +435,6 @@ public class AppointmentMenuController implements Initializable {
             LocalDateTime apptStart = appointment.getApptStartDateTime();
             LocalDateTime apptEnd = appointment.getApptEndDateTime();
 
-
             if (appt_ID == apptID) {
                 break;
             }
@@ -541,11 +443,11 @@ public class AppointmentMenuController implements Initializable {
                 overlap = true;
                 break;
 
-            } else if (startLocalDateTime.isAfter(apptStart.minusMinutes(1)) && startLocalDateTime.isBefore(apptEnd.plusMinutes(1))) {
+            } else if (startLocalDateTime.isBefore(apptEnd.plusMinutes(1)) && startLocalDateTime.isAfter(apptStart.minusMinutes(1))) {
                 overlap = true;
                 break;
 
-            } else if (endLocalDateTime.isAfter(apptStart.minusMinutes(1)) && endLocalDateTime.isBefore(apptEnd.plusMinutes(1))) {
+            } else if (endLocalDateTime.isBefore(apptEnd.plusMinutes(1)) &&  endLocalDateTime.isAfter(apptStart.minusMinutes(1))) {
                 overlap = true;
                 break;
 
@@ -662,6 +564,4 @@ public class AppointmentMenuController implements Initializable {
 
         return emptyField;
     }
-
-
 }

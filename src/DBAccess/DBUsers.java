@@ -90,24 +90,10 @@ public class DBUsers {
                 userMatch = 1;
 
             }
-
-
-
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
        return userMatch;
-    }
-
-
-    private static Users userResultSet(ResultSet resultSet) throws SQLException {
-        Users user = new Users();
-
-        user.setUserID(resultSet.getInt("User_ID"));
-        user.setUserName(resultSet.getString("User_Name"));
-        user.setUserPassword(resultSet.getString("Password"));
-
-        return user;
     }
 
 

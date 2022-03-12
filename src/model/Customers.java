@@ -104,12 +104,7 @@ public class Customers {
     public void setCustomerCount(String customerCount) {
         this.customerCount = customerCount;
     }
-/*
-    @Override
-    public String toString() {
-        return (customerName);
-    }
- */
+
     @Override
     public String toString() {
         return "(" + customerID + ") " + customerName;

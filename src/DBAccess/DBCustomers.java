@@ -16,8 +16,8 @@ public class DBCustomers {
         ObservableList<Customers> customersList = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, customers.Division_ID, " +
-                    "COUNTRY_ID FROM customers, first_level_divisions WHERE customers.Division_ID=first_level_divisions.Division_ID";
+            String sql = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, c.Division_ID, " +
+                    "COUNTRY_ID FROM customers AS c, first_level_divisions AS f WHERE c.Division_ID=f.Division_ID";
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
@@ -69,6 +69,7 @@ public class DBCustomers {
 
 
    public static void updateCustomer(int customerID, String customerName, String customerAddress, String customerPostal, String customerPhone, Integer divisionID) {
+
         try {
             Timestamp lastUpdateToAdd = Timestamp.valueOf(LocalDateTime.now());
             String lastUpdatedByToAdd = "test";
@@ -117,8 +118,8 @@ public class DBCustomers {
         ObservableList<Customers> customersByCountryList = FXCollections.observableArrayList();
 
         try {
-            String sql = "Select count(Customer_ID) AS Customer_Count, Country FROM client_schedule.customers c " +
-                    "JOIN first_level_divisions f ON c.Division_ID=f.Division_ID JOIN countries o " +
+            String sql = "Select count(Customer_ID) AS Customer_Count, Country FROM client_schedule.customers AS c " +
+                    "JOIN first_level_divisions AS f ON c.Division_ID=f.Division_ID JOIN countries o " +
                     "ON f.Country_ID=o.Country_ID group by Country";
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -136,5 +137,4 @@ public class DBCustomers {
         }
         return customersByCountryList;
     }
-
 }

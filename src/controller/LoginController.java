@@ -23,6 +23,7 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -103,7 +104,7 @@ public class LoginController implements Initializable {
             alert.setContentText("Please try again");
             alert.showAndWait();
             successfulLogIn = false;
-            return;
+            //return;
 
         } else {
 
@@ -111,14 +112,12 @@ public class LoginController implements Initializable {
 
                 int userID = DBUsers.getDBUserMatch(userName, userPassword).get(0).getUserID();
 
-                //******** I DONT THINK I NEED AN ALERT TO SAY NO APPOINTSMENTS, REMOVE *************************************
-
                 if (DBAppointments.getApppointments15Minutes(userID).isEmpty()) {
 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("No appointments");
+                    alert.setTitle("No upcoming appointments");
                     alert.setHeaderText(null);
-                    alert.setContentText("No upcoming appointments");
+                    alert.setContentText("There are no upcoming appointments within the next 15 minutes.");
                     alert.showAndWait();
                 } else {
 
@@ -134,12 +133,10 @@ public class LoginController implements Initializable {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("You have an upcoming appointment");
                     alert.setHeaderText(null);
-                    alert.setContentText("Appointment ID: " + appointmentID + "\n" + "Start Date: " + startDate + " Start Time: " + startTime +
-                            "\n" + "End Time: " + endTime);
-
+                    alert.setContentText("Appointment ID: " + appointmentID + "\n" + "Start Date: " + startDate + "\n" +
+                                        " Start Time: " + startTime + "\n" + "End Time: " + endTime);
                     alert.showAndWait();
                 }
-
 
             }
             stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
@@ -154,16 +151,17 @@ public class LoginController implements Initializable {
 
     public void loginActivityTracker() throws IOException {
 
-        Timestamp attemptTimeStamp = Timestamp.valueOf(LocalDateTime.now());
-        FileWriter fileWriter = new FileWriter("login_activity.txt", true);
+        Timestamp timeStamp = Timestamp.valueOf(LocalDateTime.now());
+        String loginTimeStamp = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(timeStamp);
 
+        FileWriter fileWriter = new FileWriter("login_activity.txt", true);
         PrintWriter outputFile = new PrintWriter(fileWriter);
-        outputFile.print("Timestamp: " + attemptTimeStamp + " -- ");
+        outputFile.print("Timestamp: " + loginTimeStamp + ": ");
         if (successfulLogIn) {
-            outputFile.print("Login Attempt Successful\n");
+            outputFile.print("Login Attempt Successful \n");
         }
         else {
-            outputFile.print("Login Attempt Unsuccessful\n");
+            outputFile.print("Login Attempt Unsuccessful \n");
         }
         outputFile.close();
     }

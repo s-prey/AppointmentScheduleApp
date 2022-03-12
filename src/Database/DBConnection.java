@@ -15,7 +15,6 @@ public class DBConnection {
 
 
     public static Connection startConnection() {
-
         try {
             Class.forName(MYSQLJBCDriver);
             conn = DriverManager.getConnection(DB_URL, username, password);
@@ -29,7 +28,6 @@ public class DBConnection {
         }
         return conn;
     }
-
 
 
     public static Connection getConnection() {
