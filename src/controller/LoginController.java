@@ -33,6 +33,9 @@ public class LoginController implements Initializable {
     Parent scene;
     String logInErrorMessage;
     String logInErrorTitle;
+    String loginStatusMessage;
+    String loginStatusTitle;
+    String loginErrorContent;
     boolean successfulLogIn = false;
 
     @FXML private Button exitLoginButton;
@@ -40,8 +43,7 @@ public class LoginController implements Initializable {
     @FXML private Label loginPasswordLabel;
     @FXML private TextField loginPasswordTxtField;
     @FXML private Label loginTitleLabel;
-    @FXML
-    private Label loginUsernameLabel;
+    @FXML private Label loginUsernameLabel;
     @FXML private TextField loginUsernameTxtField;
     @FXML private Label userZoneLabel;
 
@@ -63,6 +65,10 @@ public class LoginController implements Initializable {
         userZoneLabel.setText(rb.getString("zoneLabel") + ": " + currentZone);
         logInErrorTitle = rb.getString("loginErrorTitle");
         logInErrorMessage = rb.getString("loginErrorMessage");
+        loginStatusTitle = rb.getString("loginStatusTitle");
+        loginStatusMessage = rb.getString("loginStatusMessage");
+        loginErrorContent = rb.getString("loginErrorContent");
+
 
     }
 
@@ -89,9 +95,9 @@ public class LoginController implements Initializable {
         if (DBUsers.getUser(userName, userPassword) == 0) {
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Login Failed");
-            alert.setHeaderText("Incorrect Username or Password");
-            alert.setContentText("Please try again");
+            alert.setTitle(logInErrorTitle);
+            alert.setHeaderText(logInErrorMessage);
+            alert.setContentText(loginErrorContent);
             alert.showAndWait();
             successfulLogIn = false;
 
