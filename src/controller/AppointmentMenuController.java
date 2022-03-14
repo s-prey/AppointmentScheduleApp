@@ -16,13 +16,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.*;
-
 import java.io.IOException;
 import java.net.URL;
 import java.time.*;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/** This class is used as a java fx controller for the appointment schedule application appointment menu GUI screen.*/
 public class AppointmentMenuController implements Initializable {
 
     Stage stage;
@@ -75,7 +75,11 @@ public class AppointmentMenuController implements Initializable {
     public static final ZonedDateTime EST_START_TIME = ZonedDateTime.of(LocalDate.now(), LocalTime.of(8,0), ZoneId.of("America/New_York"));
     public static final ZonedDateTime EST_END_TIME = ZonedDateTime.of(LocalDate.now(), LocalTime.of(22,0), ZoneId.of("America/New_York"));
 
-
+    /** This is the initialize method.
+     This method is used to initialize data for the appointment menu controller.
+     @param url uniform resource locator to initialize
+     @param resourceBundle resource bundle to initialize
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         appointmentsTableView.setItems(DBAppointments.getAllAppointments());
@@ -98,6 +102,11 @@ public class AppointmentMenuController implements Initializable {
 
     }
 
+    /** This is the populate appointment local time lists method.
+     This method creates a list of available business appointment hours shown at user local time by converting business
+     Eastern Standard time time hours to user system default time hours. The times lists are shown as 15 minute intervals
+     to provide 15 minute minimum appointment duration.
+     */
     private static void poplulateApptLocalTimeLists() {
         localStartTimes.clear();
         localEndTimes.clear();
@@ -111,6 +120,11 @@ public class AppointmentMenuController implements Initializable {
         }
     }
 
+    /** This is the get local start times method.
+     This method returns a list of available appointment start times that were converted from business EST zone to user
+     local time and populates the appointment start time combo box.
+     @return Returns local appointment start times
+     */
     public static ObservableList<LocalTime> getLocalStartTimes () {
         if (localStartTimes.size()<1) {
             poplulateApptLocalTimeLists();
@@ -118,6 +132,11 @@ public class AppointmentMenuController implements Initializable {
         return localStartTimes;
     }
 
+    /** This is the get local end times method.
+     This method returns a list of available appointment end times that were converted from business EST zone to user
+     local time and populates the appointment end time combo box.
+     @return Returns local appointment end times
+     */
     public static ObservableList<LocalTime> getLocalEndTimes () {
         if (localEndTimes.size()<1) {
             poplulateApptLocalTimeLists();
@@ -125,6 +144,10 @@ public class AppointmentMenuController implements Initializable {
         return localEndTimes;
     }
 
+    /** This is the selected appointment data method.
+     This method takes the selected appointment data from the menu tableview and populates the appointment data fields
+     for updating or deletion.
+     */
     public void selectedAppointmentData() {
         Appointments selectedAppointment = appointmentsTableView.getSelectionModel().getSelectedItem();
         appointmentIDTxtField.setText(String.valueOf(selectedAppointment.getApptID()));
@@ -167,7 +190,11 @@ public class AppointmentMenuController implements Initializable {
         endTimeCmboBox.setValue(apptEndTime);
     }
 
-
+    /** This is the add new appointment method.
+     This method takes the appointment data entered in the GUI appointment data information fields and adds the
+     appointment data to the client_schedule database via DBAppointment.addAppointments class method.
+     @param event java fxml method trigger event
+     */
     @FXML
     void onActionAddNewAppointment(ActionEvent event) {
         if (emptyFieldCheck()) {
@@ -177,28 +204,21 @@ public class AppointmentMenuController implements Initializable {
         String apptTitle = apptTitleTxtField.getText();
         String apptDescription = apptDescriptionTxtField.getText();
         String apptLocation = apptLocationTxtField.getText();
-
         Contacts contact = contactCmboBox.getSelectionModel().getSelectedItem();
-        //NOT SURE IF I WANT TO USE THIS, Obtain String contact name based on combo box selection.
         int contactID = contact.getContactID();
-
         String apptType = apptTypeTxtField.getText();
 
         Customers customer = customerIDCmboBox.getSelectionModel().getSelectedItem();
-        //SAME - NOT SURE IF I WANT TO USE THIS, Obtain String contact name based on combo box selection.
         customerID = customer.getCustomerID();
 
         Users user = userIDCmboBox.getSelectionModel().getSelectedItem();
         int userID = user.getUserID();
 
-        //Gets appointment start/end dates and times from form date pickers and combo boxes.
         LocalDate startDate = startDatePicker.getValue();
         LocalTime startTime = startTimeCmboBox.getValue();
-
         LocalDate endDate = endDatePicker.getValue();
         LocalTime endTime = endTimeCmboBox.getValue();
 
-        //Combines date and time into single variables for start and end datetimes.
         startLocalDateTime = LocalDateTime.of(startDate, startTime);
         endLocalDateTime = LocalDateTime.of(endDate, endTime);
 
@@ -230,6 +250,10 @@ public class AppointmentMenuController implements Initializable {
     }
 
 
+    /** This is the show all appointments method.
+     This method populates the All Appointments menu tab tableview with all appointments from the database.
+     @param event java fxml method trigger event
+     */
     @FXML
     void onActionShowAllAppointments(ActionEvent event) {
         if (allAppointmentsRadioBtn.isSelected()) {
@@ -237,7 +261,10 @@ public class AppointmentMenuController implements Initializable {
         }
     }
 
-
+    /** This is the appointments by month method.
+     This method populates the Appointments by Month menu tab tableview with all appointments for the month from the database.
+     @param event java fxml method trigger event
+     */
     @FXML
     void onActionAppointmentsByMonth(ActionEvent event) {
         if (appointmentsByMoRadioBtn.isSelected()) {
@@ -245,7 +272,10 @@ public class AppointmentMenuController implements Initializable {
         }
     }
 
-
+    /** This is the appointments by week method.
+     This method populates the Appointments by Week menu tab tableview with all appointments for the week from the database.
+     @param event java fxml method trigger event
+     */
     @FXML
     void onActionAppointmentsByWeek(ActionEvent event) {
         if (appointmentsByWkRadioBtn.isSelected()) {
@@ -253,7 +283,10 @@ public class AppointmentMenuController implements Initializable {
         }
     }
 
-
+    /** This is the clear information fields method.
+     This method clears the appointment information fields in the appointment menu.
+     @param event java fxml method trigger event
+     */
     @FXML
     void onActionClearInformationFields(ActionEvent event) {
         try {
@@ -266,7 +299,10 @@ public class AppointmentMenuController implements Initializable {
         }
     }
 
-
+    /** This is the delete appointment method.
+     This method deletes a selected appointment from the tableview and provides a confirmation message for deletion.
+     @param event java fxml method trigger event
+     */
     @FXML
     void onActionDeleteAppointment(ActionEvent event) {
         Appointments selectedAppointment = appointmentsTableView.getSelectionModel().getSelectedItem();
@@ -299,7 +335,10 @@ public class AppointmentMenuController implements Initializable {
         }
     }
 
-
+    /** This is the switch to customer menu method.
+     This method loads the customer menu screen when the customer menu button is selected from the appointment menu.
+     @param event java fxml method trigger event
+     */
     @FXML
     void onActionSwitchToCustomerMenu(ActionEvent event) throws IOException {
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
@@ -308,7 +347,10 @@ public class AppointmentMenuController implements Initializable {
         stage.show();
     }
 
-
+    /** This is the switch to reports menu method.
+     This method loads the reports menu screen when the reports menu button is selected from the appointment menu.
+     @param event java fxml method trigger event
+     */
     @FXML
     void onActionSwitchToReportsMenu(ActionEvent event) throws IOException {
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
@@ -317,7 +359,11 @@ public class AppointmentMenuController implements Initializable {
         stage.show();
     }
 
-
+    /** This is the update appointment method.
+     This method takes the appointment data entered in the GUI appointment data information fields and updates the
+     appointment data to the client_schedule database via DBAppointment.updateAppointments class method.
+     @param event java fxml method trigger event
+     */
     @FXML
     void onActionUpdateAppointment(ActionEvent event) {
 
@@ -333,14 +379,12 @@ public class AppointmentMenuController implements Initializable {
         Users user = userIDCmboBox.getSelectionModel().getSelectedItem();
         int userID = user.getUserID();
 
-        //Gets appointment start/end dates and times from form date pickers and combo boxes.
         LocalDate startDate = startDatePicker.getValue();
         LocalTime startTime = startTimeCmboBox.getValue();
 
         LocalDate endDate = endDatePicker.getValue();
         LocalTime endTime = endTimeCmboBox.getValue();
 
-        //Combines date and time into single variables for start and end datetimes.
         startLocalDateTime = LocalDateTime.of(startDate, startTime);
         endLocalDateTime = LocalDateTime.of(endDate, endTime);
 
@@ -375,27 +419,27 @@ public class AppointmentMenuController implements Initializable {
         }
     }
 
-
+    /** This is the timer verification method.
+     This method provides an error message if the selected appointment time is outside of business hour or on a weekend.
+     @return Returns boolean value for appointment time outside of business hours
+     */
     public boolean timeVerification() {
         boolean outsideBusinessHours = false;
 
-        //Assigns users system default time
+
         ZoneId systemZoneID = ZoneId.systemDefault();
-        //assigns selected times to user default times.
+
         ZonedDateTime systemStartZoneDateTime = ZonedDateTime.of(startLocalDateTime, systemZoneID);
         ZonedDateTime systemEndZoneDateTime = ZonedDateTime.of(endLocalDateTime, systemZoneID);
 
-        //Assigns EST zone for business hours to a variable.
         ZoneId estZoneID = ZoneId.of("America/New_York");
-        //Converts selected system default time to Eastern Time Business hours zone.
+
         ZonedDateTime estZoneStartDateTime = systemStartZoneDateTime.withZoneSameInstant(estZoneID);
         ZonedDateTime estZoneEndDateTime = systemEndZoneDateTime.withZoneSameInstant(estZoneID);
 
-        //Converts EST zone to user LocalDateTime
         LocalTime selectedStartEST = estZoneStartDateTime.toLocalDateTime().toLocalTime();
         LocalTime selectedEndEST = estZoneEndDateTime.toLocalDateTime().toLocalTime();
 
-        //Test
         DayOfWeek selectedDayStart = estZoneStartDateTime.toLocalDate().getDayOfWeek();
         int selectedDayStartInt = selectedDayStart.getValue();
         DayOfWeek selectedDayEnd = estZoneEndDateTime.toLocalDate().getDayOfWeek();
@@ -424,7 +468,10 @@ public class AppointmentMenuController implements Initializable {
         return outsideBusinessHours;
     }
 
-
+    /** This is the overlap appointment verification method.
+     This method verifies if the entered customer appointment time overlaps with another appointment for the same customer.
+     @return Returns boolean value for customer times overlap
+     */
     private boolean overlapApptVerification() {
         ObservableList<Appointments> apptOverlaps = DBAppointments.getAppointmentsByCustomer(customerID);
         boolean overlap = false;
@@ -459,7 +506,11 @@ public class AppointmentMenuController implements Initializable {
         return overlap;
     }
 
-
+    /** This is the empty field check method.
+     This method checks for any empty appointment data GUI fields before adding appointment information and displays
+     an error message to the user for which field is empty.
+     @return Returns boolean value for empty fields
+     */
     public boolean emptyFieldCheck() {
         boolean emptyField = false;
 

@@ -1,23 +1,29 @@
 package model;
 
 import DBAccess.DBFirstLevelDivisions;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/** This class creates FirstLevelDivisions objects for the appointment schedule application.*/
 public class FirstLevelDivisions {
 
 
     private int divisionID;
     private String divisionName;
-    public int countryID;
 
-    public FirstLevelDivisions(int divisionID, String divisionName/*, int countryID*/) {
+    /** This is the FirstLevelDivisions object constructor method.
+     This method is used to setup parameters for a FirstLevelDivision object.
+     @param divisionID first level division ID
+     @param divisionName first level division name
+     */
+    public FirstLevelDivisions(int divisionID, String divisionName) {
         this.divisionID = divisionID;
         this.divisionName = divisionName;
-        this.countryID = countryID;
     }
 
-
+    /** This is the get division ID match method.
+     This method returns the first level division ID and name from the FirstLevelDivisions observable list via division ID.
+     @return Returns fist level division ID and first level division name based on fist level division ID
+     */
     public static FirstLevelDivisions getDivisionIDMatch(int flDivisionID) {
         ObservableList<FirstLevelDivisions> divisions = DBFirstLevelDivisions.getAllFirstLevelDivisions();
 
@@ -33,20 +39,30 @@ public class FirstLevelDivisions {
             }
         }
         return division;
+
     }
 
+    /** This is the get division ID method.
+     This method returns the first level division ID.
+     @return Returns first level division ID
+     */
     public int getDivisionID() {
         return divisionID;
     }
 
+    /** This is the get division name method.
+     This method returns the first level division name.
+     @return Returns the first level division name
+     */
     public String getDivisionName() {
         return divisionName;
     }
 
-    public int getCountryID() {
-        return countryID;
-    }
-
+    /** This is the override to string method.
+     This method overrides the default String method and returns the fist level division ID and
+     first level division name for combobox.
+     @return Returns the fist level division ID and first level division name
+     */
     @Override
     public String toString() {
         return "(" + divisionID + ") " + divisionName;

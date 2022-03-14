@@ -19,9 +19,9 @@ import java.net.URL;
 import java.sql.*;
 import java.util.*;
 import java.util.function.Consumer;
-
 import static DBAccess.DBFirstLevelDivisions.*;
 
+/** This class is used as a java fx controller for the appointment schedule application customer menu GUI screen.*/
 public class CustomerMenuController implements Initializable {
 
     Stage stage;
@@ -46,7 +46,11 @@ public class CustomerMenuController implements Initializable {
     @FXML private TextField postalCodeTxtField;
     @FXML private TextField phoneNumberTxtField;
 
-
+    /** This is the initialize method.
+     This method is used to initialize data for the customer menu controller.
+     @param url uniform resource locator to initialize
+     @param resourceBundle resource bundle to initialize
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         countryCmboBox.setItems(DBCountries.getAllCountries());
@@ -60,7 +64,10 @@ public class CustomerMenuController implements Initializable {
         customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("customerPhone"));
     }
 
-
+    /** This is the selected customer data method.
+     This method takes the selected customer data from the menu tableview and populates the customer data fields
+     for updating or deleting.
+     */
     public void selectedCustomerData() throws IOException {
         Customers selectedCustomer = customerTableView.getSelectionModel().getSelectedItem();
         customerIDTxtField.setText(String.valueOf(selectedCustomer.getCustomerID()));
@@ -75,7 +82,11 @@ public class CustomerMenuController implements Initializable {
         firstLevelDivisionCmboBox.setValue(FirstLevelDivisions.getDivisionIDMatch(selectedCustomer.getDivisionID()));
     }
 
-
+    /** This is the empty field check method.
+     This method checks for any empty customer GUI data fields before adding customer information and displays
+     an error message to the user for which field is empty.
+     @return Returns boolean value for empty fields
+     */
     public boolean emptyFieldCheck() {
         boolean emptyField = false;
 
@@ -136,7 +147,11 @@ public class CustomerMenuController implements Initializable {
         return emptyField;
     }
 
-
+    /** This is the add new customer method.
+     This method takes the customer data entered in the GUI customer data information fields and adds the
+     customer data to the client_schedule database via DBCustomers.addCustomer class method.
+     @param event java fxml method trigger event
+     */
     @FXML
     public void onActionAddNewCustomer(ActionEvent event) throws IOException, SQLException {
         if (emptyFieldCheck() == true) {
@@ -161,7 +176,10 @@ public class CustomerMenuController implements Initializable {
         }
     }
 
-
+    /** This is the clear information fields method.
+     This method clears the customer information fields in the customer menu.
+     @param event java fxml method trigger event
+     */
     @FXML
     void onActionClearInformationFields(ActionEvent event) {
         try {
@@ -174,7 +192,11 @@ public class CustomerMenuController implements Initializable {
         }
     }
 
-
+    /** This is the delete customer method.
+     This method deletes a selected customer from the tableview and provides a confirmation message for deletion.
+     LAMBDA EXPRESSION: A lambda expression utilized for the confirmation OK button response to provide improved code readability.
+     @param event java fxml method trigger event
+     */
     @FXML
     void onActionDeleteCustomer(ActionEvent event) {
         Customers selectedCustomer = customerTableView.getSelectionModel().getSelectedItem();
@@ -209,7 +231,10 @@ public class CustomerMenuController implements Initializable {
         });
     }
 
-
+    /** This is the switch to appointment menu method.
+     This method loads the appointment menu screen when the appointment menu button is selected from the customer menu.
+     @param event java fxml method trigger event
+     */
     @FXML
     void onActionSwitchToAppointmentMenu(ActionEvent event) throws IOException {
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
@@ -218,7 +243,10 @@ public class CustomerMenuController implements Initializable {
         stage.show();
     }
 
-
+    /** This is the switch to reports menu method.
+     This method loads the reports menu screen when the reports menu button is selected from the appointment menu.
+     @param event java fxml method trigger event
+     */
     @FXML
     void onActionSwitchToReportsMenu(ActionEvent event) throws IOException {
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
@@ -227,7 +255,11 @@ public class CustomerMenuController implements Initializable {
         stage.show();
     }
 
-
+    /** This is the update customer method.
+     This method takes the customer data entered in the GUI customer data information fields and updates the
+     customer data to the client_schedule database via DBCustomers.updateCustomer class method.
+     @param event java fxml method trigger event
+     */
     @FXML
     void onActionUpdateCustomer(ActionEvent event) throws SQLException, IOException {
 
@@ -249,7 +281,11 @@ public class CustomerMenuController implements Initializable {
         stage.show();
     }
 
-
+    /** This is the filter country combo box method.
+     This method takes the country combo box selection and filters the first level divisions for that country to set
+     the first level division combo box.
+     @param event java fxml method trigger event
+     */
     public void onActionFilterCountryCmboBox(ActionEvent event) throws IOException {
        Countries country = countryCmboBox.getSelectionModel().getSelectedItem();
        int countryID = country.getCountryID();

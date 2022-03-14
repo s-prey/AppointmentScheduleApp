@@ -4,14 +4,16 @@ import Database.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Customers;
-import model.Users;
-
-import java.net.PortUnreachableException;
 import java.sql.*;
 import java.time.LocalDateTime;
 
+/** This class is used to contain methods for Database customers table CRUD and data querying for GUI menu controllers.*/
 public class DBCustomers {
 
+    /** This is the get all customers method.
+     This method returns a list of all customers from the customers and fist_level_divisions tables within the client_schedule database.
+     @return Returns list of all customers from the customers and fist_level_divisions tables
+     */
     public static ObservableList<Customers> getAllCustomers() {
         ObservableList<Customers> customersList = FXCollections.observableArrayList();
 
@@ -40,7 +42,14 @@ public class DBCustomers {
         return customersList;
     }
 
-
+    /** This is the add customer method.
+     This method creates a customer row in the customers table within the client_schedule database.
+     @param customerName customer name to add
+     @param customerAddress customer address to add
+     @param customerPostal customer postal code to add
+     @param customerPhone customer phone number to add
+     @param divisionID customer first level division ID to add
+     */
     public static void addCustomer(String customerName, String customerAddress, String customerPostal, String customerPhone, Integer divisionID) {
 
         try {
@@ -67,7 +76,15 @@ public class DBCustomers {
         }
     }
 
-
+    /** This is the update customer method.
+     This method updates a customer row in the customers table via a selected customer within the client_schedule database.
+     @param customerID customer ID to update
+     @param customerName customer name to update
+     @param customerAddress customer address to update
+     @param customerPostal customer postal code to update
+     @param customerPhone customer phone number to update
+     @param divisionID customer division ID to update
+     */
    public static void updateCustomer(int customerID, String customerName, String customerAddress, String customerPostal, String customerPhone, Integer divisionID) {
 
         try {
@@ -92,7 +109,10 @@ public class DBCustomers {
         }
     }
 
-
+    /** This is the delete customer method.
+     This method deletes a customer row in the customers table via a selected customer ID within the client_schedule database.
+     @param customerID customer ID to delete
+     */
     public static void deleteCustomer(int customerID) {
 
         try {
@@ -111,9 +131,10 @@ public class DBCustomers {
         }
     }
 
-
-
-
+    /** This is the get get customer count by country method.
+     This method reads appointment information from the customers, first_level_division, and countries tables within the client_schedule database and returns a count of customers by country list.
+     @return Returns list of customer count by country
+     */
     public static ObservableList<Customers> getCustomerCountByCountry() {
         ObservableList<Customers> customersByCountryList = FXCollections.observableArrayList();
 

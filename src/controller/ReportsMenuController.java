@@ -15,13 +15,12 @@ import javafx.stage.Stage;
 import model.Appointments;
 import model.Contacts;
 import model.Customers;
-//import model.Reports;
-
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
+/** This class is used as a java fx controller for the appointment schedule application reports menu GUI screen.*/
 public class ReportsMenuController implements Initializable {
 
     Stage stage;
@@ -52,6 +51,11 @@ public class ReportsMenuController implements Initializable {
     @FXML private TableColumn<Customers, Integer> totalCustomersByCountryCustomerTotalCol;
 
 
+    /** This is the initialize method.
+     This method is used to initialize data for the reports menu controller.
+     @param url uniform resource locator to initialize
+     @param resourceBundle resource bundle to initialize
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //Initialize Report 1
@@ -76,7 +80,10 @@ public class ReportsMenuController implements Initializable {
         totalCustomersByCountryCustomerTotalCol.setCellValueFactory(new PropertyValueFactory<>("customerCount"));
     }
 
-
+    /** This is the switch to appointment menu method.
+     This method loads the appointment menu screen when the appointment menu button is selected from the customer menu.
+     @param event java fxml method trigger event
+     */
     @FXML
     void onActionSwitchToAppointmentMenu(ActionEvent event) {
         try {
@@ -89,7 +96,10 @@ public class ReportsMenuController implements Initializable {
         }
     }
 
-
+    /** This is the switch to customer menu method.
+     This method loads the customer menu screen when the customer menu button is selected from the appointment menu.
+     @param event java fxml method trigger event
+     */
     @FXML
     void onActionSwitchToCustomerMenu(ActionEvent event) {
         try {
@@ -102,14 +112,21 @@ public class ReportsMenuController implements Initializable {
         }
     }
 
-
+    /** This is the select contact method.
+     This method sets the contact ID variable based the contact selected from the contact combo box.
+     @param event java fxml method trigger event
+     */
     @FXML
     void onActionSelectContact(ActionEvent event) {
         Contacts contact = contactComboBox.getSelectionModel().getSelectedItem();
         contactID = contact.getContactID();
     }
 
-
+    /** This is the get appointment by contact method.
+     This method populates the Appointments by Contact tab tableview with all appointment data based on the contact
+     selected in the select contact combo box.
+     @param event java fxml method trigger event
+     */
     @FXML
     void onActionGetApptsByContact(ActionEvent event) {
         appointmentsByContactTableView.setItems(DBAppointments.getAppointmentsByContact(contactID));

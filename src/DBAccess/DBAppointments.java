@@ -1,22 +1,20 @@
 package DBAccess;
 
 import Database.DBConnection;
-import controller.LoginController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Appointments;
-//import model.Reports;
-
-import java.net.PortUnreachableException;
 import java.sql.*;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
-import java.util.TimeZone;
 import static java.sql.Timestamp.valueOf;
 
+/** This class is used to contain methods for Database appointment table CRUD and data querying for GUI menu controllers.*/
 public class DBAppointments {
 
-
+    /** This is the get all appointments method.
+     This method returns all appointments data from the appointments, contacts, and customer tables withing the client_schedule database.
+     @return Returns all appointments
+     */
     public static ObservableList<Appointments> getAllAppointments() {
         ObservableList<Appointments> allAppointments = FXCollections.observableArrayList();
 
@@ -50,7 +48,18 @@ public class DBAppointments {
         return allAppointments;
     }
 
-
+    /** This is the add appointment method.
+     This method creates an appointment table row in the appointments table, within the client_schedule database.
+     @param apptTitle appointment title to add
+     @param apptDesc appointment description to add
+     @param apptLocation appointment location to add
+     @param apptType appointment type to add
+     @param apptStartDatetime appointment start datetime to add
+     @param apptEndDateTime appointment end datetime to add
+     @param customerID appointment customer ID to add
+     @param userID user ID to add
+     @param contactID appointment contact ID to add
+     */
     public static void addAppointment(String apptTitle, String apptDesc, String apptLocation, String apptType,
                                       LocalDateTime apptStartDatetime, LocalDateTime apptEndDateTime, int customerID,
                                       int userID, int contactID) {
@@ -85,6 +94,19 @@ public class DBAppointments {
         }
     }
 
+    /** This is the update appointment method.
+     This method updates an appointment table row in the appointments table, within the client_schedule database.
+     @param apptID appointment ID to update
+     @param apptTitle appointment title to update
+     @param apptDesc appointment description to update
+     @param apptLocation appointment location to update
+     @param apptType appointment type to update
+     @param apptStartDatetime appointment start datetime to update
+     @param apptEndDateTime appointment end datetime to update
+     @param customerID appointment customer ID to update
+     @param userID user ID to update
+     @param contactID appointment contact ID to update
+     */
     public static void updateAppointment(int apptID, String apptTitle, String apptDesc, String apptLocation,
                                          String apptType, LocalDateTime apptStartDatetime, LocalDateTime apptEndDateTime,
                                          int customerID, int userID, int contactID) {
@@ -116,7 +138,9 @@ public class DBAppointments {
         }
     }
 
-
+    /** This is the delete appointment method.
+     This method deletes an appointment table row via appointment ID in the appointments table, within the client_schedule database.
+     @param apptID appointment ID for deletion*/
     public static void deleteAppointment(int apptID) {
 
         try {
@@ -131,7 +155,11 @@ public class DBAppointments {
         }
     }
 
-//************************* NEED TO CHECK IF THIS CAN ADJUSTED / THIS IS A LAMBDA EXPRESSSION *************************************************************
+    /** This is the get appointments 15 minutes method.
+     This method returns all appointments that are withing 15 minutes of the user login time.
+     LAMBDA EXPRESSION: A lambda expression has been utilized in this method to provide easier reading of code for checking appointment start and end time is within 15 minutes of timeNow.
+     @return Returns all appointments with the next 15 minutes if appointment start or end date time is within 15 minutes of timeNow.
+     */
     public static ObservableList<Appointments> getApppointments15Minutes(int userID) {
         ObservableList<Appointments> allApptList = getAllAppointments();
 
@@ -155,15 +183,17 @@ public class DBAppointments {
             return apptsWithin15MinsList;
     }
 
-    //*************************** SEE IF SQL STATEMENT CAN BE ADJUSTED ***************************
+    /** This is the get appointments by month method.
+     This method reads appointment information from the appointments, contacts, and customers tables within the client_schedule database and filters by current month.
+     @return Returns list of appointments for the current month
+     */
     public static ObservableList<Appointments> getAppointmentsByMonth() {
         ObservableList<Appointments> apptByMonthList = FXCollections.observableArrayList();
 
         try {
-            String sql = "SELECT Appointment_ID, Title, Description, Location, o.Contact_ID, o.Contact_Name, " +
-                    "Type, Start, End, c.Customer_ID, User_ID FROM appointments AS a, contacts AS o, customers AS c" +
-                    "WHERE a.Contact_ID=o.Contact_ID AND a.Customer_ID=c.Customer_ID " +
-                    "AND month(Start) = month(now())";
+            String sql = "SELECT Appointment_ID, Title, Description, Location, o.Contact_ID, o.Contact_Name, Type, " +
+                    "Start, End, c.Customer_ID, User_ID FROM appointments AS a, contacts AS o, customers AS c " +
+                    "WHERE a.Contact_ID=o.Contact_ID AND a.Customer_ID=c.Customer_ID AND month(Start) = month(now())";
 
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -192,6 +222,10 @@ public class DBAppointments {
         return apptByMonthList;
     }
 
+    /** This is the get appointments by week method.
+     This method reads appointment information from the appointments, contacts, and customers tables within the client_schedule database and filters by current week.
+     @return Returns list of appointments for the current week
+     */
     public static ObservableList<Appointments> getAppointmentsByWeek() {
         ObservableList<Appointments> apptByWeekList = FXCollections.observableArrayList();
 
@@ -201,13 +235,10 @@ public class DBAppointments {
                     "WHERE a.Contact_ID=o.Contact_ID AND a.Customer_ID=c.Customer_ID AND Start >= ? AND " +
                     "Start <= date_add(?, interval 7 day)";
 
-            // ************** Gets Monday before date now ************
 
-            // Gets midnight time as of today
             LocalDate today = LocalDate.now();
             LocalTime midnight = LocalTime.MIDNIGHT;
 
-            // Go's back in time from today to reach Monday
             LocalDate monday = today;
             while (monday.getDayOfWeek() != DayOfWeek.MONDAY) {
                 monday = monday.minusDays(1);
@@ -215,7 +246,6 @@ public class DBAppointments {
 
             LocalDateTime mondayMidnight = LocalDateTime.of(monday, midnight);
             Timestamp timestamp = valueOf(mondayMidnight);
-            // ************* Ends get Monday code***********
 
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
             ps.setTimestamp(1, timestamp);
@@ -229,8 +259,8 @@ public class DBAppointments {
                 String apptDesc = rs.getString("Description");
                 String apptLocation = rs.getString("Location");
                 String apptType = rs.getString("Type");
-                LocalDateTime dateTimeStart = rs.getTimestamp("Start").toLocalDateTime();       //UTC
-                LocalDateTime dateTimeEnd = rs.getTimestamp("End").toLocalDateTime();          //UTC
+                LocalDateTime dateTimeStart = rs.getTimestamp("Start").toLocalDateTime();
+                LocalDateTime dateTimeEnd = rs.getTimestamp("End").toLocalDateTime();
                 int customerID = rs.getInt("Customer_ID");
                 int userID = rs.getInt("User_ID");
                 int contactID = rs.getInt("Contact_ID");
@@ -247,7 +277,11 @@ public class DBAppointments {
         return apptByWeekList;
     }
 
-    //*********************************** SEE IF SQL STATEMENT CAN BE ADJUSTED **************************************************
+    /** This is the get appointment by contact method.
+     This method reads and returns appointment information from the appointments, contacts, and customers tables within the client_schedule database and returns a list of appointment via selected contact.
+     @param contact_ID selected contact ID
+     @return Returns appointments list by selected contact
+     */
     public static ObservableList<Appointments> getAppointmentsByContact(int contact_ID) {
         ObservableList<Appointments> apptByContactList = FXCollections.observableArrayList();
 
@@ -284,7 +318,10 @@ public class DBAppointments {
         return apptByContactList;
     }
 
-    //******************* METHOD FOR APPOINTMENT TOTAL BY MONTH ***************************************************************
+    /** This is the get appointment total by month and type method.
+     This method reads appointment information from the appointments table within the client_schedule database and returns of total appointments by month and appointment type.
+     @return Returns appointment count list by month and appointment type
+     */
     public static ObservableList<Appointments> getAppointmentTotalByMonthType() {
         ObservableList<Appointments> apptByMonthTotalList = FXCollections.observableArrayList();
 
@@ -312,7 +349,11 @@ public class DBAppointments {
         return apptByMonthTotalList;
     }
 
-
+    /** This is the get appointments by customer method.
+     This method reads appointment information from the appointments, contacts, and customers tables within the client_schedule database and returns a list of appointments by customer.
+     @param customer_ID selected customer ID
+     @return Returns list of appointments by selected customer
+     */
     public static ObservableList<Appointments> getAppointmentsByCustomer(int customer_ID) {
         ObservableList<Appointments> apptByCustomerList = FXCollections.observableArrayList();
 

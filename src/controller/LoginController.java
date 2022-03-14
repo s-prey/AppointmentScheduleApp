@@ -6,22 +6,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-
 import javafx.stage.Stage;
-
-import javax.swing.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -29,9 +24,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
+/** This class is used as a java fx controller for the appointment schedule application login menu GUI screen.*/
 public class LoginController implements Initializable {
 
     Stage stage;
@@ -40,31 +35,21 @@ public class LoginController implements Initializable {
     String logInErrorTitle;
     boolean successfulLogIn = false;
 
-
-    @FXML
-    private Button exitLoginButton;
-
-    @FXML
-    private Button loginButton;
-
-    @FXML
-    private Label loginPasswordLabel;
-
-    @FXML
-    private TextField loginPasswordTxtField;
-
-    @FXML
-    private Label loginTitleLabel;
-
+    @FXML private Button exitLoginButton;
+    @FXML private Button loginButton;
+    @FXML private Label loginPasswordLabel;
+    @FXML private TextField loginPasswordTxtField;
+    @FXML private Label loginTitleLabel;
     @FXML
     private Label loginUsernameLabel;
+    @FXML private TextField loginUsernameTxtField;
+    @FXML private Label userZoneLabel;
 
-    @FXML
-    private TextField loginUsernameTxtField;
-
-    @FXML
-    private Label userZoneLabel;
-
+    /** This is the initialize method.
+     This method is used to initialize data for the login menu controller.
+     @param url uniform resource locator to initialize
+     @param resourceBundle resource bundle to initialize
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ResourceBundle rb = ResourceBundle.getBundle("C195.AppointmentScheduleApp/Nat", Locale.getDefault());
@@ -81,19 +66,24 @@ public class LoginController implements Initializable {
 
     }
 
-
+    /** This is the exit login method.
+     This method provide a system exit status of 0 when closing the application.
+     @param event java fxml method trigger event
+     */
     @FXML
     void onActionExitLogin(ActionEvent event) {
         System.exit(0);
     }
 
+    /** This is the user login method.
+     This method provides a login failed message if the incorrect username or password was entered into the login screen
+     and also provides a message if a appointment was found within 15 minutes of login.
+     @param event java fxml method trigger event
+     */
     @FXML
     void onActionUserLogin(ActionEvent event) throws Exception{
         String userName = loginUsernameTxtField.getText();
         String userPassword = loginPasswordTxtField.getText();
-
-        //LocalDate dateNow = LocalDate.now();
-        //LocalTime timeNow = LocalTime.now();
 
 
         if (DBUsers.getUser(userName, userPassword) == 0) {
@@ -104,7 +94,6 @@ public class LoginController implements Initializable {
             alert.setContentText("Please try again");
             alert.showAndWait();
             successfulLogIn = false;
-            //return;
 
         } else {
 
@@ -148,7 +137,9 @@ public class LoginController implements Initializable {
         loginActivityTracker();
     }
 
-
+    /** This is the login activity tracker method.
+     This method writes a login timestamp and login attempt status of successful or unsuccessful to the login_activity.txt file.
+     */
     public void loginActivityTracker() throws IOException {
 
         Timestamp timeStamp = Timestamp.valueOf(LocalDateTime.now());
