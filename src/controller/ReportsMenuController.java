@@ -85,7 +85,7 @@ public class ReportsMenuController implements Initializable {
      @param event java fxml method trigger event
      */
     @FXML
-    void onActionSwitchToAppointmentMenu(ActionEvent event) {
+    public void onActionSwitchToAppointmentMenu(ActionEvent event) {
         try {
             stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/View/AppointmentMenu.fxml"));
@@ -101,7 +101,7 @@ public class ReportsMenuController implements Initializable {
      @param event java fxml method trigger event
      */
     @FXML
-    void onActionSwitchToCustomerMenu(ActionEvent event) {
+    public void onActionSwitchToCustomerMenu(ActionEvent event) {
         try {
             stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/View/CustomerMenu.fxml"));
@@ -117,7 +117,7 @@ public class ReportsMenuController implements Initializable {
      @param event java fxml method trigger event
      */
     @FXML
-    void onActionSelectContact(ActionEvent event) {
+    public void onActionSelectContact(ActionEvent event) {
         Contacts contact = contactComboBox.getSelectionModel().getSelectedItem();
         contactID = contact.getContactID();
     }
@@ -128,7 +128,7 @@ public class ReportsMenuController implements Initializable {
      @param event java fxml method trigger event
      */
     @FXML
-    void onActionGetApptsByContact(ActionEvent event) {
+    public void onActionGetApptsByContact(ActionEvent event) {
         appointmentsByContactTableView.setItems(DBAppointments.getAppointmentsByContact(contactID));
         apptByContactApptID.setCellValueFactory(new PropertyValueFactory<>("apptID"));
         apptByContactApptTitleCol.setCellValueFactory(new PropertyValueFactory<>("apptTitle"));

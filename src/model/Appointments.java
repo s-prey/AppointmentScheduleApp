@@ -101,16 +101,16 @@ public class Appointments {
         this.apptType = apptType;
     }
 
-    /** This is the set appointment start date & time method.
-     This method sets the appointment start date & time value.
+    /** This is the set appointment start date and time method.
+     This method sets the appointment start date and time value.
      @param apptStartDateTime The appointment start datetime to set
      */
     public void setApptStartDateTime(LocalDateTime apptStartDateTime) {
         this.apptStartDateTime = apptStartDateTime;
     }
 
-    /** This is the set appointment end date & time method.
-     This method sets the appointment end date & time value.
+    /** This is the set appointment end date and time method.
+     This method sets the appointment end date and time value.
      @param apptEndDateTime The appointment end datetime to set
      */
     public void setApptEndDateTime(LocalDateTime apptEndDateTime) {

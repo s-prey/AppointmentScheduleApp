@@ -68,7 +68,7 @@ public class CustomerMenuController implements Initializable {
      This method takes the selected customer data from the menu tableview and populates the customer data fields
      for updating or deleting.
      */
-    public void selectedCustomerData() throws IOException {
+    public void selectedCustomerData() {
         Customers selectedCustomer = customerTableView.getSelectionModel().getSelectedItem();
         customerIDTxtField.setText(String.valueOf(selectedCustomer.getCustomerID()));
         customerID = selectedCustomer.getCustomerID();
@@ -80,6 +80,7 @@ public class CustomerMenuController implements Initializable {
         countryCmboBox.setValue(Countries.getDivisionAndCountryMatch(selectedCustomer.getCountryID()));
         onActionFilterCountryCmboBox(null);
         firstLevelDivisionCmboBox.setValue(FirstLevelDivisions.getDivisionIDMatch(selectedCustomer.getDivisionID()));
+
     }
 
     /** This is the empty field check method.
@@ -153,27 +154,32 @@ public class CustomerMenuController implements Initializable {
      @param event java fxml method trigger event
      */
     @FXML
-    public void onActionAddNewCustomer(ActionEvent event) throws IOException, SQLException {
-        if (emptyFieldCheck() == true) {
-            return;
+    public void onActionAddNewCustomer(ActionEvent event) {
 
-        } else {
-            String customerName = customerNameTxtField.getText();
-            String customerAddress = customerAddressTxtField.getText();
-            String customerPostal = postalCodeTxtField.getText();
-            String customerPhone = phoneNumberTxtField.getText();
+       try {
+           if (emptyFieldCheck() == true) {
+               return;
 
-            FirstLevelDivisions divisions = firstLevelDivisionCmboBox.getSelectionModel().getSelectedItem();
-            int divisionID = divisions.getDivisionID();
+           } else {
+               String customerName = customerNameTxtField.getText();
+               String customerAddress = customerAddressTxtField.getText();
+               String customerPostal = postalCodeTxtField.getText();
+               String customerPhone = phoneNumberTxtField.getText();
 
-            DBCustomers.addCustomer(customerName, customerAddress, customerPostal, customerPhone, divisionID);
+               FirstLevelDivisions divisions = firstLevelDivisionCmboBox.getSelectionModel().getSelectedItem();
+               int divisionID = divisions.getDivisionID();
 
-            System.out.println("Add Customer successful.");
-            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            scene = FXMLLoader.load(getClass().getResource("/View/CustomerMenu.fxml"));
-            stage.setScene(new Scene(scene));
-            stage.show();
-        }
+               DBCustomers.addCustomer(customerName, customerAddress, customerPostal, customerPhone, divisionID);
+
+               System.out.println("Add Customer successful.");
+               stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+               scene = FXMLLoader.load(getClass().getResource("/View/CustomerMenu.fxml"));
+               stage.setScene(new Scene(scene));
+               stage.show();
+           }
+       } catch (IOException ex) {
+           ex.printStackTrace();
+       }
     }
 
     /** This is the clear information fields method.
@@ -181,14 +187,14 @@ public class CustomerMenuController implements Initializable {
      @param event java fxml method trigger event
      */
     @FXML
-    void onActionClearInformationFields(ActionEvent event) {
+    public void onActionClearInformationFields(ActionEvent event) {
         try {
             stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/View/CustomerMenu.fxml"));
             stage.setScene(new Scene(scene));
             stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -198,7 +204,7 @@ public class CustomerMenuController implements Initializable {
      @param event java fxml method trigger event
      */
     @FXML
-    void onActionDeleteCustomer(ActionEvent event) {
+    public void onActionDeleteCustomer(ActionEvent event) {
         Customers selectedCustomer = customerTableView.getSelectionModel().getSelectedItem();
 
         if (selectedCustomer == null) {
@@ -236,32 +242,40 @@ public class CustomerMenuController implements Initializable {
      @param event java fxml method trigger event
      */
     @FXML
-    void onActionSwitchToAppointmentMenu(ActionEvent event) throws IOException {
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/View/AppointmentMenu.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
+    public void onActionSwitchToAppointmentMenu(ActionEvent event) {
+        try {
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/View/AppointmentMenu.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
-    /** This is the switch to reports menu method.
+        /** This is the switch to reports menu method.
      This method loads the reports menu screen when the reports menu button is selected from the appointment menu.
      @param event java fxml method trigger event
      */
     @FXML
-    void onActionSwitchToReportsMenu(ActionEvent event) throws IOException {
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/View/ReportsMenu.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
+    public void onActionSwitchToReportsMenu(ActionEvent event) {
+        try {
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/View/ReportsMenu.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
-    /** This is the update customer method.
+        /** This is the update customer method.
      This method takes the customer data entered in the GUI customer data information fields and updates the
      customer data to the client_schedule database via DBCustomers.updateCustomer class method.
      @param event java fxml method trigger event
      */
     @FXML
-    void onActionUpdateCustomer(ActionEvent event) throws SQLException, IOException {
+    public void onActionUpdateCustomer(ActionEvent event) {
 
         String customerName = customerNameTxtField.getText();
         String customerAddress = customerAddressTxtField.getText();
@@ -274,21 +288,29 @@ public class CustomerMenuController implements Initializable {
 
         DBCustomers.updateCustomer(customerID, customerName, customerAddress, customerPostal, customerPhone, divisionID);
 
-        System.out.println("Update Customer successful.");
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/View/CustomerMenu.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
+        try {
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/View/CustomerMenu.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
-    /** This is the filter country combo box method.
+        /** This is the filter country combo box method.
      This method takes the country combo box selection and filters the first level divisions for that country to set
      the first level division combo box.
      @param event java fxml method trigger event
      */
-    public void onActionFilterCountryCmboBox(ActionEvent event) throws IOException {
-       Countries country = countryCmboBox.getSelectionModel().getSelectedItem();
-       int countryID = country.getCountryID();
-       firstLevelDivisionCmboBox.setItems(getDivisionsByCountry(countryID));
+    public void onActionFilterCountryCmboBox(ActionEvent event) {
+        try {
+            Countries country = countryCmboBox.getSelectionModel().getSelectedItem();
+            int countryID = country.getCountryID();
+            firstLevelDivisionCmboBox.setItems(getDivisionsByCountry(countryID));
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

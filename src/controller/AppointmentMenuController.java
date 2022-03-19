@@ -107,7 +107,7 @@ public class AppointmentMenuController implements Initializable {
      Eastern Standard time time hours to user system default time hours. The times lists are shown as 15 minute intervals
      to provide 15 minute minimum appointment duration.
      */
-    private static void poplulateApptLocalTimeLists() {
+    public static void populateApptLocalTimeLists() {
         localStartTimes.clear();
         localEndTimes.clear();
         ZonedDateTime start = EST_START_TIME.withZoneSameInstant(ZoneId.systemDefault());
@@ -127,7 +127,7 @@ public class AppointmentMenuController implements Initializable {
      */
     public static ObservableList<LocalTime> getLocalStartTimes () {
         if (localStartTimes.size()<1) {
-            poplulateApptLocalTimeLists();
+            populateApptLocalTimeLists();
         }
         return localStartTimes;
     }
@@ -139,7 +139,7 @@ public class AppointmentMenuController implements Initializable {
      */
     public static ObservableList<LocalTime> getLocalEndTimes () {
         if (localEndTimes.size()<1) {
-            poplulateApptLocalTimeLists();
+            populateApptLocalTimeLists();
         }
         return localEndTimes;
     }
@@ -196,7 +196,7 @@ public class AppointmentMenuController implements Initializable {
      @param event java fxml method trigger event
      */
     @FXML
-    void onActionAddNewAppointment(ActionEvent event) {
+    public void onActionAddNewAppointment(ActionEvent event) {
         if (emptyFieldCheck()) {
             return;
         }
@@ -234,7 +234,15 @@ public class AppointmentMenuController implements Initializable {
             alert.showAndWait();
             return;
 
-        }  else {
+        } if (verifyStartTimeBeforeEndTime()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Appointment Scheduling Error.");
+            alert.setHeaderText("Scheduled end date or time is BEFORE scheduled start date or time.");
+            alert.setContentText("Please select an end date/time that occurs AFTER the start date/time.");
+            alert.showAndWait();
+            return;
+
+        } else {
             DBAppointments.addAppointment(apptTitle, apptDescription, apptLocation, apptType, startLocalDateTime,
                     endLocalDateTime, customerID, userID, contactID);
 
@@ -255,7 +263,7 @@ public class AppointmentMenuController implements Initializable {
      @param event java fxml method trigger event
      */
     @FXML
-    void onActionShowAllAppointments(ActionEvent event) {
+    public void onActionShowAllAppointments(ActionEvent event) {
         if (allAppointmentsRadioBtn.isSelected()) {
             appointmentsTableView.setItems(DBAppointments.getAllAppointments());
         }
@@ -266,7 +274,7 @@ public class AppointmentMenuController implements Initializable {
      @param event java fxml method trigger event
      */
     @FXML
-    void onActionAppointmentsByMonth(ActionEvent event) {
+    public void onActionAppointmentsByMonth(ActionEvent event) {
         if (appointmentsByMoRadioBtn.isSelected()) {
             appointmentsTableView.setItems(DBAppointments.getAppointmentsByMonth());
         }
@@ -277,7 +285,7 @@ public class AppointmentMenuController implements Initializable {
      @param event java fxml method trigger event
      */
     @FXML
-    void onActionAppointmentsByWeek(ActionEvent event) {
+    public void onActionAppointmentsByWeek(ActionEvent event) {
         if (appointmentsByWkRadioBtn.isSelected()) {
             appointmentsTableView.setItems(DBAppointments.getAppointmentsByWeek());
         }
@@ -288,7 +296,7 @@ public class AppointmentMenuController implements Initializable {
      @param event java fxml method trigger event
      */
     @FXML
-    void onActionClearInformationFields(ActionEvent event) {
+    public void onActionClearInformationFields(ActionEvent event) {
         try {
             stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("/View/AppointmentMenu.fxml"));
@@ -304,7 +312,7 @@ public class AppointmentMenuController implements Initializable {
      @param event java fxml method trigger event
      */
     @FXML
-    void onActionDeleteAppointment(ActionEvent event) {
+    public void onActionDeleteAppointment(ActionEvent event) {
         Appointments selectedAppointment = appointmentsTableView.getSelectionModel().getSelectedItem();
 
         if (selectedAppointment == null) {
@@ -317,8 +325,10 @@ public class AppointmentMenuController implements Initializable {
         }
 
         int appointmentID = selectedAppointment.getApptID();
+        String appointmentType = selectedAppointment.getApptType();
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Deleting selected appointment. Do you wish to continue?");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Deleting Appointment\n" + "Appointment ID: " + appointmentID + "\n" +
+                "Type of Appointment: " + appointmentType + "\n" +"\nDo you wish to continue?");
         Optional<ButtonType> results = alert.showAndWait();
 
         if (results.isPresent() && results.get() == ButtonType.OK) {
@@ -340,32 +350,40 @@ public class AppointmentMenuController implements Initializable {
      @param event java fxml method trigger event
      */
     @FXML
-    void onActionSwitchToCustomerMenu(ActionEvent event) throws IOException {
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/View/CustomerMenu.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
+    public void onActionSwitchToCustomerMenu(ActionEvent event) {
+        try {
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/View/CustomerMenu.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
-    /** This is the switch to reports menu method.
+        /** This is the switch to reports menu method.
      This method loads the reports menu screen when the reports menu button is selected from the appointment menu.
      @param event java fxml method trigger event
      */
     @FXML
-    void onActionSwitchToReportsMenu(ActionEvent event) throws IOException {
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/View/ReportsMenu.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
+    public void onActionSwitchToReportsMenu(ActionEvent event) {
+        try {
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/View/ReportsMenu.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
     }
 
-    /** This is the update appointment method.
+        /** This is the update appointment method.
      This method takes the appointment data entered in the GUI appointment data information fields and updates the
      appointment data to the client_schedule database via DBAppointment.updateAppointments class method.
      @param event java fxml method trigger event
      */
     @FXML
-    void onActionUpdateAppointment(ActionEvent event) {
+    public void onActionUpdateAppointment(ActionEvent event) {
 
         String apptTitle = apptTitleTxtField.getText();
         String apptDescription = apptDescriptionTxtField.getText();
@@ -400,11 +418,18 @@ public class AppointmentMenuController implements Initializable {
             alert.showAndWait();
             return;
 
-        } else {
-            if (emptyFieldCheck()) {
-                return;
+        } if (verifyStartTimeBeforeEndTime()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Appointment Scheduling Error.");
+            alert.setHeaderText("Scheduled end time is BEFORE scheduled start time.");
+            alert.setContentText("Please select an end time that occurs AFTER the start time.");
+            alert.showAndWait();
+            return;
 
-            }
+        } if (emptyFieldCheck()) {
+            return;
+
+        } else {
             DBAppointments.updateAppointment(apptID, apptTitle, apptDescription, apptLocation, apptType, startLocalDateTime,
                     endLocalDateTime, customerID, userID, contactID);
 
@@ -426,7 +451,6 @@ public class AppointmentMenuController implements Initializable {
     public boolean timeVerification() {
         boolean outsideBusinessHours = false;
 
-
         ZoneId systemZoneID = ZoneId.systemDefault();
 
         ZonedDateTime systemStartZoneDateTime = ZonedDateTime.of(startLocalDateTime, systemZoneID);
@@ -440,11 +464,6 @@ public class AppointmentMenuController implements Initializable {
         LocalTime selectedStartEST = estZoneStartDateTime.toLocalDateTime().toLocalTime();
         LocalTime selectedEndEST = estZoneEndDateTime.toLocalDateTime().toLocalTime();
 
-        DayOfWeek selectedDayStart = estZoneStartDateTime.toLocalDate().getDayOfWeek();
-        int selectedDayStartInt = selectedDayStart.getValue();
-        DayOfWeek selectedDayEnd = estZoneEndDateTime.toLocalDate().getDayOfWeek();
-        int selectedDayEndInt = selectedDayEnd.getValue();
-
         if (selectedStartEST.isBefore(businessStart) || selectedStartEST.isAfter(businessEnd) ||
             selectedEndEST.isBefore(businessStart) || selectedEndEST.isAfter(businessEnd)) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -454,17 +473,6 @@ public class AppointmentMenuController implements Initializable {
             alert.showAndWait();
             outsideBusinessHours = true;
         }
-
-        if (selectedDayStartInt < weekStart || selectedDayStartInt > weekEnd ||
-        selectedDayEndInt < weekStart || selectedDayEndInt > weekEnd) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Selected appointment is outside of business days.");
-            alert.setContentText("Please select a time between Monday and Friday.");
-            alert.showAndWait();
-            outsideBusinessHours = true;
-        }
-
         return outsideBusinessHours;
     }
 
@@ -472,7 +480,7 @@ public class AppointmentMenuController implements Initializable {
      This method verifies if the entered customer appointment time overlaps with another appointment for the same customer.
      @return Returns boolean value for customer times overlap
      */
-    private boolean overlapApptVerification() {
+    public  boolean overlapApptVerification() {
         ObservableList<Appointments> apptOverlaps = DBAppointments.getAppointmentsByCustomer(customerID);
         boolean overlap = false;
 
@@ -614,5 +622,33 @@ public class AppointmentMenuController implements Initializable {
         }
 
         return emptyField;
+    }
+
+    /** This is the verify start time before end time method.
+     This method verifies that the appointment end time does not occur before the appointment start time.
+     @return Returns boolean value for end before start
+     */
+    public boolean verifyStartTimeBeforeEndTime() {
+        ObservableList<Appointments> apptTimesStartEndList = DBAppointments.getAppointmentsByCustomer(customerID);
+        boolean endBeforeStart = false;
+
+        for (int i = 0; i < apptTimesStartEndList.size(); i++) {
+            Appointments appointment = apptTimesStartEndList.get(i);
+            int appt_ID = appointment.getApptID();
+
+            if (appt_ID == apptID) {
+                break;
+            }
+
+            if (endLocalDateTime.isBefore(startLocalDateTime)) {
+                endBeforeStart = true;
+                break;
+
+            } else {
+                endBeforeStart = false;
+                continue;
+            }
+        }
+        return endBeforeStart;
     }
 }

@@ -52,7 +52,8 @@ public class Countries {
 
     /** This is the get division and country match method.
      This method returns the country ID based on first level division ID value match.
-     @return Returns the country ID
+     @param countryID country ID
+     @return Returns the country ID match
      */
     public static Countries getDivisionAndCountryMatch(int countryID) {
         ObservableList<Countries> divisions = DBCountries.getAllCountries();

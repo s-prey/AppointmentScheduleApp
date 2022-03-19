@@ -77,7 +77,7 @@ public class LoginController implements Initializable {
      @param event java fxml method trigger event
      */
     @FXML
-    void onActionExitLogin(ActionEvent event) {
+    public void onActionExitLogin(ActionEvent event) {
         System.exit(0);
     }
 
@@ -87,7 +87,7 @@ public class LoginController implements Initializable {
      @param event java fxml method trigger event
      */
     @FXML
-    void onActionUserLogin(ActionEvent event) throws Exception{
+    public void onActionUserLogin(ActionEvent event) throws Exception{
         String userName = loginUsernameTxtField.getText();
         String userPassword = loginPasswordTxtField.getText();
 
@@ -146,20 +146,23 @@ public class LoginController implements Initializable {
     /** This is the login activity tracker method.
      This method writes a login timestamp and login attempt status of successful or unsuccessful to the login_activity.txt file.
      */
-    public void loginActivityTracker() throws IOException {
+    public void loginActivityTracker() {
+        try {
+            Timestamp timeStamp = Timestamp.valueOf(LocalDateTime.now());
+            String loginTimeStamp = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(timeStamp);
 
-        Timestamp timeStamp = Timestamp.valueOf(LocalDateTime.now());
-        String loginTimeStamp = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(timeStamp);
+            FileWriter fileWriter = new FileWriter("login_activity.txt", true);
+            PrintWriter outputFile = new PrintWriter(fileWriter);
+            outputFile.print("Timestamp: " + loginTimeStamp + ": ");
+            if (successfulLogIn) {
+                outputFile.print("Login Attempt Successful \n");
+            } else {
+                outputFile.print("Login Attempt Unsuccessful \n");
+            }
+            outputFile.close();
 
-        FileWriter fileWriter = new FileWriter("login_activity.txt", true);
-        PrintWriter outputFile = new PrintWriter(fileWriter);
-        outputFile.print("Timestamp: " + loginTimeStamp + ": ");
-        if (successfulLogIn) {
-            outputFile.print("Login Attempt Successful \n");
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
-        else {
-            outputFile.print("Login Attempt Unsuccessful \n");
-        }
-        outputFile.close();
     }
 }

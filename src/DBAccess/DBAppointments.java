@@ -158,6 +158,7 @@ public class DBAppointments {
     /** This is the get appointments 15 minutes method.
      This method returns all appointments that are withing 15 minutes of the user login time.
      LAMBDA EXPRESSION: A lambda expression has been utilized in this method to provide easier reading of code for checking appointment start and end time is within 15 minutes of timeNow.
+     @param userID user ID to check appointments
      @return Returns all appointments with the next 15 minutes if appointment start or end date time is within 15 minutes of timeNow.
      */
     public static ObservableList<Appointments> getApppointments15Minutes(int userID) {
